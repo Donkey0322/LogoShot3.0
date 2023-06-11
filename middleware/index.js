@@ -1,9 +1,9 @@
-import POST from "./simplePost";
-import GET from "./simpleGet";
-import Put from "./simplePut";
-import DELETE from "./simpleDelete";
 import axios from "axios";
 import Constants from "expo-constants";
+import DELETE from "./simpleDelete";
+import GET from "./simpleGet";
+import POST from "./simplePost";
+import Put from "./simplePut";
 
 const baseURL = `${
   Constants.expoConfig.extra.REACT_APP_SERVER_USE_HTTPS === "true"
@@ -13,15 +13,15 @@ const baseURL = `${
   Constants.expoConfig.extra.REACT_APP_SERVER_PORT
 }`;
 
-export default function middleware(token) {
-  const instance = axios.create({
-    baseURL,
-    withCredentials: true,
-  });
-  return {
-    ...POST(instance),
-    ...DELETE(instance),
-    ...GET(instance),
-    ...Put(instance),
-  };
-}
+
+const instance = axios.create({
+  baseURL,
+  withCredentials: true,
+});
+
+export default {
+  ...POST(instance),
+  ...DELETE(instance),
+  ...GET(instance),
+  ...Put(instance),
+};

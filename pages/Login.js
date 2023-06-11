@@ -19,7 +19,7 @@ import LgsLogo from "../components/lgsLogo";
 import { Background, ContentContainer, Scroll } from "../components/lgsScreen";
 import LgsTextInput from "../components/lgsTextInput";
 import middleware from "../middleware";
-const { logIn } = middleware();
+const { logIn } = middleware;
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -44,7 +44,6 @@ export default function Login({ navigation: { navigate } }) {
   }, [user.userId]);
 
   const handleDataChange = (name) => (e) => {
-    console.log(e);
     setData((prev) => ({ ...prev, [name]: e }));
   };
 
@@ -93,6 +92,9 @@ export default function Login({ navigation: { navigate } }) {
           case "INVALID_PASSWORD":
             Alert.alert("密碼錯誤");
             break;
+          case "INVALID_EMAIL":
+            Alert.alert("請輸入有效信箱");
+            break;
           case "EMAIL_NOT_FOUND":
             Alert.alert(
               "帳戶未註冊，請先至登入頁面註冊。或利用 Facebook、Apple 帳戶登入。"
@@ -108,7 +110,7 @@ export default function Login({ navigation: { navigate } }) {
         name: res.email,
         userType: "firebase",
       });
-    } catch (e) {
+    } catch {
       Alert.alert(
         "伺服器出錯，請檢查帳戶是否已註冊，或聯絡系統服務人員協助處理",
         "來訊信箱：ntuim2022@gmail.com"
