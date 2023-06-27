@@ -1,20 +1,20 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BottomSheet, ListItem } from "@rneui/base";
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, Alert } from "react-native";
+import { useEffect, useState } from "react";
+import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import {
-  Provider,
-  Portal,
   Dialog,
   Button as PaperButton,
+  Portal,
+  Provider,
 } from "react-native-paper";
-import LgsLogo from "../components/lgsLogo";
 import {
   PostDeleteFirebaseAccount,
   PostDeleteOuterAccount,
 } from "../axios/api";
-import { Background, Scroll, ContentContainer } from "../components/lgsScreen";
+import LgsLogo from "../components/lgsLogo";
+import { Background, ContentContainer, Scroll } from "../components/lgsScreen";
 import LgsTextInput from "../components/lgsTextInput";
 
 export default ({ navigation: { navigate }, route: { params } }) => {
@@ -253,7 +253,9 @@ export default ({ navigation: { navigate }, route: { params } }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   center: {
     alignItems: "center",

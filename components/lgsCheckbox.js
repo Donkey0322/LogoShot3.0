@@ -1,27 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { FONTS } from "../constant";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const LgsCheckbox = ({ status, onPress }) => {
+export default function LgsCheckbox({ status, onPress }) {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      {status === "checked" ? (
-        <Image
-          style={styles.image}
-          source={require("../assets/checked.png")}
-        ></Image>
+      {status ? (
+        <Image style={styles.image} source={require("../assets/checked.png")} />
       ) : (
         <Image
           style={styles.image}
           source={require("../assets/unchecked.png")}
-        ></Image>
+        />
       )}
     </TouchableOpacity>
   );
-};
-
-export default LgsCheckbox;
+}
 
 const styles = StyleSheet.create({
   container: {

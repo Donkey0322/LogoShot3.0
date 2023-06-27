@@ -1,12 +1,11 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import * as React from "react";
 import "react-native-gesture-handler";
-import BottomBar from "./BottomBar";
 import Login from "../pages/Login";
 import MyFavoriteFileDetail from "../pages/MyFavorite/MyFavoriteFileDetail";
 import Result from "../pages/Result";
 import ResultDetail from "../pages/ResultDetail";
 import Signup from "../pages/Signup";
+import BottomBar from "./BottomBar";
 const Base = createStackNavigator();
 const BASEMAP = {
   Base: BottomBar,
@@ -17,18 +16,17 @@ const BASEMAP = {
   MyFavoriteFileDetail,
 };
 
-export default () => {
-  return (
-    <Base.Navigator>
-      {Object.keys(BASEMAP).map((name) => (
-        <Base.Screen
-          name={name}
-          component={BASEMAP[name]}
-          options={{
-            headerShown: false,
-          }}
-        />
-      ))}
-    </Base.Navigator>
-  );
-};
+export default () => (
+  <Base.Navigator>
+    {Object.keys(BASEMAP).map((name, index) => (
+      <Base.Screen
+        key={index}
+        name={name}
+        component={BASEMAP[name]}
+        options={{
+          headerShown: false,
+        }}
+      />
+    ))}
+  </Base.Navigator>
+);

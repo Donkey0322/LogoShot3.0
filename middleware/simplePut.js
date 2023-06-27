@@ -1,7 +1,7 @@
 import print from "./test";
 
 const URL = {
-  renameFavoriteFile: "/favorite/file",
+  renameFavorite: "/favorite",
 };
 
 export default (instance) =>

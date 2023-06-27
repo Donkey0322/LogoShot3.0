@@ -1,5 +1,10 @@
-import { BackgroundImage } from "@rneui/base";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { FONTS } from "../constant";
 
 const LgsLogo = ({
@@ -10,16 +15,12 @@ const LgsLogo = ({
   showDeleteAccount = () => {}, //顯示 delete account 頁面
 }) => {
   return (
-    <BackgroundImage
+    <ImageBackground
       source={require("../assets/logobg.jpg")}
       style={{
         flexDirection: "row",
-        alignItems: "center",
-        position: "absolute",
-        zIndex: 1,
-        marginTop: 10,
-        flexDirection: "row",
-        borderBottomColor: "black",
+        display: "flex",
+        justifyContent: "center",
       }}
     >
       <Text
@@ -27,9 +28,6 @@ const LgsLogo = ({
           ...FONTS.h1,
           color: "#406E9F",
           fontWeight: "bold",
-          height: "100%",
-          flex: 1,
-          textAlign: "right",
         }}
       >
         Logo
@@ -39,8 +37,7 @@ const LgsLogo = ({
           ...FONTS.h1,
           color: "black",
           fontWeight: "bold",
-          flex: 1,
-          textAlign: "left",
+          // flex: 1,
         }}
       >
         shot
@@ -48,11 +45,15 @@ const LgsLogo = ({
       {isHome && ( //如果是 home 右上角的使用者資訊
         <View
           style={{
-            width: "30%",
-            // backgroundColor: "red",
+            display: "flex",
             flexDirection: "row",
             justifyContent: "flex-end",
             alignItems: "center",
+            justifySelf: "flex-end",
+            position: "absolute",
+            right: 0,
+            bottom: 0,
+            top: 0,
           }}
         >
           {name && (
@@ -68,10 +69,7 @@ const LgsLogo = ({
                 />
               )}
               <Text
-                style={{
-                  margin: 10,
-                  // width: !image ? undefined : "60%",
-                }}
+                style={{ margin: 10 }}
                 numberOfLines={1}
                 ellipsizeMode={"tail"}
                 onLongPress={() => showDeleteAccount()}
@@ -94,7 +92,7 @@ const LgsLogo = ({
           )}
         </View>
       )}
-    </BackgroundImage>
+    </ImageBackground>
   );
 };
 

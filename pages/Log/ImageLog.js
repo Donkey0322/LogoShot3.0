@@ -1,92 +1,81 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { DateTime } from "luxon";
+import { useEffect, useState } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import { ActivityIndicator } from "react-native-paper";
 import { GetSearchingHistory } from "../../axios/api";
 import {
-  Background,
-  Scroll,
   ContentContainer,
   ListBlock,
+  Scroll,
 } from "../../components/lgsScreen";
 import { FONTS, classCodeList } from "../../constant";
-import { DateTime } from "luxon";
-import { ActivityIndicator } from "react-native-paper";
 
-const Record = ({ item }, userId, toSearch) => {
-  return (
-    <>
-      <ListBlock
-        style={{
-          flexDirection: "row",
-          backgroundColor: "white",
-          borderWidth: 0,
-          shadowColor: "#000",
-          shadowOffset: {
-            width: 3,
-            height: 3,
-          },
-          shadowOpacity: 0.25,
-          shadowRadius: 3,
-          elevation: 3,
-        }}
-        onPress={() => toSearch(item)}
-      >
-        <Image
-          source={{
-            uri:
-              "http://140.112.106.82:8081/imagelog/" +
-              userId +
-              "/" +
-              item["formatSearchTime"] +
-              ".png",
-          }}
-          style={{
-            ...FONTS.image,
-            borderWidth: 0.5,
-            borderColor: "#FFF5E0",
-            // height: "120%",
-            zIndex: 1,
-            marginTop: -10,
-            marginBottom: -10,
-          }}
-        />
-        <View style={{ ...styles.listTextContainer }}>
-          <Text
-            style={{ ...FONTS.h4 }}
-            ellipsizeMode={"tail"}
-            numberOfLines={1}
-          >
-            <Text style={{ ...FONTS.h4, fontWeight: "bold", color: "#406E9F" }}>
-              應用商品類別：
-            </Text>
-            {item["targetClasscodes"].map((x) => {
-              const ind = classCodeList.findIndex(
-                (y) => y.value === x.toString()
-              );
-              if (classCodeList[ind]) {
-                return " " + classCodeList[ind].label;
-              }
-              return x;
-            })}
-          </Text>
-          <Text style={FONTS.h4}>
-            <Text style={{ ...FONTS.h4, fontWeight: "bold", color: "#406E9F" }}>
-              商標色彩：
-            </Text>
-            {item["targetColor"]}
-          </Text>
-          <Text style={FONTS.h4}>
-            <Text style={{ ...FONTS.h4, fontWeight: "bold", color: "#406E9F" }}>
-              申請人：
-            </Text>
-            {item["targetApplicant"]}
-          </Text>
-        </View>
-      </ListBlock>
-    </>
-  );
-};
+const Record = ({ item }, userId, toSearch) => (
+  <ListBlock
+    style={{
+      flexDirection: "row",
+      backgroundColor: "white",
+      borderWidth: 0,
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 3,
+        height: 3,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3,
+      elevation: 3,
+    }}
+    onPress={() => toSearch(item)}
+  >
+    <Image
+      source={{
+        uri:
+          "http://140.112.106.82:8081/imagelog/" +
+          userId +
+          "/" +
+          item["formatSearchTime"] +
+          ".png",
+      }}
+      style={{
+        ...FONTS.image,
+        borderWidth: 0.5,
+        borderColor: "#FFF5E0",
+        // height: "120%",
+        zIndex: 1,
+        marginTop: -10,
+        marginBottom: -10,
+      }}
+    />
+    <View style={{ ...styles.listTextContainer }}>
+      <Text style={{ ...FONTS.h4 }} ellipsizeMode={"tail"} numberOfLines={1}>
+        <Text style={{ ...FONTS.h4, fontWeight: "bold", color: "#406E9F" }}>
+          應用商品類別：
+        </Text>
+        {item["targetClasscodes"].map((x) => {
+          const ind = classCodeList.findIndex((y) => y.value === x.toString());
+          if (classCodeList[ind]) {
+            return " " + classCodeList[ind].label;
+          }
+          return x;
+        })}
+      </Text>
+      <Text style={FONTS.h4}>
+        <Text style={{ ...FONTS.h4, fontWeight: "bold", color: "#406E9F" }}>
+          商標色彩：
+        </Text>
+        {item["targetColor"]}
+      </Text>
+      <Text style={FONTS.h4}>
+        <Text style={{ ...FONTS.h4, fontWeight: "bold", color: "#406E9F" }}>
+          申請人：
+        </Text>
+        {item["targetApplicant"]}
+      </Text>
+    </View>
+  </ListBlock>
+);
 
 const DateRecord = ({ item }, userId, toSearch) => {
   return (

@@ -1,8 +1,8 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
-import React, { useState } from "react";
-import { Platform, TouchableOpacity, Image } from "react-native";
-import LgsTextInput from "./lgsTextInput";
 import { DateTime } from "luxon";
+import { useState } from "react";
+import { Image, Platform, TouchableOpacity } from "react-native";
+import LgsTextInput from "./lgsTextInput";
 
 const LgsDatePicker = ({ value, onChange }) => {
   const [show, setShow] = useState(false);
@@ -69,35 +69,9 @@ const LgsDatePicker = ({ value, onChange }) => {
       )}
       {Platform.OS === "ios" && (
         <DateTimePicker
-          value={new Date()}
-          mode={"date"}
-          placeholder="select date"
-          format="YYYY/MM/DD"
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
-          customStyles={{
-            flex: 1,
-            dateIcon: {
-              position: "relative",
-              // right: -5,
-              // top: 4,
-              // marginLeft: 0,
-            },
-            dateInput: {
-              borderColor: "gray",
-              alignItems: "flex-start",
-              borderWidth: 0,
-              borderBottomWidth: 1,
-            },
-            placeholderText: {
-              fontSize: 17,
-              color: "gray",
-            },
-            dateText: {
-              fontSize: 17,
-            },
-          }}
-          onDateChange={(date) => {
+          value={value}
+          mode="date"
+          onChange={(_, date) => {
             console.log(date);
             onChange(date);
           }}

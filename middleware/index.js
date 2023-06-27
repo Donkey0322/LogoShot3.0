@@ -13,7 +13,6 @@ const baseURL = `${
   Constants.expoConfig.extra.REACT_APP_SERVER_PORT
 }`;
 
-
 const instance = axios.create({
   baseURL,
   withCredentials: true,

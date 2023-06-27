@@ -1,17 +1,16 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { DateTime } from "luxon";
+import { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import { ActivityIndicator } from "react-native-paper";
 import { GetSearchingHistory } from "../../axios/api";
 import {
-  Background,
-  Scroll,
   ContentContainer,
   ListBlock,
+  Scroll,
 } from "../../components/lgsScreen";
-import { classCodeList, FONTS } from "../../constant";
-import { DateTime } from "luxon";
-import { ActivityIndicator } from "react-native-paper";
+import { FONTS, classCodeList } from "../../constant";
 
 const Record = ({ item }, userId, toSearch) => {
   return (

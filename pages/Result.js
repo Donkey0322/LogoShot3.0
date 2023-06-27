@@ -1,21 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
+  Image,
+  StatusBar,
   StyleSheet,
   Text,
-  View,
-  Image,
-  FlatList,
-  StatusBar,
   TouchableOpacity,
+  View,
 } from "react-native";
-import { FONTS } from "../constant";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { Background, ContentContainer, Scroll } from "../components/lgsScreen";
-import { SearchText } from "../axios/api";
-import { set } from "react-native-reanimated";
 import LgsGobackButton from "../components/lgsGobackButton";
 import LgsLogo from "../components/lgsLogo";
+import { Background, ContentContainer, Scroll } from "../components/lgsScreen";
 
 const Result = ({ navigation: { navigate, goBack }, route: { params } }) => {
   const [data, setData] = useState([]);
@@ -66,6 +60,7 @@ const Result = ({ navigation: { navigate, goBack }, route: { params } }) => {
               <View style={styles.searchResults}>
                 {data.map((values, idx) => (
                   <View
+                    key={idx}
                     style={{
                       ...styles.searchResultsBox,
                       marginBottom: 1,
@@ -82,11 +77,11 @@ const Result = ({ navigation: { navigate, goBack }, route: { params } }) => {
                       }}
                     >
                       <Image
-                        source={{
-                          uri:
-                            "http://140.112.106.88:8082/" +
-                            params.data[idx]["_source"]["tmark-image-url_1"],
-                        }}
+                        // source={{
+                        //   uri:
+                        //     "http://140.112.106.88:8082/" +
+                        //     params.data[idx]["_source"]["tmark-image-url_1"],
+                        // }}
                         style={styles.searchResultsImage}
                       />
                       <Text
@@ -94,10 +89,13 @@ const Result = ({ navigation: { navigate, goBack }, route: { params } }) => {
                         numberOfLines={3}
                         ellipsizeMode={"tail"}
                       >
-                        {params.data[idx]["_source"]["tmark-name"].replace(
-                          /\s*/g,
-                          ""
-                        )}
+                        {
+                          // params.data[idx][1]
+                          params.data[idx]["_source"]["tmark-name"].replace(
+                            /\s*/g,
+                            ""
+                          )
+                        }
                       </Text>
                     </TouchableOpacity>
                   </View>

@@ -1,5 +1,4 @@
-import React from "react";
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 // import { Button } from "react-native-elements";
 
 const LgsButton = ({ title, onPress, style, disabled }) => {

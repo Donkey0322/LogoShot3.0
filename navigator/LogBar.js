@@ -1,5 +1,4 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import * as React from "react";
 import "react-native-gesture-handler";
 import ImageLog from "../pages/Log/ImageLog";
 import TextLog from "../pages/Log/TextLog";
@@ -14,7 +13,6 @@ export default () => {
         tabBarActiveTintColor: "#406E9F",
         tabBarInactiveTintColor: "black",
         tabBarStyle: {
-          marginTop: 10,
           height: 60,
           justifyContent: "center",
           backgroundColor: "white",

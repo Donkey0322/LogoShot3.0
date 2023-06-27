@@ -22,19 +22,17 @@ const Signup = ({ navigation: { navigate } }) => {
     try {
       const { data: res, error } = await signUp(data);
       if (error) {
-        if (error) {
-          switch (error) {
-            case "INVALID_EMAIL":
-              Alert.alert("請輸入有效信箱");
-              break;
-            case "EMAIL_EXISTS":
-              Alert.alert("此信箱已註冊過");
-              break;
-            default:
-              break;
-          }
-          return;
+        switch (error) {
+          case "INVALID_EMAIL":
+            Alert.alert("請輸入有效信箱");
+            break;
+          case "EMAIL_EXISTS":
+            Alert.alert("此信箱已註冊過");
+            break;
+          default:
+            break;
         }
+        return;
       } else {
         Alert.alert(
           `驗證信已寄至${res.email}，請至信箱中點擊連結完成驗證。（請小心，驗證信有可能會被信箱中被歸類為垃圾信件）`

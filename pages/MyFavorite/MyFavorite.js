@@ -1,29 +1,19 @@
-import React, { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BottomSheet, ListItem } from "@rneui/base";
+import { useEffect, useState } from "react";
+import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import { Button, Dialog, Portal, Provider } from "react-native-paper";
+import LgsLogo from "../../components/lgsLogo";
 import {
   Background,
-  Scroll,
   ContentContainer,
-  ListBlock,
+  Scroll,
 } from "../../components/lgsScreen";
-import { FONTS } from "../../constant";
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
-import {
-  GetMyFavoriteFiles,
-  PostAddFavoriteFile,
-  PostDeleteFavoriteFile,
-  PostRenameFavoriteFile,
-} from "../../axios/api";
-import { BottomSheet, ListItem } from "@rneui/base";
-import {
-  Provider,
-  Portal,
-  Dialog,
-  Button,
-  Paragraph,
-} from "react-native-paper";
-import LgsLogo from "../../components/lgsLogo";
 import LgsTextInput from "../../components/lgsTextInput";
+import { FONTS } from "../../constant";
+import middleware from "../../middleware";
+const { addFavorite, getFavorite, deleteFavorite, renameFavorite } = middleware;
 
 const File = ({ item }, onPressFile, onLongPress) => {
   return (
@@ -123,7 +113,7 @@ const MyFavorite = ({ navigation: { navigate } }) => {
         text: "確認",
         onPress: () => {
           const asyncfunction = async () => {
-            await PostDeleteFavoriteFile(selectedFile["fileId"]);
+            await deleteFavorite({ fileId: selectedFile["fileId"] });
             await loadDatas();
           };
           asyncfunction();
@@ -141,27 +131,45 @@ const MyFavorite = ({ navigation: { navigate } }) => {
   };
 
   const addFile = async () => {
-    await PostAddFavoriteFile(newFileName);
-    await loadDatas();
-    setAddDialogVisible(false);
-    setNewFileName("新增資料夾");
+    const userInfoStr = await AsyncStorage.getItem("@userInfo");
+    const userInfo = userInfoStr != null ? JSON.parse(userInfoStr) : null;
+    if (userInfo) {
+      await addFavorite({
+        fileName: newFileName,
+        userId: userInfo.userId,
+        userType: userInfo.userType,
+      });
+      await loadDatas();
+      setAddDialogVisible(false);
+      setNewFileName("新增資料夾");
+    } else return;
   };
 
   const renameFile = async () => {
-    await PostRenameFavoriteFile(selectedFile["fileId"], renameFileName);
+    await renameFavorite({
+      fileId: selectedFile["fileId"],
+      fileName: renameFileName,
+    });
     await loadDatas();
     setRenameDialogVisible(false);
   };
 
   const loadDatas = async () => {
-    const data = await GetMyFavoriteFiles();
-    const newObj = {
-      esIds: [],
-      fileId: -1,
-      fileName: "+",
-    };
-    console.log("load data here");
-    setFiles([newObj, ...data]);
+    const userInfoStr = await AsyncStorage.getItem("@userInfo");
+    const userInfo = userInfoStr != null ? JSON.parse(userInfoStr) : null;
+    if (userInfo) {
+      const { data } = await getFavorite({
+        userId: userInfo.userId,
+        userType: userInfo.userType,
+      });
+      const newObj = {
+        esIds: [],
+        fileId: -1,
+        fileName: "+",
+      };
+      console.log("load data here");
+      setFiles([newObj, ...data]);
+    } else return;
   };
 
   useEffect(() => {
@@ -173,14 +181,6 @@ const MyFavorite = ({ navigation: { navigate } }) => {
       <Background>
         <LgsLogo />
         <Scroll>
-          <View
-            style={{
-              height: 40,
-              // backgroundColor: "red",
-              width: "100%",
-              marginBottom: 20,
-            }}
-          ></View>
           <ContentContainer style={{ width: "85%" }}>
             <Text style={FONTS.h3}> </Text>
             {files ? (
@@ -190,7 +190,7 @@ const MyFavorite = ({ navigation: { navigate } }) => {
                 keyExtractor={(x) => x["fileId"]}
                 numColumns={3}
                 columnWrapperStyle={{
-                  justifyContent: "flex-start",
+                  justifyContent: "space-between",
                   // alignSelf: "center",
                 }}
                 contentContainerStyle={{ width: "100%" }}
@@ -279,14 +279,6 @@ const MyFavorite = ({ navigation: { navigate } }) => {
               </BottomSheet>
             </Portal>
           </ContentContainer>
-          <View
-            style={{
-              height: 40,
-              // backgroundColor: "red",
-              width: "100%",
-              marginBottom: 20,
-            }}
-          ></View>
         </Scroll>
       </Background>
     </Provider>

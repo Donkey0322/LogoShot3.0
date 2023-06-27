@@ -1,5 +1,4 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import * as React from "react";
 import "react-native-gesture-handler";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Home from "../pages/Home";
@@ -10,88 +9,63 @@ import TextSearch from "../pages/Search/TextSearch";
 
 const Tab = createBottomTabNavigator();
 
-export default () => {
+const NAVIGATE_ITEM = {
+  TextSearch: {
+    component: TextSearch,
+    label: "文字搜尋",
+    icon: "format-text",
+  },
+  Home: {
+    component: Home,
+    label: "首頁",
+    icon: "home-outline",
+  },
+  ImageSearch: {
+    component: ImageSearch,
+    label: "圖片搜尋",
+    icon: "image-outline",
+  },
+  MyFavorite: {
+    component: MyFavorite,
+    label: "我的最愛",
+    icon: "heart-outline",
+  },
+  Log: {
+    component: Log,
+    label: "瀏覽紀錄",
+    icon: "history",
+  },
+};
+
+export default function ButtomBar() {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: "#f4a261",
+        tabBarActiveTintColor: "#000000",
+        tabBarActiveBackgroundColor: "#FFDEAE",
+        tabBarStyle: {
+          height: 80,
+        },
       }}
     >
-      <Tab.Screen
-        name="TextSearch"
-        component={TextSearch}
-        options={{
-          unmountOnBlur: true,
-          tabBarLabel: "文字搜尋",
-          headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="format-text"
-              color={color}
-              size={26}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarLabel: "首頁",
-          headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="home-outline"
-              color={color}
-              size={28}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="ImageSearch"
-        component={ImageSearch}
-        options={{
-          unmountOnBlur: true,
-          tabBarLabel: "圖片搜尋",
-          headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="image-outline"
-              color={color}
-              size={26}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="MyFavorite"
-        component={MyFavorite}
-        options={{
-          unmountOnBlur: true,
-          tabBarLabel: "我的最愛",
-          headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="heart-outline"
-              color={color}
-              size={26}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Log"
-        component={Log}
-        options={{
-          unmountOnBlur: true,
-          tabBarLabel: "瀏覽紀錄",
-          headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="history" color={color} size={26} />
-          ),
-        }}
-      />
+      {Object.keys(NAVIGATE_ITEM).map((n, index) => (
+        <Tab.Screen
+          key={index}
+          name={n}
+          component={NAVIGATE_ITEM[n].component}
+          options={{
+            tabBarLabel: NAVIGATE_ITEM[n].label,
+            headerShown: false,
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons
+                name={NAVIGATE_ITEM[n].icon}
+                color={color}
+                size={26}
+              />
+            ),
+          }}
+        ></Tab.Screen>
+      ))}
     </Tab.Navigator>
   );
-};
+}

@@ -1,12 +1,6 @@
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-} from "react-native";
-import React from "react";
-import styled from "styled-components/native";
+import { KeyboardAvoidingView, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import styled from "styled-components/native";
 
 const Background = ({ children }) => (
   <SafeAreaView style={{ backgroundColor: "#ffffff" }}>
@@ -16,36 +10,49 @@ const Background = ({ children }) => (
       enabled
       keyboardVerticalOffset={10}
     >
-      <View style={{ height: 50 }}></View>
       {children}
     </KeyboardAvoidingView>
   </SafeAreaView>
 );
 
-const Scroll = styled(ScrollView)`
-  height: 100%;
-  width: 100%;
-  overflow: scroll;
-  background-color: #fff5e0;
-`;
-const SafeAreaViewContainer = styled(SafeAreaView)`
+const Scroll = ({ children }) => (
+  <ScrollView
+    style={{
+      height: "100%",
+      width: "100%",
+      overflow: "scroll",
+      backgroundColor: "#F3EDF7",
+    }}
+    contentContainerStyle={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+  >
+    {children}
+  </ScrollView>
+);
+
+const SafeAreaViewContainer = styled.SafeAreaView`
   height: 100%;
   width: 100%;
   align-items: center;
   overflow: scroll;
 `;
-const ContentContainer = styled(View)`
+const ContentContainer = styled.View`
   display: flex;
   width: 80%;
   height: 100%;
-  margin: auto;
-  // flex-direction: row;
-  // justify-content: center;
-  // align-items: flex-start;
-  // background-color: red;
+  /* 請根據 navigator/BottomBar.js 的 tabBarStyle: {
+                                        height: 80,
+                                      }, 
+     調整位置
+  */
+  padding-bottom: 80;
+  /* margin: auto; */
 `;
 
-const ListBlock = styled(TouchableOpacity)`
+const ListBlock = styled.TouchableOpacity`
   margin-top: 10;
   margin-bottom: 10;
   padding-top: 5;
@@ -56,9 +63,9 @@ const ListBlock = styled(TouchableOpacity)`
 `;
 
 export {
-  ListBlock,
   Background,
-  Scroll,
-  SafeAreaViewContainer,
   ContentContainer,
+  ListBlock,
+  SafeAreaViewContainer,
+  Scroll,
 };

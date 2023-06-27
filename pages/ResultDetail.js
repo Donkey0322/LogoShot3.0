@@ -1,33 +1,25 @@
-import React, { useState, useEffect, useCallback } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  FlatList,
-  StatusBar,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
-import { Button } from "react-native-elements";
-import { Background, Scroll, ContentContainer } from "../components/lgsScreen";
-import { SliderBox } from "react-native-image-slider-box";
-import Carousel from "react-native-snap-carousel";
-import { PostAddFavoriteFile, SearchText } from "../axios/api";
-import { icons, COLORS, FONTS, SIZES, classCodeList } from "../constant";
-import LgsCarousel from "../components/carousel";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { GetMyFavoriteFiles, PostAddFavorite } from "../axios/api";
 import { BottomSheet, ListItem } from "@rneui/themed";
-import LgsGobackButton from "../components/lgsGobackButton";
-import LgsTextInput from "../components/lgsTextInput";
-import LgsLogo from "../components/lgsLogo";
+import { useCallback, useEffect, useState } from "react";
+import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import { Button } from "react-native-elements";
+import { SliderBox } from "react-native-image-slider-box";
 import {
-  Portal,
-  Provider,
   Dialog,
   Button as PaperButton,
+  Portal,
+  Provider,
 } from "react-native-paper";
+import Icon from "react-native-vector-icons/FontAwesome";
+import {
+  GetMyFavoriteFiles,
+  PostAddFavorite,
+  PostAddFavoriteFile,
+} from "../axios/api";
+import LgsGobackButton from "../components/lgsGobackButton";
+import LgsLogo from "../components/lgsLogo";
+import { Background, ContentContainer, Scroll } from "../components/lgsScreen";
+import LgsTextInput from "../components/lgsTextInput";
+import { FONTS } from "../constant";
 
 const imageArr = [
   "tmark-image-url_1",
