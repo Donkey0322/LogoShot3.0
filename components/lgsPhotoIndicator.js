@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { StyleSheet, Image, Dimensions } from "react-native";
-import LgsDraggablePin from "./lgsDraggablePin";
+import { useEffect } from "react";
+import { Dimensions, Image } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import LgsDraggablePin from "./lgsDraggablePin";
 
 // const windowWidth = Dimensions.get("window").width;
 // const windowHeight = Dimensions.get("window").height;
@@ -27,7 +27,7 @@ const LgsPhotoIndicator = ({
 
   useEffect(() => {
     Image.getSize(
-      source.uri,
+      source,
       (srcWidth, srcHeight) => {
         const maxHeight = Dimensions.get("window").height * 0.7; // or something else
         const maxWidth = Dimensions.get("window").width * 0.7;
@@ -40,7 +40,7 @@ const LgsPhotoIndicator = ({
         console.log("error:", error);
       }
     );
-  }, [source.uri]);
+  }, [source]);
 
   return (
     <GestureHandlerRootView
@@ -53,13 +53,13 @@ const LgsPhotoIndicator = ({
     >
       <Image
         resizeMode="cover"
-        source={source}
+        source={{ uri: source }}
         style={{
           width: width,
           height: height,
         }}
       />
-      {source.uri ? (
+      {source ? (
         <LgsDraggablePin
           X={initialX}
           Y={initialY}
@@ -71,7 +71,7 @@ const LgsPhotoIndicator = ({
           <Image
             source={require("../assets/indicator.png")}
             style={{ width: 30, height: 30 }}
-          ></Image>
+          />
         </LgsDraggablePin>
       ) : null}
     </GestureHandlerRootView>
