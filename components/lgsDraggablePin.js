@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
   runOnJS,
+  useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
-  useAnimatedGestureHandler,
 } from "react-native-reanimated";
 
 const LgsDraggablePin = ({

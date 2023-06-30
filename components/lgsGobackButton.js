@@ -1,5 +1,4 @@
-// import { TouchableOpacity, Image } from "react-native-gesture-handler";
-import { TouchableOpacity, Image } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 
 const LgsGobackButton = ({ goBack }) => {
   return (
