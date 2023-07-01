@@ -2,52 +2,45 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  type StyleProp,
   type ViewStyle,
 } from "react-native";
-// import { Button } from "react-native-elements";
 
 interface ButtonProp {
-  title: string;
+  children: React.ReactNode;
   onPress: () => void;
-  style?: StyleProp<ViewStyle>;
+  style?: ViewStyle;
   disabled?: boolean;
 }
 
 export default function Button({
-  title,
+  children,
   onPress,
   style,
   disabled,
 }: ButtonProp) {
   return (
-    <View style={style}>
-      <TouchableOpacity
-        style={{
-          ...styles.global,
-          ...(disabled ? styles.disabled : styles.enabled),
-        }}
-        onPress={onPress}
-        disabled={disabled}
-      >
-        <Text style={styles.title}>{title}</Text>
-      </TouchableOpacity>
-    </View>
+    // <View style={style}>
+    <TouchableOpacity
+      style={{
+        ...styles.container,
+        ...(disabled ? styles.disabled : style),
+      }}
+      onPress={onPress}
+      disabled={disabled}
+    >
+      <Text style={styles.title}>{children}</Text>
+    </TouchableOpacity>
+    // </View>
   );
 }
 
 const styles = StyleSheet.create({
-  global: {
-    padding: 10,
+  container: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     alignItems: "center",
     justifyContent: "center",
-    height: 40,
     borderRadius: 20,
-    marginHorizontal: "20%",
-  },
-  enabled: {
-    backgroundColor: "#449190",
   },
   disabled: {
     backgroundColor: "#dad7cd",
@@ -57,5 +50,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "white",
+    fontWeight: "bold",
   },
 });

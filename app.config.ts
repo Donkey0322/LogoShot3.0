@@ -17,6 +17,17 @@ const config: ExpoConfig = {
     REACT_APP_IMAGE_DOMAIN: "140.112.106.88",
     REACT_APP_IMAGE_PORT: "8082",
   },
+  plugins: [
+    [
+      "expo-image-picker",
+      {
+        photosPermission:
+          "The app accesses your photos to let you share them with your friends.",
+        cameraPermission:
+          "The app accesses your photos to let you share them with your friends.",
+      },
+    ],
+  ],
 };
 
 export default config;
