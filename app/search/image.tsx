@@ -1,6 +1,18 @@
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import * as FileSystem from "expo-file-system";
+import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styled from "styled-components/native";
@@ -8,9 +20,12 @@ import DateTimePicker from "../../components/LgsDatePicker";
 import Button from "../../components/lgsButton";
 import Checkbox from "../../components/lgsCheckbox";
 import Header from "../../components/lgsHeader";
+import PhotoIndicator from "../../components/lgsPhotoIndicator";
 import { Background, ContentContainer } from "../../components/lgsScreen";
 import Input from "../../components/lgsTextInput";
-import { CLASS_CODE, COLOR_CODE, FONTS } from "../../constant";
+import { CLASS_CODE, COLORS, COLOR_CODE, FONTS, ICONS } from "../../constant";
+
+const { Camera, Album } = ICONS;
 
 // import middleware from "../../middleware";
 // const { imageSearch } = middleware;
@@ -24,6 +39,15 @@ const ImageUpload = styled.TouchableOpacity`
   border-radius: 8px;
   border-width: 1px;
   border-color: black;
+  width: 100%;
+`;
+
+const ModalOption = styled.TouchableOpacity`
+  border: 1px dashed #808080;
+  padding: 20px;
+  border-radius: 15px;
+  align-items: center;
+  row-gap: 10px;
 `;
 
 export default function ImageSearch() {
@@ -66,7 +90,20 @@ export default function ImageSearch() {
   }, [targetColor]);
   /******************************************************/
 
+  /*advance kit*/
   const [advance, setAdvance] = useState(false);
+  useEffect(() => {
+    if (!advance) {
+      setData((prev) => ({
+        ...prev,
+        targetDraftC: "",
+        targetDraftE: "",
+        targetDraftJ: "",
+      }));
+    }
+  }, [advance]);
+  /******************************************************/
+
   const [isLoading, setIsLoading] = useState(false);
 
   const onSearch = async () => {
@@ -94,6 +131,61 @@ export default function ImageSearch() {
     // }
   };
   const tabBarHeight = useBottomTabBarHeight();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  /*圖片的 uri*/
+  const [source, setSource] = useState("");
+  useEffect(() => {
+    if (source) {
+      (async () => {
+        let image;
+        if (!data.isOldImage)
+          image = await FileSystem.readAsStringAsync(source, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+        else
+          image =
+            /imagelog\/\w{1,30}\/\d{4}-\d{2}-\d{2}-\d{2}:\d{2}:\d{2}.png/.exec(
+              source
+            )?.[0];
+        handleDataChange("image")(image);
+      })();
+    }
+  }, [source]);
+
+  const handlePickImage = (type: "photo" | "camera") => async () => {
+    /*permission kit*/
+    const { granted } = await (type === "photo"
+      ? ImagePicker.getMediaLibraryPermissionsAsync
+      : ImagePicker.getCameraPermissionsAsync)();
+    if (!granted) {
+      const request = await (type === "photo"
+        ? ImagePicker.requestMediaLibraryPermissionsAsync
+        : ImagePicker.requestCameraPermissionsAsync)();
+      if (!request.granted) {
+        return;
+      }
+    }
+    /******************************************************/
+    const { assets, canceled } = await (type === "photo"
+      ? ImagePicker.launchImageLibraryAsync
+      : ImagePicker.launchCameraAsync)({ allowsEditing: true, quality: 1 });
+    if (!canceled) {
+      console.log(assets);
+      handleDataChange("isOldImage")(false);
+      setSource(assets[0].uri);
+      setModalVisible(false);
+    }
+  };
+  /******************************************************/
+
+  const setIndicator = (x: number, y: number) => {
+    setData((prev) => ({
+      ...prev,
+      indicatorX: x,
+      indicatorY: y,
+    }));
+  };
 
   return (
     <Background>
@@ -105,12 +197,48 @@ export default function ImageSearch() {
           }}
         >
           <ContentContainer style={styles.container}>
-            <ImageUpload>
-              <Image
-                source={require("../../assets/addImageButton.png")}
-                style={{ height: 72, width: 64 }}
-              />
-            </ImageUpload>
+            {data.image ? (
+              <>
+                <PhotoIndicator
+                  initialX={data.indicatorX}
+                  initialY={data.indicatorY}
+                  width={data.imageWidth}
+                  height={data.imageHeight}
+                  setWidth={handleDataChange("imageWidth")}
+                  setHeight={handleDataChange("imageHeight")}
+                  setIndicator={setIndicator}
+                  source={source}
+                />
+                <View
+                  style={{
+                    marginVertical: 10,
+                    borderWidth: 0,
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{ color: "#5173B7", flex: 1, fontWeight: "bold" }}
+                  >
+                    請將十字拖曳至商標中心
+                  </Text>
+                  <TouchableOpacity onPress={() => setModalVisible(true)}>
+                    <Image
+                      source={require("../../assets/readdImageButton.png")}
+                      style={{ height: 28, width: 28 }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </>
+            ) : (
+              <ImageUpload onPress={() => setModalVisible(true)}>
+                <Image
+                  source={require("../../assets/addImageButton.png")}
+                  style={{ height: 72, width: 64 }}
+                />
+              </ImageUpload>
+            )}
+
             <DropDownPicker
               dropDownContainerStyle={{
                 backgroundColor: "#ffffff",
@@ -156,13 +284,13 @@ export default function ImageSearch() {
             <Input
               value={data.searchKeywords}
               onChangeText={handleDataChange("searchKeywords")}
-              // style={style.input}
+              style={styles.input}
               placeholder={"輸入關鍵字"}
             />
             <Input
               value={data.targetApplicant}
               onChangeText={handleDataChange("targetApplicant")}
-              // style={style.input}
+              style={styles.input}
               placeholder={"輸入申請人"}
             />
             <Text
@@ -211,32 +339,80 @@ export default function ImageSearch() {
                   value={data.targetDraftC}
                   onChangeText={handleDataChange("targetDraftC")}
                   placeholder="輸入圖樣中文"
+                  style={styles.input}
                 />
                 <Input
                   value={data.targetDraftE}
                   onChangeText={handleDataChange("targetDraftE")}
                   placeholder="輸入圖樣英文"
+                  style={styles.input}
                 />
                 <Input
                   value={data.targetDraftJ}
                   onChangeText={handleDataChange("targetDraftJ")}
                   placeholder="輸入圖樣日文"
+                  style={styles.input}
                 />
               </>
             )}
             {isLoading && <ActivityIndicator />}
             <Button
-              title={"搜尋"}
               onPress={onSearch}
               disabled={
                 false
                 // !data.image || !(!!data.image && isLoading !== true)
               }
-              style={{ marginTop: 10 }}
-            />
+              style={{
+                marginTop: 10,
+                backgroundColor: COLORS.coldblue[400],
+                paddingHorizontal: 50,
+                paddingVertical: 10,
+              }}
+            >
+              <Text>搜尋</Text>
+            </Button>
             <View style={{ height: tabBarHeight / 2 }} />
           </ContentContainer>
         </KeyboardAwareScrollView>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <Pressable
+            style={styles.centeredView}
+            onPress={() => setModalVisible(false)}
+          >
+            <Pressable
+              style={styles.modalView}
+              onPress={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <Text style={styles.modalText}>Choose a way!</Text>
+              <View style={{ flexDirection: "row", columnGap: 10 }}>
+                <ModalOption
+                  onPress={handlePickImage("camera")}
+                  style={{ elevation: 2 }}
+                >
+                  <Camera />
+                  <Text style={styles.textStyle}>Use Camera</Text>
+                </ModalOption>
+                <ModalOption
+                  onPress={handlePickImage("photo")}
+                  style={{ elevation: 2 }}
+                >
+                  <Album />
+                  <Text style={styles.textStyle}>Open Album</Text>
+                </ModalOption>
+              </View>
+            </Pressable>
+          </Pressable>
+        </Modal>
       </View>
     </Background>
   );
@@ -247,10 +423,46 @@ const styles = StyleSheet.create({
     flex: 1,
     rowGap: 10,
     backgroundColor: "#E3DFFD",
+    alignItems: "center",
   },
   rangeContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  textStyle: {
+    color: "#000000",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 25,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "#000000",
+    fontSize: 18,
+  },
+  input: {
+    width: "100%",
   },
 });

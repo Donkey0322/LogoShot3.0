@@ -16,4 +16,10 @@ export default {
   Delete: ({ color, size }: { color?: string; size?: number }) => (
     <FontAwesome name="trash" size={size ?? 24} color={color ?? "black"} />
   ),
+  Camera: ({ color, size }: { color?: string; size?: number }) => (
+    <FontAwesome5 name="camera" size={size ?? 24} color={color ?? "black"} />
+  ),
+  Album: ({ color, size }: { color?: string; size?: number }) => (
+    <FontAwesome5 name="images" size={size ?? 24} color={color ?? "black"} />
+  ),
 };

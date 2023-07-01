@@ -74,7 +74,16 @@ export default function Page() {
         <TouchableOpacity onPress={router.back}>
           <Back />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            flexDirection: "row",
+            columnGap: 8,
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ color: COLORS.red[400], fontWeight: "bold" }}>
+            刪除帳戶
+          </Text>
           <Delete color={COLORS.red[400]} />
         </TouchableOpacity>
       </ToolBar>
