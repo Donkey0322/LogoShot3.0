@@ -4,10 +4,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Image,
-  Modal,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -20,6 +17,7 @@ import DateTimePicker from "../../components/LgsDatePicker";
 import Button from "../../components/lgsButton";
 import Checkbox from "../../components/lgsCheckbox";
 import Header from "../../components/lgsHeader";
+import Modal from "../../components/lgsModal";
 import PhotoIndicator from "../../components/lgsPhotoIndicator";
 import { Background, ContentContainer } from "../../components/lgsScreen";
 import Input from "../../components/lgsTextInput";
@@ -374,44 +372,24 @@ export default function ImageSearch() {
             <View style={{ height: tabBarHeight / 2 }} />
           </ContentContainer>
         </KeyboardAwareScrollView>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <Pressable
-            style={styles.centeredView}
-            onPress={() => setModalVisible(false)}
-          >
-            <Pressable
-              style={styles.modalView}
-              onPress={(e) => {
-                e.stopPropagation();
-              }}
+        <Modal modalVisible={modalVisible} setModalVisible={setModalVisible}>
+          <Text style={styles.modalText}>Choose a way!</Text>
+          <View style={{ flexDirection: "row", columnGap: 10 }}>
+            <ModalOption
+              onPress={handlePickImage("camera")}
+              style={{ elevation: 2 }}
             >
-              <Text style={styles.modalText}>Choose a way!</Text>
-              <View style={{ flexDirection: "row", columnGap: 10 }}>
-                <ModalOption
-                  onPress={handlePickImage("camera")}
-                  style={{ elevation: 2 }}
-                >
-                  <Camera />
-                  <Text style={styles.textStyle}>Use Camera</Text>
-                </ModalOption>
-                <ModalOption
-                  onPress={handlePickImage("photo")}
-                  style={{ elevation: 2 }}
-                >
-                  <Album />
-                  <Text style={styles.textStyle}>Open Album</Text>
-                </ModalOption>
-              </View>
-            </Pressable>
-          </Pressable>
+              <Camera />
+              <Text style={styles.textStyle}>Use Camera</Text>
+            </ModalOption>
+            <ModalOption
+              onPress={handlePickImage("photo")}
+              style={{ elevation: 2 }}
+            >
+              <Album />
+              <Text style={styles.textStyle}>Open Album</Text>
+            </ModalOption>
+          </View>
         </Modal>
       </View>
     </Background>
@@ -429,26 +407,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   textStyle: {
     color: "#000000",
