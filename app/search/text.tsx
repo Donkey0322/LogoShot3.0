@@ -1,30 +1,15 @@
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import styled from "styled-components/native";
 import DateTimePicker from "../../components/LgsDatePicker";
 import Button from "../../components/lgsButton";
 import Checkbox from "../../components/lgsCheckbox";
 import Header from "../../components/lgsHeader";
 import { Background, ContentContainer } from "../../components/lgsScreen";
 import Input from "../../components/lgsTextInput";
-import { CLASS_CODE, COLOR_CODE, FONTS } from "../../constant";
-
-// import middleware from "../../middleware";
-// const { imageSearch } = middleware;
-
-const ImageUpload = styled.TouchableOpacity`
-  background-color: white;
-  margin-top: 10px;
-  height: 178px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  border-width: 1px;
-  border-color: black;
-`;
+import { CLASS_CODE, COLORS, COLOR_CODE, FONTS } from "../../constant";
 
 export default function ImageSearch() {
   /*input kit*/
@@ -38,12 +23,8 @@ export default function ImageSearch() {
     targetDraftC: "",
     targetDraftE: "",
     targetDraftJ: "",
-    image: "",
-    imageWidth: 0,
-    imageHeight: 0,
-    indicatorX: 0,
-    indicatorY: 0,
-    isOldImage: true,
+    isSimShape: false,
+    isSimSound: false,
   });
 
   const handleDataChange =
@@ -66,7 +47,20 @@ export default function ImageSearch() {
   }, [targetColor]);
   /******************************************************/
 
+  /*advance kit*/
   const [advance, setAdvance] = useState(false);
+  useEffect(() => {
+    if (!advance) {
+      setData((prev) => ({
+        ...prev,
+        targetDraftC: "",
+        targetDraftE: "",
+        targetDraftJ: "",
+      }));
+    }
+  }, [advance]);
+  /******************************************************/
+
   const [isLoading, setIsLoading] = useState(false);
 
   const onSearch = async () => {
@@ -105,12 +99,52 @@ export default function ImageSearch() {
           }}
         >
           <ContentContainer style={styles.container}>
-            <ImageUpload>
-              <Image
-                source={require("../../assets/addImageButton.png")}
-                style={{ height: 72, width: 64 }}
-              />
-            </ImageUpload>
+            <Input
+              value={data.searchKeywords}
+              onChangeText={handleDataChange("searchKeywords")}
+              style={styles.input}
+              placeholder={"輸入關鍵字"}
+            />
+            <View
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-around",
+                marginVertical: 10,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  columnGap: 20,
+                }}
+              >
+                <Text>字音相似</Text>
+                <Checkbox
+                  status={data.isSimSound}
+                  onPress={() => {
+                    handleDataChange("isSimSound")(!data.isSimSound);
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  columnGap: 20,
+                }}
+              >
+                <Text>字型相似</Text>
+                <Checkbox
+                  status={data.isSimShape}
+                  onPress={() => {
+                    handleDataChange("isSimShape")(!data.isSimShape);
+                  }}
+                />
+              </View>
+            </View>
             <DropDownPicker
               dropDownContainerStyle={{
                 backgroundColor: "#ffffff",
@@ -154,15 +188,9 @@ export default function ImageSearch() {
               listMode="SCROLLVIEW"
             />
             <Input
-              value={data.searchKeywords}
-              onChangeText={handleDataChange("searchKeywords")}
-              // style={style.input}
-              placeholder={"輸入關鍵字"}
-            />
-            <Input
               value={data.targetApplicant}
               onChangeText={handleDataChange("targetApplicant")}
-              // style={style.input}
+              style={styles.input}
               placeholder={"輸入申請人"}
             />
             <Text
@@ -211,29 +239,38 @@ export default function ImageSearch() {
                   value={data.targetDraftC}
                   onChangeText={handleDataChange("targetDraftC")}
                   placeholder="輸入圖樣中文"
+                  style={styles.input}
                 />
                 <Input
                   value={data.targetDraftE}
                   onChangeText={handleDataChange("targetDraftE")}
                   placeholder="輸入圖樣英文"
+                  style={styles.input}
                 />
                 <Input
                   value={data.targetDraftJ}
                   onChangeText={handleDataChange("targetDraftJ")}
                   placeholder="輸入圖樣日文"
+                  style={styles.input}
                 />
               </>
             )}
             {isLoading && <ActivityIndicator />}
             <Button
-              title={"搜尋"}
               onPress={onSearch}
               disabled={
                 false
                 // !data.image || !(!!data.image && isLoading !== true)
               }
-              style={{ marginTop: 10 }}
-            />
+              style={{
+                marginTop: 10,
+                backgroundColor: COLORS.coldblue[400],
+                paddingHorizontal: 50,
+                paddingVertical: 10,
+              }}
+            >
+              <Text>搜尋</Text>
+            </Button>
             <View style={{ height: tabBarHeight / 2 }} />
           </ContentContainer>
         </KeyboardAwareScrollView>
@@ -247,10 +284,27 @@ const styles = StyleSheet.create({
     flex: 1,
     rowGap: 10,
     backgroundColor: "#E3DFFD",
+    alignItems: "center",
+    paddingTop: 15,
   },
   rangeContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+  },
+  textStyle: {
+    color: "#000000",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 25,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "#000000",
+    fontSize: 18,
+  },
+  input: {
+    width: "100%",
   },
 });

@@ -10,11 +10,11 @@ export default function LgsLogo() {
       source={require("../assets/logobg.jpg")}
       style={{
         flexDirection: "row",
-        display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         paddingHorizontal: 20,
         backgroundColor: "#000000",
+        paddingVertical: 5,
       }}
     >
       <View
@@ -44,9 +44,9 @@ export default function LgsLogo() {
         onPress={() => {
           router.push("/profile");
         }}
-        style={{ backgroundColor: COLORS.mustard.mid }}
+        style={{ backgroundColor: COLORS.mustard[300], paddingVertical: 10 }}
       >
-        <Text>Login</Text>
+        <Text style={{ color: "black" }}>Olivia Rodrigo</Text>
       </Button>
     </ImageBackground>
   );

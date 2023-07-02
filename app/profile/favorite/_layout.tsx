@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 
-const NAVIGATE_ITEM = ["index", "favorite"];
+const NAVIGATE_ITEM = ["index", "detail"];
 
 export const unstable_settings = {
   initialRouteName: "index",

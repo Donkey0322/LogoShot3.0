@@ -19,7 +19,6 @@ export default function Button({
   disabled,
 }: ButtonProp) {
   return (
-    // <View style={style}>
     <TouchableOpacity
       style={{
         ...styles.container,
@@ -30,7 +29,6 @@ export default function Button({
     >
       <Text style={styles.title}>{children}</Text>
     </TouchableOpacity>
-    // </View>
   );
 }
 

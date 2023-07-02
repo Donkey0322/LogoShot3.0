@@ -16,6 +16,7 @@ const Background = styled.View<{ color?: string }>`
 const ToolBar = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 10px;
   padding: 20px 25px;
   width: 100%;
 `;
@@ -103,14 +104,14 @@ export default function Page() {
           </ImageContainer>
         </ImageBorder>
         <Text style={{ fontSize: 31, marginTop: 32, fontWeight: "bold" }}>
-          Zen Meditation
+          Olivia Rodrigo
         </Text>
         <List>
-          <ListItem>
+          <ListItem onPress={() => {}}>
             <Search />
             <Text style={{ fontSize: 14, fontWeight: "bold" }}>搜尋紀錄</Text>
           </ListItem>
-          <ListItem>
+          <ListItem onPress={() => router.push("profile/favorite")}>
             <Star color="#f7dd72" />
             <Text style={{ fontSize: 14, fontWeight: "bold" }}>我的最愛</Text>
           </ListItem>
