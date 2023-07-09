@@ -1,8 +1,14 @@
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 // import { TouchableOpacity } from "react-native-gesture-handler";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "styled-components/native";
 import Divider from "../../../components/lgsDivider";
 import Modal from "../../../components/lgsModal";
@@ -22,7 +28,7 @@ const DATA = [
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
-  background-color: ${COLORS.mustard[200]};
+  background-color: ${COLORS("mustard.200")};
   align-items: center;
   padding-top: 25px;
 `;
@@ -67,7 +73,7 @@ const FileTitle = styled.Text`
   margin-top: 35px;
   padding-left: 10px;
   width: 70%;
-  line-height: 20px;
+  /* line-height: 20px; */
 `;
 
 const List = styled.View`
@@ -90,6 +96,18 @@ export default function Page() {
   const [modalVisible, setModalVisible] = useState(false);
   const [title, setTitle] = useState("");
 
+  const [width, setWidth] = useState(Dimensions.get("window").width);
+
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener(
+      "change",
+      ({ window: { width } }) => {
+        setWidth(width);
+      }
+    );
+    return () => subscription?.remove();
+  });
+
   return (
     <Background>
       <ToolBar>
@@ -98,6 +116,7 @@ export default function Page() {
         </TouchableOpacity>
       </ToolBar>
       <ContentContainer>
+        <Text>{Math.floor((width - 100) / 150)}</Text>
         <View style={{ width: "100%", height: "100%" }}>
           <FlashList
             data={DATA}
@@ -105,7 +124,8 @@ export default function Page() {
               <View
                 style={{
                   position: "relative",
-                  marginBottom: 20,
+                  marginBottom: 10,
+                  marginRight: 30,
                 }}
               >
                 <FileTitle>{item.title}</FileTitle>
@@ -125,17 +145,15 @@ export default function Page() {
                     }}
                     hitSlop={{ top: -50, bottom: -50, left: -20, right: -20 }}
                   >
-                    <Folder size={150} backgroundColor={COLORS.joy.orange} />
+                    <Folder size={150} backgroundColor={COLORS("joy.orange")} />
                   </TouchableOpacity>
                 </View>
               </View>
             )}
             estimatedItemSize={100}
-            numColumns={2}
+            numColumns={Math.floor((width - 100) / 150)}
             contentContainerStyle={{
-              paddingLeft: 35,
-              // paddingRight: 30,
-              paddingBottom: 10,
+              paddingLeft: 30,
             }}
           />
         </View>
@@ -170,12 +188,12 @@ export default function Page() {
           </ListItem>
           <Divider />
           <ListItem>
-            <Delete color={COLORS.red[400]} size={20} />
+            <Delete color={COLORS("red")} size={20} />
             <Text
               style={{
                 fontSize: 14,
                 fontWeight: "bold",
-                color: COLORS.red[400],
+                color: COLORS("red"),
               }}
             >
               刪除資料夾

@@ -1,8 +1,21 @@
-import { Dimensions } from "react-native";
+import { ColorValue, Dimensions } from "react-native";
+type NestedKeys<T> = T extends Record<string | number, Object | string>
+  ? {
+      [K in keyof T]:
+        | Extract<K, string | number>
+        | `${Extract<K, string | number>}.${NestedKeys<T[K]>}`;
+    }[keyof T]
+  : never;
+
+type AllKeys<T> = T extends Record<string | number, any>
+  ? {
+      [K in keyof T]: Extract<K, string | number> | AllKeys<T[K]>;
+    }[keyof T]
+  : never;
 
 const { width, height } = Dimensions.get("window");
 
-export const COLORS = {
+export const colors = {
   // base colors
   primary: "#00996D", // Green
   secondary: "#606d87", // Gray
@@ -39,7 +52,7 @@ export const COLORS = {
     mid: "#ffca3d",
   },
   purple: {
-    100: "#daceef",
+    100: "#daceef" as ColorValue,
     200: "#bda7e3",
     300: "#9f80d7",
     400: "#673ab7",
@@ -58,6 +71,25 @@ export const COLORS = {
     700: "#571212",
     mid: "#d32f2f",
   },
+  gray: {
+    100: "#e6e6e6",
+    200: "#cdcdcd",
+    300: "#b3b3b3",
+    400: "#808080",
+    500: "#676767",
+    600: "#4d4d4d",
+    700: "#343434",
+    mid: "#808080",
+  },
+};
+
+export const COLORS = (routes: NestedKeys<typeof colors>) => {
+  let hex: any = colors;
+  for (const route of routes.split(".") as AllKeys<typeof colors>[]) {
+    hex = hex[route];
+    if (!hex) return undefined;
+  }
+  return typeof hex === "string" ? hex : hex?.mid ?? undefined;
 };
 
 export const SIZES = {

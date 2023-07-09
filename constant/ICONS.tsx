@@ -4,6 +4,7 @@ import {
   FontAwesome,
   FontAwesome5,
   MaterialCommunityIcons,
+  Octicons,
 } from "@expo/vector-icons";
 import React from "react";
 
@@ -17,6 +18,9 @@ const ICONS = {
   Menu: { name: "dots-three-horizontal", Component: Entypo },
   EditFile: { name: "folder-edit-outline", Component: MaterialCommunityIcons },
   Enter: { name: "location-enter", Component: MaterialCommunityIcons },
+  Member: { name: "wallet-membership", Component: MaterialCommunityIcons },
+  Login: { name: "login", Component: AntDesign },
+  Person: { name: "feed-person", Component: Octicons },
 };
 
 interface ICONSTYPE {
@@ -29,6 +33,9 @@ interface ICONSTYPE {
   Menu: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
   EditFile: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
   Enter: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
+  Member: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
+  Login: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
+  Person: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
 }
 
 export default Object.keys(ICONS).reduce((acc, curr) => {

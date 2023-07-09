@@ -1,14 +1,15 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { Text } from "react-native";
+import { useState } from "react";
+import { StyleSheet, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styled } from "styled-components/native";
 import { COLORS, ICONS } from "../../constant";
-const { Star, Search, Back, Delete } = ICONS;
+const { Star, Search, Back, Delete, Member, Login, Person } = ICONS;
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
-  background-color: ${COLORS.mustard[200]};
+  background-color: ${COLORS("mustard.200")};
   align-items: center;
   padding-top: 25px;
 `;
@@ -35,19 +36,23 @@ const ImageBorder = styled.View`
   width: 230px;
   height: 230px;
   border-radius: 200%;
-  padding: 16px;
-  border: 5px solid ${COLORS.joy.orange};
+  border: 5px solid ${COLORS("joy.orange")};
   padding: 20px;
+  align-items: center;
+  justify-content: center;
+  /* padding-left: 15px; */
 `;
 
 const ImageContainer = styled.View`
   border-radius: 200%;
-  background-color: ${COLORS.joy.orange};
+  background-color: ${COLORS("joy.orange")};
   width: 100%;
   height: 100%;
   justify-content: center;
   align-items: center;
   flex: 1;
+  flex-direction: row;
+  /* margin: 20px; */
 `;
 
 const List = styled.View`
@@ -67,8 +72,10 @@ const ListItem = styled.TouchableOpacity`
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
-export default function Page() {
+export default function Page({ login = true }: { login?: boolean }) {
   const router = useRouter();
+  const [imageWidth, setImageWidth] = useState(0);
+
   return (
     <Background>
       <ToolBar>
@@ -82,41 +89,87 @@ export default function Page() {
             alignItems: "center",
           }}
         >
-          <Text style={{ color: COLORS.red[400], fontWeight: "bold" }}>
+          <Text style={{ color: COLORS("red"), fontWeight: "bold" }}>
             刪除帳戶
           </Text>
-          <Delete color={COLORS.red[400]} />
+          <Delete color={COLORS("red")} />
         </TouchableOpacity>
       </ToolBar>
       <ContentContainer>
         <ImageBorder>
-          <ImageContainer>
-            <Image
-              style={{
-                flex: 0.8,
-                width: "80%",
-              }}
-              source={require("../../assets/figure.png")}
-              // placeholder={blurhash}
-              // contentFit="cover"
-              transition={1000}
-            />
+          <ImageContainer
+            onLayout={({
+              nativeEvent: {
+                layout: { width },
+              },
+            }: {
+              nativeEvent: {
+                layout: { width: number };
+              };
+            }) => setImageWidth(width)}
+          >
+            {login ? (
+              <Image
+                style={{
+                  flex: 0.8,
+                  width: "80%",
+                }}
+                source={require("../../assets/figure.png")}
+                // placeholder={blurhash}
+                // contentFit="cover"
+                transition={1000}
+              />
+            ) : (
+              <Person size={imageWidth} color={COLORS("gray.300")} />
+            )}
           </ImageContainer>
         </ImageBorder>
         <Text style={{ fontSize: 31, marginTop: 32, fontWeight: "bold" }}>
           Olivia Rodrigo
         </Text>
         <List>
-          <ListItem onPress={() => {}}>
-            <Search />
-            <Text style={{ fontSize: 14, fontWeight: "bold" }}>搜尋紀錄</Text>
-          </ListItem>
-          <ListItem onPress={() => router.push("profile/favorite")}>
-            <Star color="#f7dd72" />
-            <Text style={{ fontSize: 14, fontWeight: "bold" }}>我的最愛</Text>
-          </ListItem>
+          {login ? (
+            <>
+              <ListItem onPress={() => {}}>
+                <Search />
+                <Text style={{ fontSize: 14, fontWeight: "bold" }}>
+                  搜尋紀錄
+                </Text>
+              </ListItem>
+              <ListItem onPress={() => router.push("profile/favorite")}>
+                <Star color="#f7dd72" />
+                <Text style={{ fontSize: 14, fontWeight: "bold" }}>
+                  我的最愛
+                </Text>
+              </ListItem>
+            </>
+          ) : (
+            <>
+              <ListItem onPress={() => router.push("profile/auth/login")}>
+                <Login />
+                <Text style={{ fontSize: 14, fontWeight: "bold" }}>登入</Text>
+              </ListItem>
+              <ListItem>
+                <Member color={COLORS("coldblue")} />
+                <Text style={{ fontSize: 14, fontWeight: "bold" }}>註冊</Text>
+              </ListItem>
+            </>
+          )}
         </List>
       </ContentContainer>
     </Background>
   );
 }
+
+const stlyes = StyleSheet.create({
+  imageContainer: {
+    borderRadius: 100,
+    backgroundColor: COLORS("joy.orange"),
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+    flexDirection: "row",
+  },
+});
