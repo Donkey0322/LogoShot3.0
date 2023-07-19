@@ -362,7 +362,7 @@ export default function ImageSearch() {
               }
               style={{
                 marginTop: 10,
-                backgroundColor: COLORS.coldblue[400],
+                backgroundColor: COLORS("coldblue"),
                 paddingHorizontal: 50,
                 paddingVertical: 10,
               }}
@@ -372,7 +372,12 @@ export default function ImageSearch() {
             <View style={{ height: tabBarHeight / 2 }} />
           </ContentContainer>
         </KeyboardAwareScrollView>
-        <Modal modalVisible={modalVisible} setModalVisible={setModalVisible}>
+        <Modal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          animation="fade"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+        >
           <Text style={styles.modalText}>Choose a way!</Text>
           <View style={{ flexDirection: "row", columnGap: 10 }}>
             <ModalOption
