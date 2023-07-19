@@ -4,8 +4,8 @@ import {
   FontAwesome,
   FontAwesome5,
   MaterialCommunityIcons,
+  MaterialIcons
 } from "@expo/vector-icons";
-import React from "react";
 
 const ICONS = {
   Star: { name: "star", Component: AntDesign },
@@ -17,6 +17,8 @@ const ICONS = {
   Menu: { name: "dots-three-horizontal", Component: Entypo },
   EditFile: { name: "folder-edit-outline", Component: MaterialCommunityIcons },
   Enter: { name: "location-enter", Component: MaterialCommunityIcons },
+  ImageSearchIcon:{ name: "image-search", Component: MaterialIcons },
+  TextSearchIcon:{ name: "text-recognition", Component: MaterialCommunityIcons },
 };
 
 interface ICONSTYPE {
@@ -29,6 +31,8 @@ interface ICONSTYPE {
   Menu: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
   EditFile: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
   Enter: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
+  ImageSearchIcon: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
+  TextSearchIcon: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
 }
 
 export default Object.keys(ICONS).reduce((acc, curr) => {
