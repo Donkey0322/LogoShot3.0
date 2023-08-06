@@ -4,7 +4,8 @@ import {
   FontAwesome,
   FontAwesome5,
   MaterialCommunityIcons,
-  MaterialIcons
+  MaterialIcons,
+  Octicons,
 } from "@expo/vector-icons";
 
 const ICONS = {
@@ -17,8 +18,14 @@ const ICONS = {
   Menu: { name: "dots-three-horizontal", Component: Entypo },
   EditFile: { name: "folder-edit-outline", Component: MaterialCommunityIcons },
   Enter: { name: "location-enter", Component: MaterialCommunityIcons },
-  ImageSearchIcon:{ name: "image-search", Component: MaterialIcons },
-  TextSearchIcon:{ name: "text-recognition", Component: MaterialCommunityIcons },
+  Member: { name: "wallet-membership", Component: MaterialCommunityIcons },
+  Login: { name: "login", Component: AntDesign },
+  Person: { name: "feed-person", Component: Octicons },
+  ImageSearchIcon: { name: "image-search", Component: MaterialIcons },
+  TextSearchIcon: {
+    name: "text-recognition",
+    Component: MaterialCommunityIcons,
+  },
 };
 
 interface ICONSTYPE {
@@ -31,8 +38,23 @@ interface ICONSTYPE {
   Menu: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
   EditFile: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
   Enter: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  ImageSearchIcon: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  TextSearchIcon: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
+  Member: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
+  Login: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
+  Person: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
+  ImageSearchIcon: ({
+    color,
+    size,
+  }: {
+    color?: string;
+    size?: number;
+  }) => JSX.Element;
+  TextSearchIcon: ({
+    color,
+    size,
+  }: {
+    color?: string;
+    size?: number;
+  }) => JSX.Element;
 }
 
 export default Object.keys(ICONS).reduce((acc, curr) => {
