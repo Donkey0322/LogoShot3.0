@@ -77,7 +77,6 @@ export default function ImageSearch() {
       console.log(e);
     } finally {
       setIsLoading(false);
-      return;
     }
     // if (data) {
     //   setIsLoading(false);

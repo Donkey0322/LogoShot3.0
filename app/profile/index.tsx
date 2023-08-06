@@ -36,7 +36,6 @@ const ImageBorder = styled.View`
   width: 230px;
   height: 230px;
   border-radius: 200%;
-  padding: 16px;
   border: 5px solid ${COLORS("joy.orange")};
   padding: 20px;
 `;
@@ -65,8 +64,8 @@ const ListItem = styled.TouchableOpacity`
   align-items: center;
   column-gap: 8px;
 `;
-const blurhash =
-  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
+// ÷\const blurhash =
+// "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 export default function Page({ login = false }) {
   const router = useRouter();
