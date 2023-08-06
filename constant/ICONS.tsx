@@ -7,7 +7,6 @@ import {
   MaterialIcons,
   Octicons,
 } from "@expo/vector-icons";
-import React from "react";
 
 const ICONS = {
   Star: { name: "star", Component: AntDesign },

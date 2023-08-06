@@ -69,10 +69,10 @@ const ListItem = styled.TouchableOpacity`
   align-items: center;
   column-gap: 8px;
 `;
-const blurhash =
-  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
+// ÷\const blurhash =
+// "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
-export default function Page({ login = true }: { login?: boolean }) {
+export default function Page({ login = false }) {
   const router = useRouter();
   const [imageWidth, setImageWidth] = useState(0);
 
@@ -112,7 +112,7 @@ export default function Page({ login = true }: { login?: boolean }) {
               <Image
                 style={{
                   flex: 0.8,
-                  width: "80%",
+                  width: 0.8 * imageWidth,
                 }}
                 source={require("../../assets/figure.png")}
                 // placeholder={blurhash}

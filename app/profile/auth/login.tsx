@@ -1,8 +1,8 @@
 import { StyleSheet } from "react-native";
 import { styled } from "styled-components/native";
 import Input from "../../../components/lgsTextInput";
-import { COLORS, ICONS } from "../../../constant";
-const { Star, Search, Back, Delete, Member, Login } = ICONS;
+import { COLORS } from "../../../constant";
+// import Facebook from "../../../hooks/useFacebook";
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
@@ -69,11 +69,12 @@ export default function Page() {
   return (
     <Background>
       <Input
-        // value={data.targetApplicant}
+        value={"value"}
         // onChangeText={handleDataChange("targetApplicant")}
         style={styles.input}
         placeholder={"輸入申請人"}
       />
+      {/* <Facebook /> */}
     </Background>
   );
 }

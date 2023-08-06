@@ -1,7 +1,25 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
+    "checkJs": true,
+    "target": "ESNext",
+    "lib": ["dom", "dom.iterable", "ESNext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
     "jsx": "react-jsx",
-    "strict": true
+    "noFallthroughCasesInSwitch": true,
+    "useDefineForClassFields": true
   },
   "extends": "expo/tsconfig.base"
 }

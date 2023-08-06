@@ -1,21 +1,8 @@
-import { ColorValue, Dimensions } from "react-native";
-type NestedKeys<T> = T extends Record<string | number, Object | string>
-  ? {
-      [K in keyof T]:
-        | Extract<K, string | number>
-        | `${Extract<K, string | number>}.${NestedKeys<T[K]>}`;
-    }[keyof T]
-  : never;
-
-type AllKeys<T> = T extends Record<string | number, any>
-  ? {
-      [K in keyof T]: Extract<K, string | number> | AllKeys<T[K]>;
-    }[keyof T]
-  : never;
-
+import { Dimensions } from "react-native";
+import type { AllKeys, NestedKeys } from "./types";
 const { width, height } = Dimensions.get("window");
 
-export const colors = {
+const colors = {
   // base colors
   primary: "#00996D", // Green
   secondary: "#606d87", // Gray
@@ -52,7 +39,7 @@ export const colors = {
     mid: "#ffca3d",
   },
   purple: {
-    100: "#daceef" as ColorValue,
+    100: "#daceef",
     200: "#bda7e3",
     300: "#9f80d7",
     400: "#673ab7",
