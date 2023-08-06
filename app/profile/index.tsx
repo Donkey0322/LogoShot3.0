@@ -8,7 +8,7 @@ const { Star, Search, Back, Delete } = ICONS;
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
-  background-color: ${COLORS.mustard[200]};
+  background-color: ${COLORS("mustard.200")};
   align-items: center;
   padding-top: 25px;
 `;
@@ -36,13 +36,13 @@ const ImageBorder = styled.View`
   height: 230px;
   border-radius: 200%;
   padding: 16px;
-  border: 5px solid ${COLORS.joy.orange};
+  border: 5px solid ${COLORS("joy.orange")};
   padding: 20px;
 `;
 
 const ImageContainer = styled.View`
   border-radius: 200%;
-  background-color: ${COLORS.joy.orange};
+  background-color: ${COLORS("joy.orange")};
   width: 100%;
   height: 100%;
   justify-content: center;
@@ -82,10 +82,10 @@ export default function Page() {
             alignItems: "center",
           }}
         >
-          <Text style={{ color: COLORS.red[400], fontWeight: "bold" }}>
+          <Text style={{ color: COLORS("red"), fontWeight: "bold" }}>
             刪除帳戶
           </Text>
-          <Delete color={COLORS.red[400]} />
+          <Delete color={COLORS("red")} />
         </TouchableOpacity>
       </ToolBar>
       <ContentContainer>

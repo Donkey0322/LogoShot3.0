@@ -7,7 +7,7 @@ const { Back } = ICONS;
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
-  background-color: ${COLORS.mustard[200]};
+  background-color: ${COLORS("mustard.200")};
   align-items: center;
   padding-top: 25px;
 `;

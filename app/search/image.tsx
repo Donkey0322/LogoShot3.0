@@ -362,7 +362,7 @@ export default function ImageSearch() {
               }
               style={{
                 marginTop: 10,
-                backgroundColor: COLORS.coldblue[400],
+                backgroundColor: COLORS("coldblue"),
                 paddingHorizontal: 50,
                 paddingVertical: 10,
               }}

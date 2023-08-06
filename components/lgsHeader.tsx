@@ -23,7 +23,7 @@ export default function LgsLogo() {
         <Text
           style={{
             ...FONTS.h1,
-            color: COLORS.purple[400],
+            color: COLORS("purple"),
             fontWeight: "bold",
           }}
         >
@@ -32,7 +32,7 @@ export default function LgsLogo() {
         <Text
           style={{
             ...FONTS.h1,
-            color: COLORS.mustard[400],
+            color: COLORS("mustard"),
             fontWeight: "bold",
           }}
         >
@@ -44,7 +44,7 @@ export default function LgsLogo() {
         onPress={() => {
           router.push("/profile");
         }}
-        style={{ backgroundColor: COLORS.mustard[300], paddingVertical: 10 }}
+        style={{ backgroundColor: COLORS("mustard.300"), paddingVertical: 10 }}
       >
         <Text style={{ color: "black" }}>Olivia Rodrigo</Text>
       </Button>

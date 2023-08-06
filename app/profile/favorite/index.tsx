@@ -22,7 +22,7 @@ const DATA = [
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
-  background-color: ${COLORS.mustard[200]};
+  background-color: ${COLORS("mustard.200")};
   align-items: center;
   padding-top: 25px;
 `;
@@ -125,7 +125,7 @@ export default function Page() {
                     }}
                     hitSlop={{ top: -50, bottom: -50, left: -20, right: -20 }}
                   >
-                    <Folder size={150} backgroundColor={COLORS.joy.orange} />
+                    <Folder size={150} backgroundColor={COLORS("joy.orange")} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -170,12 +170,12 @@ export default function Page() {
           </ListItem>
           <Divider />
           <ListItem>
-            <Delete color={COLORS.red[400]} size={20} />
+            <Delete color={COLORS("red")} size={20} />
             <Text
               style={{
                 fontSize: 14,
                 fontWeight: "bold",
-                color: COLORS.red[400],
+                color: COLORS("red"),
               }}
             >
               刪除資料夾

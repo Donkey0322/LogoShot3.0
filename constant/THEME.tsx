@@ -1,8 +1,8 @@
 import { Dimensions } from "react-native";
-
+import type { AllKeys, NestedKeys } from "./types";
 const { width, height } = Dimensions.get("window");
 
-export const COLORS = {
+const colors = {
   // base colors
   primary: "#00996D", // Green
   secondary: "#606d87", // Gray
@@ -58,6 +58,15 @@ export const COLORS = {
     700: "#571212",
     mid: "#d32f2f",
   },
+};
+
+export const COLORS = (routes: NestedKeys<typeof colors>) => {
+  let hex: any = colors;
+  for (const route of routes.split(".") as AllKeys<typeof colors>[]) {
+    hex = hex[route];
+    if (!hex) return undefined;
+  }
+  return typeof hex === "string" ? hex : hex?.mid ?? undefined;
 };
 
 export const SIZES = {
