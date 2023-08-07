@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { styled } from "styled-components/native";
 import Input from "../../../components/lgsTextInput";
 import { COLORS } from "../../../constant";
-import Facebook from "../../../hooks/useFacebook";
+// import Facebook from "../../../hooks/useFacebook";
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
@@ -74,7 +74,7 @@ export default function Page() {
         style={styles.input}
         placeholder={"輸入申請人"}
       />
-      <Facebook />
+      {/* <Facebook /> */}
     </Background>
   );
 }

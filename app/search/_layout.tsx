@@ -1,15 +1,15 @@
 import { Tabs } from "expo-router";
 import { ICONS } from "../../constant";
-const {ImageSearchIcon, TextSearchIcon} = ICONS
+const { ImageSearchIcon, TextSearchIcon } = ICONS;
 
 const NAVIGATE_ITEM = {
   image: {
     label: "圖片搜尋",
-    icon: (color:string)=><ImageSearchIcon color={color}/>,
+    icon: (color: string) => <ImageSearchIcon color={color} />,
   },
   text: {
     label: "文字搜尋",
-    icon: (color:string)=><TextSearchIcon color={color}/>,
+    icon: (color: string) => <TextSearchIcon color={color} />,
   },
 };
 
@@ -36,9 +36,8 @@ export default function Layout() {
           options={{
             tabBarLabel: NAVIGATE_ITEM[n as keyof typeof NAVIGATE_ITEM].label,
             headerShown: false,
-            tabBarIcon: ({ color }) => (
-              NAVIGATE_ITEM[n as keyof typeof NAVIGATE_ITEM].icon(color)
-            ),
+            tabBarIcon: ({ color }) =>
+              NAVIGATE_ITEM[n as keyof typeof NAVIGATE_ITEM].icon(color),
           }}
         />
       ))}
