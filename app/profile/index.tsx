@@ -35,7 +35,8 @@ const ContentContainer = styled.View`
 const ImageBorder = styled.View`
   width: 230px;
   height: 230px;
-  border-radius: 200%;
+  // TODO: 
+  border-radius: 200px;
   border: 5px solid ${COLORS("joy.orange")};
   padding: 20px;
   align-items: center;
@@ -44,7 +45,7 @@ const ImageBorder = styled.View`
 `;
 
 const ImageContainer = styled.View`
-  border-radius: 200%;
+  border-radius: 200px;
   background-color: ${COLORS("joy.orange")};
   width: 100%;
   height: 100%;
@@ -72,7 +73,7 @@ const ListItem = styled.TouchableOpacity`
 // ÷\const blurhash =
 // "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
-export default function Page({ login = false }) {
+export default function Page({ login = true }) {
   const router = useRouter();
   const [imageWidth, setImageWidth] = useState(0);
 
