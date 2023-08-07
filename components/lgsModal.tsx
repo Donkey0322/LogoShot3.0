@@ -1,7 +1,6 @@
 import type { ViewStyle } from "react-native";
 import { Modal, Pressable, StyleSheet } from "react-native";
 
-
 export default function lgsModal({
   modalVisible,
   setModalVisible,
@@ -22,7 +21,7 @@ export default function lgsModal({
         onPress={() => setModalVisible(false)}
       >
         <Pressable
-          style={{ ...styles.modalView, ...style }}
+          style={{ ...styles.modalView }}
           onPress={(e) => {
             e.stopPropagation();
           }}

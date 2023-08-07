@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text } from "react-native";
+import { Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styled } from "styled-components/native";
 import { COLORS, ICONS } from "../../constant";
@@ -35,14 +35,10 @@ const ContentContainer = styled.View`
 const ImageBorder = styled.View`
   width: 230px;
   height: 230px;
-  // TODO: 
   border-radius: 200px;
   border: 5px solid ${COLORS("joy.orange")};
   padding: 20px;
-  align-items: center;
-  justify-content: center;
-  /* padding-left: 15px; */
-`;
+`; // TODO: border-radius
 
 const ImageContainer = styled.View`
   border-radius: 200px;
@@ -52,8 +48,6 @@ const ImageContainer = styled.View`
   justify-content: center;
   align-items: center;
   flex: 1;
-  flex-direction: row;
-  /* margin: 20px; */
 `;
 
 const List = styled.View`
@@ -73,7 +67,7 @@ const ListItem = styled.TouchableOpacity`
 // ÷\const blurhash =
 // "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
-export default function Page({ login = true }) {
+export default function Page({ login = false }) {
   const router = useRouter();
   const [imageWidth, setImageWidth] = useState(0);
 
@@ -161,16 +155,3 @@ export default function Page({ login = true }) {
     </Background>
   );
 }
-
-const stlyes = StyleSheet.create({
-  imageContainer: {
-    borderRadius: 100,
-    backgroundColor: COLORS("joy.orange"),
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-    flexDirection: "row",
-  },
-});

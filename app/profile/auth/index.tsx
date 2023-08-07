@@ -1,6 +1,7 @@
 import { Link, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
+
 export default function Modal() {
   const navigation = useNavigation();
   // If the page was reloaded or navigated to directly, then the modal should be presented as
