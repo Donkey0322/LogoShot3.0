@@ -1,11 +1,11 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styled } from "styled-components/native";
 import { COLORS, ICONS } from "../../constant";
-const { Star, Search, Back, Delete, Login, Member, Person } = ICONS;
+const { Star, Search, Back, Delete, Member, Login, Person } = ICONS;
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
@@ -35,9 +35,13 @@ const ContentContainer = styled.View`
 const ImageBorder = styled.View`
   width: 230px;
   height: 230px;
+  // TODO: 
   border-radius: 200px;
   border: 5px solid ${COLORS("joy.orange")};
   padding: 20px;
+  align-items: center;
+  justify-content: center;
+  /* padding-left: 15px; */
 `;
 
 const ImageContainer = styled.View`
@@ -48,6 +52,8 @@ const ImageContainer = styled.View`
   justify-content: center;
   align-items: center;
   flex: 1;
+  flex-direction: row;
+  /* margin: 20px; */
 `;
 
 const List = styled.View`
@@ -155,3 +161,16 @@ export default function Page({ login = true }) {
     </Background>
   );
 }
+
+const stlyes = StyleSheet.create({
+  imageContainer: {
+    borderRadius: 100,
+    backgroundColor: COLORS("joy.orange"),
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+    flexDirection: "row",
+  },
+});

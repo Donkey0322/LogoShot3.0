@@ -27,7 +27,13 @@ const ContentContainer = styled.View`
   border-top-left-radius: 30px;
   width: 100%;
   padding-top: 24px;
-  align-items: center;
+  padding-left: 24px;
+  padding-right: 24px;
+  /* align-items: center; */
+  flex-direction: row;
+  gap: 30px;
+  flex-wrap: wrap;
+  /* justify-content: spa; */
 `;
 
 export default function Page() {
@@ -40,7 +46,13 @@ export default function Page() {
           <Back />
         </TouchableOpacity>
       </ToolBar>
-      <ContentContainer></ContentContainer>
+      <ContentContainer>
+        {[0, 0, 0, 0, 0, 0, 0, 0].map((m, index) => (
+          <TouchableOpacity
+            style={{ width: 120, height: 120, backgroundColor: "orange" }}
+          ></TouchableOpacity>
+        ))}
+      </ContentContainer>
     </Background>
   );
 }

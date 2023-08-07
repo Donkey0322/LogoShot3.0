@@ -1,6 +1,7 @@
 import type { ViewStyle } from "react-native";
 import { Modal, Pressable, StyleSheet } from "react-native";
 
+
 export default function lgsModal({
   modalVisible,
   setModalVisible,
@@ -17,7 +18,7 @@ export default function lgsModal({
   return (
     <Modal animationType={animation} transparent={true} visible={modalVisible}>
       <Pressable
-        style={styles.centeredView}
+        style={{ ...styles.centeredView, ...style }}
         onPress={() => setModalVisible(false)}
       >
         <Pressable
