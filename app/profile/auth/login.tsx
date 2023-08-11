@@ -1,13 +1,16 @@
+import Button from "@/components/lgsButton";
+import Input from "@/components/lgsTextInput";
+import { COLORS } from "@/constant";
+import useLogin from "@/hooks/useLogin";
+import useAuth from "@/libs/useAuth";
 import { StyleSheet } from "react-native";
 import { styled } from "styled-components/native";
-import Input from "../../../components/lgsTextInput";
-import { COLORS } from "../../../constant";
 // import Facebook from "../../../hooks/useFacebook";
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
   background-color: ${COLORS("mustard.200")};
-  align-items: center;
+  /* align-items: center; */
   padding: 25px;
 `;
 
@@ -65,15 +68,40 @@ const ListItem = styled.TouchableOpacity`
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
+const Label = styled.Text`
+  margin-left: 8px;
+`;
+
 export default function Page() {
+  const { loginData, handleLoginDataChange } = useLogin();
+  const { logIn } = useAuth();
+
   return (
     <Background>
+      <Label>帳號</Label>
       <Input
-        value={"value"}
-        // onChangeText={handleDataChange("targetApplicant")}
+        value={loginData.email}
         style={styles.input}
-        placeholder={"輸入申請人"}
+        placeholder={"輸入帳號"}
+        onChangeText={(text) => handleLoginDataChange(text, "email")}
       />
+      <Label>密碼</Label>
+      <Input
+        value={loginData.password}
+        style={styles.input}
+        placeholder={"輸入密碼"}
+        onChangeText={(text) => handleLoginDataChange(text, "password")}
+        secureTextEntry={true}
+      />
+      <Button
+        onPress={() => logIn(loginData)}
+        style={{
+          backgroundColor: COLORS("mustard.500"),
+          marginHorizontal: 100,
+        }}
+      >
+        登入
+      </Button>
       {/* <Facebook /> */}
     </Background>
   );
@@ -82,5 +110,7 @@ export default function Page() {
 const styles = StyleSheet.create({
   input: {
     width: "100%",
+    marginTop: 10,
+    marginBottom: 25,
   },
 });

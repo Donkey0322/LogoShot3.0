@@ -2,13 +2,13 @@ export interface LogInRequest {
   email: string;
   password: string;
 }
-export interface SignUpRequest extends LogInRequest {}
+export type SignUpRequest = LogInRequest;
 
 interface search {
   userId: string | number;
   userType: string;
   searchKeywords: string;
-  targetClasscodes: Array;
+  targetClasscodes: string[];
   targetColor: string;
   targetApplicant: string;
   targetStartTime: string;

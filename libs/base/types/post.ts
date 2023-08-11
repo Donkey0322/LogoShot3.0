@@ -1,5 +1,3 @@
-import instance from "./instance";
-import type { PostRequest } from "./interfaces";
 import type {
   AddFavoriteFileRequest,
   AddFavoriteRequest,
@@ -7,7 +5,8 @@ import type {
   LogInRequest,
   SignUpRequest,
   TextSearchRequest,
-} from "./interfaces/request";
+} from "./request";
+
 import type {
   AddFavoriteFileResponse,
   AddFavoriteResponse,
@@ -15,18 +14,17 @@ import type {
   LoginResponse,
   SignUpReponse,
   TextSearchResponse,
-} from "./interfaces/response";
+} from "./response";
 
-const URL = {
-  logIn: "/login",
-  signUp: "/registerVerify",
-  imageSearch: "/search/image",
-  textSearch: "/search/text",
-  addFavoriteFile: "/favorite/file",
-  addFavorite: "/favorite",
-};
+export type PostRequest =
+  | AddFavoriteFileRequest
+  | AddFavoriteRequest
+  | ImageSearchRequest
+  | LogInRequest
+  | SignUpRequest
+  | TextSearchRequest;
 
-interface URLTYPE {
+export interface URLTYPE {
   logIn: (data: LogInRequest) => Promise<LoginResponse>;
   signUp: (data: SignUpRequest) => Promise<SignUpReponse>;
   imageSearch: (data: ImageSearchRequest) => Promise<ImageSearchResponse>;
@@ -36,18 +34,3 @@ interface URLTYPE {
   ) => Promise<AddFavoriteFileResponse>;
   addFavorite: (data: AddFavoriteRequest) => Promise<AddFavoriteResponse>;
 }
-
-export default Object.keys(URL).reduce((acc, curr) => {
-  acc[curr as keyof typeof URL] = async (data: PostRequest) => {
-    try {
-      const { data: result } = await instance.post(
-        URL[curr as keyof typeof URL],
-        data
-      );
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  };
-  return acc;
-}, {} as URLTYPE);

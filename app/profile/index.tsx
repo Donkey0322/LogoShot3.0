@@ -1,11 +1,15 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styled } from "styled-components/native";
-import { COLORS, ICONS } from "../../constant";
-const { Star, Search, Back, Delete, Member, Login, Person } = ICONS;
+
+import { COLORS, ICONS } from "@/constant";
+import { useUser } from "@/contexts/useUser";
+import useAuth from "@/libs/useAuth";
+
+const { Star, Search, Back, Delete, Member, Login, Person, Logout } = ICONS;
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
@@ -32,17 +36,17 @@ const ContentContainer = styled.View`
   align-items: center;
 `;
 
-const ImageBorder = styled.View`
+const ImageBorder = styled.View<{ color?: string }>`
   width: 230px;
   height: 230px;
   border-radius: 200px;
-  border: 5px solid ${COLORS("joy.orange")};
+  border: 5px solid ${({ color }) => color ?? COLORS("joy.orange")};
   padding: 20px;
 `; // TODO: border-radius
 
-const ImageContainer = styled.View`
+const ImageContainer = styled.View<{ color?: string }>`
   border-radius: 200px;
-  background-color: ${COLORS("joy.orange")};
+  background-color: ${({ color }) => color ?? COLORS("joy.orange")};
   width: 100%;
   height: 100%;
   justify-content: center;
@@ -67,9 +71,12 @@ const ListItem = styled.TouchableOpacity`
 // ÷\const blurhash =
 // "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
-export default function Page({ login = false }) {
+export default function Page() {
   const router = useRouter();
   const [imageWidth, setImageWidth] = useState(0);
+  const { logOut } = useAuth();
+  const { user } = useUser();
+  const login = useMemo(() => user?.userId ?? false, [user?.userId]);
 
   return (
     <Background>
@@ -77,21 +84,30 @@ export default function Page({ login = false }) {
         <TouchableOpacity onPress={router.back}>
           <Back />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            columnGap: 8,
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ color: COLORS("red"), fontWeight: "bold" }}>
-            刪除帳戶
-          </Text>
-          <Delete color={COLORS("red")} />
-        </TouchableOpacity>
+        {login && (
+          <TouchableOpacity
+            style={{
+              flexDirection: "row",
+              columnGap: 8,
+              alignItems: "center",
+            }}
+            onPress={logOut}
+          >
+            <Text
+              style={{
+                color: COLORS("coldblue.500"),
+                fontWeight: "bold",
+                fontSize: 17,
+              }}
+            >
+              登出
+            </Text>
+            <Logout color={COLORS("coldblue.500")} />
+          </TouchableOpacity>
+        )}
       </ToolBar>
       <ContentContainer>
-        <ImageBorder>
+        <ImageBorder color={!login ? COLORS("gray.300") : null}>
           <ImageContainer
             onLayout={({
               nativeEvent: {
@@ -102,6 +118,7 @@ export default function Page({ login = false }) {
                 layout: { width: number };
               };
             }) => setImageWidth(width)}
+            color={!login ? "#FFFFFF" : undefined}
           >
             {login ? (
               <Image
@@ -135,6 +152,18 @@ export default function Page({ login = false }) {
                 <Star color="#f7dd72" />
                 <Text style={{ fontSize: 14, fontWeight: "bold" }}>
                   我的最愛
+                </Text>
+              </ListItem>
+              <ListItem style={{ borderColor: COLORS("red") }}>
+                <Delete color={COLORS("red.500")} />
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontWeight: "bold",
+                    color: COLORS("red.500"),
+                  }}
+                >
+                  刪除帳戶
                 </Text>
               </ListItem>
             </>
