@@ -20,6 +20,7 @@ const ICONS = {
   Enter: { name: "location-enter", Component: MaterialCommunityIcons },
   Member: { name: "wallet-membership", Component: MaterialCommunityIcons },
   Login: { name: "login", Component: AntDesign },
+  Logout: { name: "logout", Component: MaterialCommunityIcons },
   Person: { name: "feed-person", Component: Octicons },
   ImageSearchIcon: { name: "image-search", Component: MaterialIcons },
   TextSearchIcon: {
@@ -40,6 +41,7 @@ interface ICONSTYPE {
   Enter: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
   Member: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
   Login: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
+  Logout: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
   Person: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
   ImageSearchIcon: ({
     color,

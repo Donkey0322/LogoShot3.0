@@ -5,5 +5,5 @@ export type {
   LogInRequest,
   SignUpRequest,
   TextSearchRequest,
-} from "./post";
-export type { RenameFavoriteRequest } from "./put";
+} from "@/libs/base/types/request/post";
+export type { RenameFavoriteRequest } from "@/libs/base/types/request/put";

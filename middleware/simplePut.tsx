@@ -1,7 +1,7 @@
+import type { PutRequest } from "../libs/base/types";
+import type { RenameFavoriteRequest } from "../libs/base/types/request";
+import type { RenameFavoriteResponse } from "../libs/base/types/response";
 import instance from "./instance";
-import type { PutRequest } from "./interfaces";
-import type { RenameFavoriteRequest } from "./interfaces/request";
-import type { RenameFavoriteResponse } from "./interfaces/response";
 
 const URL = {
   renameFavorite: "/favorite",

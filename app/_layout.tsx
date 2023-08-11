@@ -1,6 +1,8 @@
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 
+import { UserProvider } from "@/contexts/useUser";
+
 const NAVIGATE_ITEM = ["search", "profile"];
 
 export const unstable_settings = {
@@ -15,17 +17,19 @@ export default function Layout() {
   });
 
   return fontsLoaded ? (
-    <Stack initialRouteName="search">
-      {NAVIGATE_ITEM.map((n, index) => (
-        <Stack.Screen
-          key={index}
-          name={n}
-          options={{
-            headerShown: false,
-          }}
-        />
-      ))}
-    </Stack>
+    <UserProvider>
+      <Stack initialRouteName="search">
+        {NAVIGATE_ITEM.map((n, index) => (
+          <Stack.Screen
+            key={index}
+            name={n}
+            options={{
+              headerShown: false,
+            }}
+          />
+        ))}
+      </Stack>
+    </UserProvider>
   ) : (
     <SplashScreen />
   );
