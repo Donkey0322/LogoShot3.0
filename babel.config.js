@@ -1,3 +1,4 @@
+// @ts-nocheck
 module.exports = function (api) {
   api.cache(true);
   return {
@@ -5,6 +6,16 @@ module.exports = function (api) {
     plugins: [
       "react-native-reanimated/plugin",
       require.resolve("expo-router/babel"),
+      [
+        "module-resolver",
+        {
+          root: ".",
+          alias: {
+            // This needs to be mirrored in tsconfig.json
+            "@": "./",
+          },
+        },
+      ],
     ],
   };
 };

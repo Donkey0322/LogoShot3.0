@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "paths": {
+      "@/*": ["./*"]
+    },
     "checkJs": true,
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "ESNext"],
