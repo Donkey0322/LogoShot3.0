@@ -1,5 +1,6 @@
-import { FlashList } from "@shopify/flash-list";
+import { CellContainer, FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
+import { forwardRef, useEffect, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -7,14 +8,17 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-// import { TouchableOpacity } from "react-native-gesture-handler";
-import { useEffect, useState } from "react";
+import Animated from "react-native-reanimated";
 import { styled } from "styled-components/native";
-import Divider from "../../../components/lgsDivider";
-import Modal from "../../../components/lgsModal";
-import Folder from "../../../components/svg/Folder";
-import { COLORS, ICONS } from "../../../constant";
+
+import Divider from "@/components/lgsDivider";
+import Modal from "@/components/lgsModal";
+import Folder from "@/components/svg/Folder";
+import { COLORS, ICONS } from "@/constant";
+
 const { Menu, Back, Delete, EditFile, Enter } = ICONS;
+const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
+const FOLDER_SIZE = 150;
 
 const DATA = [
   { title: "My favorite1" },
@@ -116,18 +120,23 @@ export default function Page() {
         </TouchableOpacity>
       </ToolBar>
       <ContentContainer>
-        <Text>{Math.floor((width - 100) / 150)}</Text>
+        {/* <Text>{Math.floor((width - 100) / FOLDER_SIZE)}</Text> */}
         <View style={{ width: "100%", height: "100%" }}>
           <FlashList
             data={DATA}
-            renderItem={({ item }) => (
-              <View
+            CellRendererComponent={forwardRef((props, ref) => (
+              <AnimatedCellContainer
+                {...props}
                 style={{
-                  position: "relative",
-                  marginBottom: 10,
-                  marginRight: 30,
+                  ...props.style,
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
                 }}
-              >
+                ref={ref}
+              />
+            ))}
+            renderItem={({ item, index }) => (
+              <View style={{ position: "relative" }} key={index}>
                 <FileTitle>{item.title}</FileTitle>
                 <MenuContainer
                   style={styles.menu}
@@ -145,16 +154,16 @@ export default function Page() {
                     }}
                     hitSlop={{ top: -50, bottom: -50, left: -20, right: -20 }}
                   >
-                    <Folder size={150} backgroundColor={COLORS("joy.orange")} />
+                    <Folder
+                      size={FOLDER_SIZE}
+                      backgroundColor={COLORS("joy.orange")}
+                    />
                   </TouchableOpacity>
                 </View>
               </View>
             )}
             estimatedItemSize={100}
-            numColumns={Math.floor((width - 100) / 150)}
-            contentContainerStyle={{
-              paddingLeft: 30,
-            }}
+            numColumns={Math.floor((width - 50) / FOLDER_SIZE)}
           />
         </View>
       </ContentContainer>
@@ -215,7 +224,6 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     marginTop: 18,
-    marginRight: 10,
     alignItems: "center",
     justifyContent: "center",
     padding: 1,
