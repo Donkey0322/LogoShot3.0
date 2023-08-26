@@ -1,11 +1,15 @@
 import { Dimensions } from "react-native";
-import type { AllKeys, NestedKeys } from "./types";
+
+import type { AllKeys, NestedKeys } from "@/utils/types/constant";
+
 const { width, height } = Dimensions.get("window");
 
 const colors = {
   // base colors
   primary: "#00996D", // Green
   secondary: "#606d87", // Gray
+  facebook: "#4267B2",
+  google: "#DB4437",
 
   // https://www.figma.com/community/file/963797805297200933
   joy: {
@@ -71,11 +75,15 @@ const colors = {
 };
 
 export const COLORS = (routes: NestedKeys<typeof colors>) => {
-  let hex: any = colors;
-  for (const route of routes.split(".") as AllKeys<typeof colors>[]) {
-    hex = hex[route];
-    if (!hex) return undefined;
-  }
+  const hex = (routes.split(".") as AllKeys<typeof colors>[]).reduce(
+    (acc, curr) => {
+      if (!acc[curr]) {
+        throw Error(`Cannot read "${curr}". Options: ${Object.keys(acc)}`);
+      }
+      return !acc ? undefined : acc[curr];
+    },
+    colors as any
+  );
   return typeof hex === "string" ? hex : hex?.mid ?? undefined;
 };
 
