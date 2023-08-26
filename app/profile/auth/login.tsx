@@ -1,9 +1,12 @@
 import Button from "@/components/lgsButton";
 import Input from "@/components/lgsTextInput";
 import { COLORS } from "@/constant";
+import Apple from "@/hooks/useApple";
+import Facebook from "@/hooks/useFacebook";
+import Google from "@/hooks/useGoogle";
 import useLogin from "@/hooks/useLogin";
 import useAuth from "@/libs/useAuth";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { styled } from "styled-components/native";
 // import Facebook from "../../../hooks/useFacebook";
 
@@ -102,6 +105,11 @@ export default function Page() {
       >
         登入
       </Button>
+      <View style={styles.icons}>
+        <Facebook buttonColor={COLORS("facebook")} iconColor="#FFFFFF" />
+        <Apple buttonColor="#000000" iconColor="#FFFFFF" />
+        <Google buttonColor={COLORS("google")} iconColor="#FFFFFF" />
+      </View>
       {/* <Facebook /> */}
     </Background>
   );
@@ -112,5 +120,12 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 10,
     marginBottom: 25,
+  },
+  icons: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    paddingHorizontal: "25%",
+    marginTop: 20,
   },
 });

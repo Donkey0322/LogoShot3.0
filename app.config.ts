@@ -26,6 +26,7 @@ const config: ExpoConfig = {
         },
       ],
     },
+    usesAppleSignIn: true,
   },
   extra: {
     eas: {
@@ -56,6 +57,7 @@ const config: ExpoConfig = {
         scheme: "fb1256648868295950",
       },
     ],
+    "expo-apple-authentication",
   ],
 };
 

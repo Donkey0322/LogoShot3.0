@@ -2,7 +2,7 @@ import instance from "./instance";
 import type { PostRequest, URLTYPE } from "./types/post";
 
 const URL: Record<keyof URLTYPE, string> = {
-  logIn: "/login",
+  logIn: "/account/login",
   signUp: "/registerVerify",
   imageSearch: "/search/image",
   textSearch: "/search/text",
