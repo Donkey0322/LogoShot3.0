@@ -9,7 +9,7 @@ import {
 } from "@expo/vector-icons";
 
 const ICONS = {
-  Star: { name: "star", Component: AntDesign },
+  Star: { Component: AntDesign, name: "star" },
   Search: { name: "search", Component: FontAwesome },
   Back: { name: "chevron-left", Component: FontAwesome5 },
   Delete: { name: "trash", Component: FontAwesome },
@@ -27,6 +27,9 @@ const ICONS = {
     name: "text-recognition",
     Component: MaterialCommunityIcons,
   },
+  Facebook: { name: "facebook", Component: FontAwesome },
+  Apple: { name: "apple", Component: FontAwesome },
+  Google: { name: "google", Component: AntDesign },
 };
 
 interface ICONSTYPE {
@@ -57,6 +60,9 @@ interface ICONSTYPE {
     color?: string;
     size?: number;
   }) => JSX.Element;
+  Facebook: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
+  Apple: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
+  Google: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
 }
 
 export default Object.keys(ICONS).reduce((acc, curr) => {
