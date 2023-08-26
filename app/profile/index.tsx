@@ -137,7 +137,7 @@ export default function Page() {
           </ImageContainer>
         </ImageBorder>
         <Text style={{ fontSize: 31, marginTop: 32, fontWeight: "bold" }}>
-          Olivia Rodrigo
+          {login ? "Olivia Rodrigo" : "未登入"}
         </Text>
         <List>
           {login ? (
@@ -173,7 +173,7 @@ export default function Page() {
                 <Login />
                 <Text style={{ fontSize: 14, fontWeight: "bold" }}>登入</Text>
               </ListItem>
-              <ListItem>
+              <ListItem onPress={() => router.push("profile/auth/signup")}>
                 <Member color={COLORS("coldblue")} />
                 <Text style={{ fontSize: 14, fontWeight: "bold" }}>註冊</Text>
               </ListItem>

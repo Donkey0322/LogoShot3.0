@@ -34,6 +34,7 @@ export default function LgsTextInput({
         onSubmitEditing={Keyboard.dismiss}
         value={value}
         onChangeText={onChangeText}
+        autoCapitalize={"none"}
       />
     </View>
   );

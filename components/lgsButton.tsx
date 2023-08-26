@@ -4,6 +4,9 @@ import {
   TouchableOpacity,
   type ViewStyle,
 } from "react-native";
+import { styled } from "styled-components/native";
+
+import type { Color } from "@/utils/types";
 
 interface ButtonProp {
   children: React.ReactNode;
@@ -51,3 +54,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
+export const IconButton = styled.TouchableOpacity<{ color?: Color }>`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ color }) => color};
+`;
