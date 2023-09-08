@@ -1,24 +1,41 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { Alert } from "react-native";
-
-import type {
-  LogInRequest,
-  SignUpRequest,
-} from "@/libs/base/types/request/post";
+import useSWRMutation from "swr/mutation";
 
 import { useUser } from "@/contexts/useUser";
-import POST from "@/libs/base/post";
+import {
+  loginAsGeneralUser,
+  signupAsGeneralUser,
+} from "@/libs/api/fetchers/account";
+import { swrMutationFetcher } from "@/libs/api/functions";
 
 export default function useAuth() {
   const router = useRouter();
+  const useLoginSWR = useSWRMutation(
+    `/account/login`,
+    swrMutationFetcher(loginAsGeneralUser)
+  );
+  const useSignupSWR = useSWRMutation(
+    `/account/signup`,
+    swrMutationFetcher(signupAsGeneralUser)
+  );
   const { setUser } = useUser();
 
-  const logIn = async (data: LogInRequest) => {
+  const logIn = async (data: { email: string; password: string }) => {
     try {
-      const { data: user, error } = await POST.logIn(data);
-      if (error) {
-        switch (error) {
+      const {
+        data: { data: user },
+      } = await useLoginSWR.trigger(data);
+      if (user?.userId) {
+        AsyncStorage.setItem("userId", `${user.userId}`);
+        setUser({ userId: user.userId, userType: "general" });
+        router.back();
+        Alert.alert("Logged in", `Hi ${user.userId}`);
+      }
+    } catch (e) {
+      if (e instanceof Error)
+        switch (e.message) {
           case "INVALID_EMAIL":
             Alert.alert("請輸入有效信箱");
             break;
@@ -31,29 +48,27 @@ export default function useAuth() {
             );
             break;
           default:
+            Alert.alert(
+              "伺服器出錯，請檢查帳戶是否已註冊，或聯繫聯絡系統服務人員協助處理",
+              "來訊信箱：ntuim2022@gmail.com"
+            );
             break;
         }
-        return;
-      }
-      if (user?.userId) {
-        AsyncStorage.setItem("userId", `${user.userId}`);
-        setUser({ userId: user.userId, userType: "general" });
-        router.back();
-        Alert.alert("Logged in", `Hi ${user.userId}`);
-      }
-    } catch {
-      Alert.alert(
-        "伺服器出錯，請檢查帳戶是否已註冊，或聯繫聯絡系統服務人員協助處理",
-        "來訊信箱：ntuim2022@gmail.com"
-      );
     }
   };
 
-  const signUp = async (data: SignUpRequest) => {
+  const signUp = async (data: { email: string; password: string }) => {
     try {
-      const { data: res, error } = await POST.signUp(data);
-      if (error) {
-        switch (error) {
+      const {
+        data: { data: res },
+      } = await useSignupSWR.trigger(data);
+      Alert.alert(
+        `驗證信已寄至${res?.email}， 請至信箱中點擊連結完成驗證。（請小心驗證信有可能在信箱中被歸類為垃圾信件）`
+      );
+      router.replace("profile");
+    } catch (e) {
+      if (e instanceof Error)
+        switch (e.message) {
           case "INVALID_EMAIL":
             Alert.alert("請輸入有效信箱");
             break;
@@ -61,19 +76,12 @@ export default function useAuth() {
             Alert.alert("此信箱已註冊過");
             break;
           default:
+            Alert.alert(
+              "伺服器出錯，請檢查帳戶是否已註冊，或聯繫聯絡系統服務人員協助處理",
+              "來訊信箱：ntuim2022@gmail.com"
+            );
             break;
         }
-        return;
-      }
-      Alert.alert(
-        `驗證信已寄至${res?.email}， 請至信箱中點擊連結完成驗證。（請小心驗證信有可能在信箱中被歸類為垃圾信件）`
-      );
-      router.replace("profile");
-    } catch {
-      Alert.alert(
-        "伺服器出錯，請檢查帳戶是否已註冊，或聯繫聯絡系統服務人員協助處理",
-        "來訊信箱：ntuim2022@gmail.com"
-      );
     }
   };
 
@@ -94,5 +102,15 @@ export default function useAuth() {
     logIn,
     signUp,
     logOut,
+
+    loading: {
+      logIn: useLoginSWR.isMutating,
+      signUp: useSignupSWR.isMutating,
+    },
+
+    error: {
+      login: useLoginSWR.error,
+      signUp: useSignupSWR.error,
+    },
   };
 }

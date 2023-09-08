@@ -5,5 +5,5 @@ export type {
   LoginResponse,
   SignUpReponse,
   TextSearchResponse,
-} from "@/libs/base/types/response/post";
-export type { RenameFavoriteResponse } from "@/libs/base/types/response/put";
+} from "@/temp/base/types/response/post";
+export type { RenameFavoriteResponse } from "@/temp/base/types/response/put";
