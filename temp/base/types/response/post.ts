@@ -1,4 +1,4 @@
-import type Response from "@/libs/base/types/response/response";
+import type Response from "@/temp/base/types/response/response";
 
 export interface LoginResponse
   extends Response<{ userId: string; email: string }> {}

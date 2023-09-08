@@ -15,20 +15,12 @@ import Divider from "@/components/lgsDivider";
 import Modal from "@/components/lgsModal";
 import Folder from "@/components/svg/Folder";
 import { COLORS, ICONS } from "@/constant";
+import { useUser } from "@/contexts/useUser";
+import useFavoriteFolder from "@/libs/useFavoriteFolder";
 
 const { Menu, Back, Delete, EditFile, Enter } = ICONS;
 const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 const FOLDER_SIZE = 150;
-
-const DATA = [
-  { title: "My favorite1" },
-  { title: "My favorite2" },
-  { title: "My favorite3" },
-  { title: "My favorite4" },
-  { title: "My favorite5" },
-  { title: "My favorite6" },
-  { title: "My favorite7 My favorite My favorite" },
-];
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
@@ -97,6 +89,9 @@ const ListItem = styled.TouchableOpacity`
 
 export default function Page() {
   const router = useRouter();
+  const { user } = useUser();
+  const { favoriteFolder } = useFavoriteFolder(user?.userId, user?.userType);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [title, setTitle] = useState("");
 
@@ -123,7 +118,7 @@ export default function Page() {
         {/* <Text>{Math.floor((width - 100) / FOLDER_SIZE)}</Text> */}
         <View style={{ width: "100%", height: "100%" }}>
           <FlashList
-            data={DATA}
+            data={favoriteFolder}
             CellRendererComponent={forwardRef((props, ref) => (
               <AnimatedCellContainer
                 {...props}
@@ -137,11 +132,11 @@ export default function Page() {
             ))}
             renderItem={({ item, index }) => (
               <View style={{ position: "relative" }} key={index}>
-                <FileTitle>{item.title}</FileTitle>
+                <FileTitle>{item.fileName}</FileTitle>
                 <MenuContainer
                   style={styles.menu}
                   onPress={() => {
-                    setTitle(item.title);
+                    setTitle(item.fileName ?? "");
                     setModalVisible(true);
                   }}
                 >

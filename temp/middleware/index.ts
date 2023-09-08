@@ -1,4 +1,4 @@
-import POST from "../libs/base/post";
+import POST from "../base/post";
 import DELETE from "./simpleDelete";
 import GET from "./simpleGet";
 import PUT from "./simplePut";
