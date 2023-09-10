@@ -79,7 +79,7 @@ export interface definitions {
     userType: string;
   };
   DeleteFavoriteFolder: {
-    folderId?: string;
+    folderId?: number;
   };
   AddFavoriteFolderRequest: {
     /** @description User ID */
@@ -90,11 +90,20 @@ export interface definitions {
      * @enum {string}
      */
     userType: "apple" | "general" | "facebook" | "firebase";
-    fileName?: string;
+    folderName?: string;
   };
   RenameFavoriteFolder: {
     folderId?: string;
     folderName?: string;
+  };
+  FormattedReadFavoriteFolderResponse: {
+    data?: definitions["ReadFavoriteFolderResponse"][];
+    error?: string;
+    success?: boolean;
+  };
+  ReadFavoriteFolderResponse: {
+    fileId?: number;
+    fileName?: string;
   };
   FormattedFavoriteFolderResponse: {
     data?: definitions["FavoriteFolderResponse"];
@@ -105,15 +114,6 @@ export interface definitions {
     data?: definitions["FavoriteFolderResponse"];
     error?: string;
     success?: boolean;
-  };
-  FormattedReadFavoriteFolderResponse: {
-    data?: definitions["ReadFavoriteFolderResponse"][];
-    error?: string;
-    success?: boolean;
-  };
-  ReadFavoriteFolderResponse: {
-    fileId?: number;
-    fileName?: string;
   };
   DeleteFavoriteFile: {
     esId?: string;

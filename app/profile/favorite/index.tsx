@@ -11,6 +11,7 @@ import {
 import Animated from "react-native-reanimated";
 import { styled } from "styled-components/native";
 
+import Fab from "@/components/Fab";
 import Divider from "@/components/lgsDivider";
 import Modal from "@/components/lgsModal";
 import Folder from "@/components/svg/Folder";
@@ -18,7 +19,7 @@ import { COLORS, ICONS } from "@/constant";
 import { useUser } from "@/contexts/useUser";
 import useFavoriteFolder from "@/libs/useFavoriteFolder";
 
-const { Menu, Back, Delete, EditFile, Enter } = ICONS;
+const { Menu, Back, Delete, EditFile, Enter, Plus } = ICONS;
 const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 const FOLDER_SIZE = 150;
 
@@ -90,10 +91,12 @@ const ListItem = styled.TouchableOpacity`
 export default function Page() {
   const router = useRouter();
   const { user } = useUser();
-  const { favoriteFolder } = useFavoriteFolder(user?.userId, user?.userType);
+  const { favoriteFolder, addFavoriteFolder, deleteFavoriteFolder } =
+    useFavoriteFolder(user?.userId, user?.userType);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [title, setTitle] = useState("");
+  const [folderId, setFolderId] = useState<undefined | number>(undefined);
 
   const [width, setWidth] = useState(Dimensions.get("window").width);
 
@@ -114,9 +117,10 @@ export default function Page() {
           <Back />
         </TouchableOpacity>
       </ToolBar>
+
       <ContentContainer>
         {/* <Text>{Math.floor((width - 100) / FOLDER_SIZE)}</Text> */}
-        <View style={{ width: "100%", height: "100%" }}>
+        <View style={{ width: "100%", height: "100%", position: "relative" }}>
           <FlashList
             data={favoriteFolder}
             CellRendererComponent={forwardRef((props, ref) => (
@@ -136,6 +140,7 @@ export default function Page() {
                 <MenuContainer
                   style={styles.menu}
                   onPress={() => {
+                    setFolderId(item.fileId);
                     setTitle(item.fileName ?? "");
                     setModalVisible(true);
                   }}
@@ -160,6 +165,19 @@ export default function Page() {
             estimatedItemSize={100}
             numColumns={Math.floor((width - 50) / FOLDER_SIZE)}
           />
+          <Fab
+            position={{ right: 20, bottom: 50 }}
+            size={70}
+            onPress={() =>
+              addFavoriteFolder({
+                userId: user?.userId ?? "",
+                userType: "firebase",
+                folderName: "新增資料夾2",
+              })
+            }
+          >
+            <Plus size={30} />
+          </Fab>
         </View>
       </ContentContainer>
       <Modal modalVisible={modalVisible} setModalVisible={setModalVisible}>
@@ -191,7 +209,12 @@ export default function Page() {
             <Text style={{ fontSize: 14, fontWeight: "bold" }}>重新命名</Text>
           </ListItem>
           <Divider />
-          <ListItem>
+          <ListItem
+            onPress={async () => {
+              await deleteFavoriteFolder({ folderId });
+              setModalVisible(false);
+            }}
+          >
             <Delete color={COLORS("red")} size={20} />
             <Text
               style={{

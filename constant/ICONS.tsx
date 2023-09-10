@@ -1,3 +1,5 @@
+/* reference: https://icons.expo.fyi/Index */
+
 import {
   AntDesign,
   Entypo,
@@ -30,40 +32,13 @@ const ICONS = {
   Facebook: { name: "facebook", Component: FontAwesome },
   Apple: { name: "apple", Component: FontAwesome },
   Google: { name: "google", Component: AntDesign },
+  Plus: { name: "plus", Component: FontAwesome },
 };
 
-interface ICONSTYPE {
-  Star: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  Search: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  Back: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  Delete: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  Camera: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  Album: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  Menu: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  EditFile: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  Enter: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  Member: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  Login: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  Logout: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  Person: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  ImageSearchIcon: ({
-    color,
-    size,
-  }: {
-    color?: string;
-    size?: number;
-  }) => JSX.Element;
-  TextSearchIcon: ({
-    color,
-    size,
-  }: {
-    color?: string;
-    size?: number;
-  }) => JSX.Element;
-  Facebook: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  Apple: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-  Google: ({ color, size }: { color?: string; size?: number }) => JSX.Element;
-}
+type ICONSTYPE = Record<
+  keyof typeof ICONS,
+  ({ color, size }: { color?: string; size?: number }) => JSX.Element
+>;
 
 export default Object.keys(ICONS).reduce((acc, curr) => {
   const { name, Component } = ICONS[curr as keyof typeof ICONS];
