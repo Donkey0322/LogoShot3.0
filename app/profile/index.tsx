@@ -24,6 +24,7 @@ const ToolBar = styled.View`
   margin-top: 10px;
   padding: 20px 25px;
   width: 100%;
+  align-items: center;
 `;
 
 const ContentContainer = styled.View`
@@ -137,7 +138,7 @@ export default function Page() {
           </ImageContainer>
         </ImageBorder>
         <Text style={{ fontSize: 31, marginTop: 32, fontWeight: "bold" }}>
-          {login ? "Olivia Rodrigo" : "未登入"}
+          {login ? user?.name ?? "Olivia Rodrigo" : "未登入"}
         </Text>
         <List>
           {login ? (

@@ -1,24 +1,31 @@
 import type { ViewStyle } from "react-native";
 import { Modal, Pressable, StyleSheet } from "react-native";
 
+export interface ModalProps {
+  modalVisible: boolean;
+  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  children: React.ReactNode;
+  animation?: "fade" | "slide";
+  style?: ViewStyle;
+  beforeModalCancel?: () => void;
+}
+
 export default function lgsModal({
   modalVisible,
   setModalVisible,
   children,
   animation = "slide",
   style,
-}: {
-  modalVisible: boolean;
-  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  children: React.ReactNode;
-  animation?: "fade" | "slide";
-  style?: ViewStyle;
-}) {
+  beforeModalCancel = () => {},
+}: ModalProps) {
   return (
     <Modal animationType={animation} transparent={true} visible={modalVisible}>
       <Pressable
         style={{ ...styles.centeredView, ...style }}
-        onPress={() => setModalVisible(false)}
+        onPress={() => {
+          beforeModalCancel();
+          setModalVisible(false);
+        }}
       >
         <Pressable
           style={{ ...styles.modalView }}

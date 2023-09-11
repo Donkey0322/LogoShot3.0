@@ -1,25 +1,19 @@
 import { CellContainer, FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
-import { forwardRef, useEffect, useState } from "react";
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { forwardRef, useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { styled } from "styled-components/native";
 
 import Fab from "@/components/Fab";
-import Divider from "@/components/lgsDivider";
-import Modal from "@/components/lgsModal";
 import Folder from "@/components/svg/Folder";
 import { COLORS, ICONS } from "@/constant";
 import { useUser } from "@/contexts/useUser";
 import useFavoriteFolder from "@/libs/useFavoriteFolder";
+import { FavoriteFolderModal } from "@/modules/favorite";
+import useWidthOnResize from "@/utils/hooks/useWidthOnResize";
 
-const { Menu, Back, Delete, EditFile, Enter, Plus } = ICONS;
+const { Menu, Back, Plus } = ICONS;
 const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 const FOLDER_SIZE = 150;
 
@@ -64,7 +58,7 @@ const MenuContainer = styled.TouchableOpacity`
   padding: 1px;
 `;
 
-const FileTitle = styled.Text`
+const FolderTitle = styled.Text`
   position: absolute;
   font-weight: bold;
   margin-top: 35px;
@@ -73,42 +67,19 @@ const FileTitle = styled.Text`
   /* line-height: 20px; */
 `;
 
-const List = styled.View`
-  width: 200px;
-`;
-
-const ListItem = styled.TouchableOpacity`
-  padding-top: 20px;
-  padding-bottom: 20px;
-  border-top: 1px solid #d8d8d8;
-  /* border-bottom-width: 1px; */
-  border-color: #d8d8d8;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 8px;
-`;
-
 export default function Page() {
   const router = useRouter();
   const { user } = useUser();
-  const { favoriteFolder, addFavoriteFolder, deleteFavoriteFolder } =
-    useFavoriteFolder(user?.userId, user?.userType);
+  const { favoriteFolder, addFavoriteFolder } = useFavoriteFolder(
+    user?.userId,
+    user?.userType
+  );
+  const { width } = useWidthOnResize();
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [title, setTitle] = useState("");
-  const [folderId, setFolderId] = useState<undefined | number>(undefined);
-
-  const [width, setWidth] = useState(Dimensions.get("window").width);
-
-  useEffect(() => {
-    const subscription = Dimensions.addEventListener(
-      "change",
-      ({ window: { width } }) => {
-        setWidth(width);
-      }
-    );
-    return () => subscription?.remove();
-  });
+  const [folder, setFolder] = useState<{ title?: string; folderId?: number }>(
+    {}
+  );
 
   return (
     <Background>
@@ -136,12 +107,11 @@ export default function Page() {
             ))}
             renderItem={({ item, index }) => (
               <View style={{ position: "relative" }} key={index}>
-                <FileTitle>{item.fileName}</FileTitle>
+                <FolderTitle>{item.fileName}</FolderTitle>
                 <MenuContainer
                   style={styles.menu}
                   onPress={() => {
-                    setFolderId(item.fileId);
-                    setTitle(item.fileName ?? "");
+                    setFolder({ title: item.fileName, folderId: item.fileId });
                     setModalVisible(true);
                   }}
                 >
@@ -172,7 +142,7 @@ export default function Page() {
               addFavoriteFolder({
                 userId: user?.userId ?? "",
                 userType: "firebase",
-                folderName: "新增資料夾2",
+                folderName: "新增資料夾",
               })
             }
           >
@@ -180,55 +150,11 @@ export default function Page() {
           </Fab>
         </View>
       </ContentContainer>
-      <Modal modalVisible={modalVisible} setModalVisible={setModalVisible}>
-        <Text
-          style={{
-            marginBottom: 25,
-            fontWeight: "bold",
-            color: "#000000",
-            fontSize: 18,
-            alignSelf: "flex-start",
-          }}
-        >
-          {title}
-        </Text>
-        <List>
-          <Divider />
-          <ListItem
-            onPress={() => {
-              setModalVisible(false);
-              router.push("profile/favorite/detail");
-            }}
-          >
-            <Enter size={20} />
-            <Text style={{ fontSize: 14, fontWeight: "bold" }}>開啟資料夾</Text>
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <EditFile size={20} />
-            <Text style={{ fontSize: 14, fontWeight: "bold" }}>重新命名</Text>
-          </ListItem>
-          <Divider />
-          <ListItem
-            onPress={async () => {
-              await deleteFavoriteFolder({ folderId });
-              setModalVisible(false);
-            }}
-          >
-            <Delete color={COLORS("red")} size={20} />
-            <Text
-              style={{
-                fontSize: 14,
-                fontWeight: "bold",
-                color: COLORS("red"),
-              }}
-            >
-              刪除資料夾
-            </Text>
-          </ListItem>
-          <Divider />
-        </List>
-      </Modal>
+      <FavoriteFolderModal
+        modalProps={{ modalVisible, setModalVisible }}
+        folder={folder}
+        setFolder={setFolder}
+      />
     </Background>
   );
 }
