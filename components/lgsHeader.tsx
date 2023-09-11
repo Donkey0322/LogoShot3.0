@@ -1,10 +1,16 @@
 import { useRouter } from "expo-router";
+import { useMemo } from "react";
 import { ImageBackground, Text, View } from "react-native";
-import { COLORS, FONTS } from "../constant";
-import Button from "./lgsButton";
+
+import Button from "@/components/lgsButton";
+import { COLORS, FONTS } from "@/constant";
+import { useUser } from "@/contexts/useUser";
 
 export default function LgsLogo() {
   const router = useRouter();
+  const { user } = useUser();
+  const login = useMemo(() => user?.userId ?? false, [user?.userId]);
+
   return (
     <ImageBackground
       source={require("../assets/logobg.jpg")}
@@ -18,7 +24,7 @@ export default function LgsLogo() {
       }}
     >
       <View
-        style={{ flexDirection: "row", alignItems: "center", marginLeft: 75 }}
+        style={{ flexDirection: "row", alignItems: "center", marginLeft: 45 }}
       >
         <Text
           style={{
@@ -46,7 +52,9 @@ export default function LgsLogo() {
         }}
         style={{ backgroundColor: COLORS("mustard.300"), paddingVertical: 10 }}
       >
-        <Text style={{ color: "black" }}>Olivia Rodrigo</Text>
+        <Text style={{ color: "black" }}>
+          {login ? user?.name ?? "Olivia Rodrigo" : "登入"}
+        </Text>
       </Button>
     </ImageBackground>
   );
