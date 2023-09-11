@@ -1,30 +1,40 @@
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { format } from "date-fns";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import DateTimePicker from "../../components/LgsDatePicker";
-import Button from "../../components/lgsButton";
-import Checkbox from "../../components/lgsCheckbox";
-import Header from "../../components/lgsHeader";
-import { Background, ContentContainer } from "../../components/lgsScreen";
-import Input from "../../components/lgsTextInput";
-import { CLASS_CODE, COLORS, COLOR_CODE, FONTS } from "../../constant";
+
+import DateTimePicker from "@/components/LgsDatePicker";
+import Button from "@/components/lgsButton";
+import Checkbox from "@/components/lgsCheckbox";
+import Header from "@/components/lgsHeader";
+import { Background, ContentContainer } from "@/components/lgsScreen";
+import Input from "@/components/lgsTextInput";
+import { CLASS_CODE, COLORS, COLOR_CODE, FONTS } from "@/constant";
+import { useResults } from "@/contexts/useResults";
+import useTextSearch from "@/libs/useTextSearch";
 
 export default function ImageSearch() {
+  const router = useRouter();
+
+  const { textSearch } = useTextSearch();
+  const { setResults } = useResults();
+
   /*input kit*/
   const [data, setData] = useState({
-    searchKeywords: "",
-    targetClasscodes: [],
-    targetColor: "",
-    targetApplicant: "",
-    targetStartTime: new Date(),
-    targetEndTime: new Date(),
-    targetDraftC: "",
-    targetDraftE: "",
-    targetDraftJ: "",
-    isSimShape: false,
-    isSimSound: false,
+    keywords: "海底撈",
+    classcodes: [],
+    color: "",
+    applicant: "",
+    startTime: new Date(),
+    endTime: new Date(),
+    chinese: "",
+    english: "",
+    japan: "",
+    isShape: false,
+    isSound: false,
   });
 
   const handleDataChange =
@@ -37,14 +47,14 @@ export default function ImageSearch() {
   const [open, setOpen] = useState(false);
   const [colorOpen, setColorOpen] = useState(false);
 
-  const [targetClasscodes, setTargetClasscodes] = useState([]);
-  const [targetColor, setTargetColor] = useState("");
+  const [classcodes, setClasscodes] = useState([]);
+  const [color, setColor] = useState("");
   useEffect(() => {
-    handleDataChange("targetClasscodes")(targetClasscodes);
-  }, [targetClasscodes]);
+    handleDataChange("classcodes")(classcodes);
+  }, [classcodes]);
   useEffect(() => {
-    handleDataChange("targetColor")(targetColor);
-  }, [targetColor]);
+    handleDataChange("color")(color);
+  }, [color]);
   /******************************************************/
 
   /*advance kit*/
@@ -53,9 +63,9 @@ export default function ImageSearch() {
     if (!advance) {
       setData((prev) => ({
         ...prev,
-        targetDraftC: "",
-        targetDraftE: "",
-        targetDraftJ: "",
+        chinese: "",
+        english: "",
+        japan: "",
       }));
     }
   }, [advance]);
@@ -65,14 +75,18 @@ export default function ImageSearch() {
 
   const onSearch = async () => {
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
       // const userInfoStr = await AsyncStorage.getItem("@userInfo");
       // const userInfo = userInfoStr != null ? JSON.parse(userInfoStr) : null;
-      // const { data: imageData } = await imageSearch({
-      //   ...data,
-      //   userId: userInfo?.userId ?? "1234",
-      //   userType: userInfo?.userType ?? "manual",
-      // });
+      const {
+        data: { data: results },
+      } = await textSearch({
+        ...data,
+        startTime: format(data["startTime"], "yyyy-mm-dd"),
+        endTime: format(data["endTime"], "yyyy-mm-dd"),
+      });
+      setResults(results?.results);
+      router.push("search/result");
     } catch (e) {
       console.log(e);
     } finally {
@@ -99,8 +113,8 @@ export default function ImageSearch() {
         >
           <ContentContainer style={styles.container}>
             <Input
-              value={data.searchKeywords}
-              onChangeText={handleDataChange("searchKeywords")}
+              value={data.keywords}
+              onChangeText={handleDataChange("keywords")}
               style={styles.input}
               placeholder={"輸入關鍵字"}
             />
@@ -122,9 +136,9 @@ export default function ImageSearch() {
               >
                 <Text>字音相似</Text>
                 <Checkbox
-                  status={data.isSimSound}
+                  status={data.isSound}
                   onPress={() => {
-                    handleDataChange("isSimSound")(!data.isSimSound);
+                    handleDataChange("isSound")(!data.isSound);
                   }}
                 />
               </View>
@@ -137,9 +151,9 @@ export default function ImageSearch() {
               >
                 <Text>字型相似</Text>
                 <Checkbox
-                  status={data.isSimShape}
+                  status={data.isShape}
                   onPress={() => {
-                    handleDataChange("isSimShape")(!data.isSimShape);
+                    handleDataChange("isShape")(!data.isShape);
                   }}
                 />
               </View>
@@ -159,10 +173,10 @@ export default function ImageSearch() {
               placeholder="商標搜尋類別"
               searchable={true}
               open={open}
-              value={targetClasscodes}
+              value={classcodes}
               items={CLASS_CODE}
               setOpen={setOpen}
-              setValue={setTargetClasscodes}
+              setValue={setClasscodes}
               dropDownDirection="BOTTOM"
               theme="LIGHT"
               multiple={true}
@@ -174,10 +188,10 @@ export default function ImageSearch() {
             <DropDownPicker
               placeholder="商標色彩"
               open={colorOpen}
-              value={targetColor}
+              value={color}
               items={COLOR_CODE}
               setOpen={setColorOpen}
-              setValue={setTargetColor}
+              setValue={setColor}
               dropDownDirection="BOTTOM"
               theme="LIGHT"
               multiple={false}
@@ -187,8 +201,8 @@ export default function ImageSearch() {
               listMode="SCROLLVIEW"
             />
             <Input
-              value={data.targetApplicant}
-              onChangeText={handleDataChange("targetApplicant")}
+              value={data.applicant}
+              onChangeText={handleDataChange("applicant")}
               style={styles.input}
               placeholder={"輸入申請人"}
             />
@@ -203,13 +217,13 @@ export default function ImageSearch() {
             </Text>
             <View style={styles.rangeContainer}>
               <DateTimePicker
-                value={data.targetStartTime}
-                onChange={handleDataChange("targetStartTime")}
+                value={data.startTime}
+                onChange={handleDataChange("startTime")}
               />
               <Text style={{ marginLeft: 10 }}>~</Text>
               <DateTimePicker
-                value={data.targetEndTime}
-                onChange={handleDataChange("targetEndTime")}
+                value={data.endTime}
+                onChange={handleDataChange("endTime")}
               />
             </View>
             <View
@@ -235,20 +249,20 @@ export default function ImageSearch() {
             {advance && (
               <>
                 <Input
-                  value={data.targetDraftC}
-                  onChangeText={handleDataChange("targetDraftC")}
+                  value={data.chinese}
+                  onChangeText={handleDataChange("chinese")}
                   placeholder="輸入圖樣中文"
                   style={styles.input}
                 />
                 <Input
-                  value={data.targetDraftE}
-                  onChangeText={handleDataChange("targetDraftE")}
+                  value={data.english}
+                  onChangeText={handleDataChange("english")}
                   placeholder="輸入圖樣英文"
                   style={styles.input}
                 />
                 <Input
-                  value={data.targetDraftJ}
-                  onChangeText={handleDataChange("targetDraftJ")}
+                  value={data.japan}
+                  onChangeText={handleDataChange("japan")}
                   placeholder="輸入圖樣日文"
                   style={styles.input}
                 />

@@ -13,15 +13,16 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styled from "styled-components/native";
-import DateTimePicker from "../../components/LgsDatePicker";
-import Button from "../../components/lgsButton";
-import Checkbox from "../../components/lgsCheckbox";
-import Header from "../../components/lgsHeader";
-import Modal from "../../components/lgsModal";
-import PhotoIndicator from "../../components/lgsPhotoIndicator";
-import { Background, ContentContainer } from "../../components/lgsScreen";
-import Input from "../../components/lgsTextInput";
-import { CLASS_CODE, COLORS, COLOR_CODE, FONTS, ICONS } from "../../constant";
+
+import DateTimePicker from "@/components/LgsDatePicker";
+import Button from "@/components/lgsButton";
+import Checkbox from "@/components/lgsCheckbox";
+import Header from "@/components/lgsHeader";
+import Modal from "@/components/lgsModal";
+import PhotoIndicator from "@/components/lgsPhotoIndicator";
+import { Background, ContentContainer } from "@/components/lgsScreen";
+import Input from "@/components/lgsTextInput";
+import { CLASS_CODE, COLORS, COLOR_CODE, FONTS, ICONS } from "@/constant";
 
 const { Camera, Album } = ICONS;
 
@@ -221,7 +222,7 @@ export default function ImageSearch() {
                   </Text>
                   <TouchableOpacity onPress={() => setModalVisible(true)}>
                     <Image
-                      source={require("../../assets/readdImageButton.png")}
+                      source={require("../../../assets/readdImageButton.png")}
                       style={{ height: 28, width: 28 }}
                     />
                   </TouchableOpacity>
@@ -230,7 +231,7 @@ export default function ImageSearch() {
             ) : (
               <ImageUpload onPress={() => setModalVisible(true)}>
                 <Image
-                  source={require("../../assets/addImageButton.png")}
+                  source={require("../../../assets/addImageButton.png")}
                   style={{ height: 72, width: 64 }}
                 />
               </ImageUpload>
