@@ -79,7 +79,11 @@ export interface definitions {
     userType: string;
   };
   DeleteFavoriteFolder: {
-    folderId?: string;
+    folderId?: number;
+  };
+  RenameFavoriteFolder: {
+    folderId?: number;
+    folderName?: string;
   };
   AddFavoriteFolderRequest: {
     /** @description User ID */
@@ -90,21 +94,7 @@ export interface definitions {
      * @enum {string}
      */
     userType: "apple" | "general" | "facebook" | "firebase";
-    fileName?: string;
-  };
-  RenameFavoriteFolder: {
-    folderId?: string;
     folderName?: string;
-  };
-  FormattedFavoriteFolderResponse: {
-    data?: definitions["FavoriteFolderResponse"];
-    error?: string;
-    success?: boolean;
-  };
-  FavoriteFolderResponse: {
-    data?: definitions["FavoriteFolderResponse"];
-    error?: string;
-    success?: boolean;
   };
   FormattedReadFavoriteFolderResponse: {
     data?: definitions["ReadFavoriteFolderResponse"][];
@@ -115,13 +105,22 @@ export interface definitions {
     fileId?: number;
     fileName?: string;
   };
+  FormattedFavoriteFolderResponse: {
+    data?: definitions["FavoriteFolderResponse"];
+    error?: string;
+    success?: boolean;
+  };
+  FavoriteFolderResponse: {
+    fileId?: number;
+    fileName?: string;
+  };
   DeleteFavoriteFile: {
     esId?: string;
   };
   AddFavoriteFile: {
     esId?: string;
   };
-  TextSearch: {
+  TextSearchRequest: {
     keywords?: string;
     isSound?: boolean;
     isShape?: boolean;
@@ -135,6 +134,14 @@ export interface definitions {
     chinese?: string;
     english?: string;
     japan?: string;
+  };
+  FormattedTextSearchResponse: {
+    data?: definitions["TextSearchResponse"];
+    error?: string;
+    success?: boolean;
+  };
+  TextSearchResponse: {
+    results?: string[][];
   };
 }
 
@@ -325,12 +332,18 @@ export interface operations {
   post_text_search: {
     parameters: {
       body: {
-        payload: definitions["TextSearch"];
+        payload: definitions["TextSearchRequest"];
+      };
+      header: {
+        /** An optional fields mask */
+        "X-Fields"?: string;
       };
     };
     responses: {
       /** Success */
-      200: unknown;
+      200: {
+        schema: definitions["FormattedTextSearchResponse"];
+      };
     };
   };
 }
