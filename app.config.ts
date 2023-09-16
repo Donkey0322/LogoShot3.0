@@ -39,6 +39,7 @@ const config: ExpoConfig = {
     REACT_APP_IMAGE_PORT: "8082",
   },
   plugins: [
+    "expo-router",
     [
       "expo-image-picker",
       {
@@ -59,6 +60,9 @@ const config: ExpoConfig = {
     ],
     "expo-apple-authentication",
   ],
+  experiments: {
+    typedRoutes: true,
+  },
 };
 
 export default config;

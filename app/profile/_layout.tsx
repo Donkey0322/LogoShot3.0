@@ -1,10 +1,9 @@
 import { Stack } from "expo-router";
-
 const NAVIGATE_ITEM = ["index", "favorite"];
-
-export const unstable_settings = {
-  initialRouteName: "index",
-};
+const Modal = [
+  { name: "auth/login", title: "Welcome" },
+  { name: "auth/signup", title: "Welcome" },
+];
 
 export default function Layout() {
   return (
@@ -18,14 +17,16 @@ export default function Layout() {
           }}
         />
       ))}
-      <Stack.Screen
-        name="auth"
-        options={{
-          // Set the presentation mode to modal for our modal route.
-          presentation: "modal",
-          headerShown: false,
-        }}
-      />
+      {Modal.map(({ name, title }) => (
+        <Stack.Screen
+          key={name}
+          name={name}
+          options={{
+            presentation: "modal",
+            title,
+          }}
+        />
+      ))}
     </Stack>
   );
 }
