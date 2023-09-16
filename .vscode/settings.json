@@ -3,5 +3,5 @@
     "source.organizeImports": true
   },
   "editor.formatOnSave": true,
-  "cSpell.words": ["blurhash"]
+  "cSpell.words": ["blurhash", "Pressable"]
 }

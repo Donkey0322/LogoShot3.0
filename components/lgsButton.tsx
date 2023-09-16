@@ -25,7 +25,8 @@ export default function Button({
     <TouchableOpacity
       style={{
         ...styles.container,
-        ...(disabled ? styles.disabled : style),
+        ...style,
+        ...(disabled && styles.disabled),
       }}
       onPress={onPress}
       disabled={disabled}

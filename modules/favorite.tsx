@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
-import { Dispatch, useRef, useState } from "react";
-import { Alert, Text, TextInput } from "react-native";
+import { Dispatch, useRef } from "react";
+import { Alert, StyleSheet, Text, TextInput } from "react-native";
 import { styled } from "styled-components/native";
 
 import Button from "@/components/lgsButton";
@@ -12,10 +12,15 @@ import useFavoriteFolder from "@/libs/useFavoriteFolder";
 
 import type { ModalProps } from "@/components/lgsModal";
 
+export type ModeType = "normal" | "edit" | "delete" | "add";
+
 const { Delete, EditFile, Enter } = ICONS;
 
 interface FavoriteFolderModalProps {
-  modalProps: Pick<ModalProps, "modalVisible" | "setModalVisible">;
+  modalProps: Pick<ModalProps, "modalVisible" | "setModalVisible"> & {
+    mode: ModeType;
+    setMode: Dispatch<React.SetStateAction<ModeType>>;
+  };
   folder: { title?: string; folderId?: number };
   setFolder: Dispatch<
     React.SetStateAction<{ title?: string; folderId?: number }>
@@ -45,43 +50,31 @@ const CheckWrapper = styled.View`
   margin: 20px;
 `;
 
-export function FavoriteFolderModal({
-  modalProps,
-  folder: { title, folderId },
+const styles = StyleSheet.create({
+  FavoriteFolderModalTitle: {
+    marginBottom: 25,
+    fontWeight: "bold",
+    color: "#000000",
+    fontSize: 18,
+    alignSelf: "flex-start",
+  },
+});
+
+const FavoriteFolderModalTitle = ({
+  mode,
+  title,
   setFolder,
-}: FavoriteFolderModalProps) {
-  const router = useRouter();
-  const { user } = useUser();
-  const { deleteFavoriteFolder, renameFavoriteFolder } = useFavoriteFolder(
-    user?.userId,
-    user?.userType
-  );
-
+}: {
+  mode: ModeType;
+  title: string;
+  setFolder: FavoriteFolderModalProps["setFolder"];
+}) => {
   const TitleInputRef = useRef<TextInput | null>(null);
-  const [mode, setMode] = useState<"normal" | "edit" | "delete">("normal");
-  const { setModalVisible } = modalProps;
-
-  const handleRenameFavoriteFolder = async () => {
-    try {
-      await renameFavoriteFolder({ folderId, folderName: title });
-      setMode("normal");
-    } catch {
-      Alert.alert("Error");
-    }
-  };
-  if (title === undefined || folderId === undefined) return null;
-
-  return (
-    <Modal {...modalProps} beforeModalCancel={() => setMode("normal")}>
-      {mode === "edit" ? (
+  switch (mode) {
+    case "edit":
+      return (
         <TextInput
-          style={{
-            marginBottom: 25,
-            fontWeight: "bold",
-            color: "#000000",
-            fontSize: 18,
-            alignSelf: "flex-start",
-          }}
+          style={styles.FavoriteFolderModalTitle}
           ref={TitleInputRef}
           onFocus={() =>
             TitleInputRef.current?.setNativeProps({
@@ -93,82 +86,199 @@ export function FavoriteFolderModal({
         >
           {title}
         </TextInput>
-      ) : (
-        <Text
-          style={{
-            marginBottom: 25,
-            fontWeight: "bold",
-            color: "#000000",
-            fontSize: 18,
-            alignSelf: "flex-start",
-          }}
+      );
+    case "add":
+      return (
+        <TextInput
+          style={styles.FavoriteFolderModalTitle}
+          onChangeText={(title) => setFolder((prev) => ({ ...prev, title }))}
+          autoFocus
+          placeholder="輸入新資料夾名稱"
         >
           {title}
+        </TextInput>
+      );
+    default:
+      return (
+        <Text style={styles.FavoriteFolderModalTitle}>
+          {mode === "delete"
+            ? `Are you sure you want to delete ${title}?`
+            : title}
         </Text>
-      )}
+      );
+  }
+};
+
+const FavoriteFolderModalBody = ({
+  mode,
+  setMode,
+  folderId,
+  folderName,
+  setModalVisible,
+}: {
+  folderId: number;
+  folderName: string;
+} & FavoriteFolderModalProps["modalProps"]) => {
+  const router = useRouter();
+
+  const { user } = useUser();
+  const { deleteFavoriteFolder, renameFavoriteFolder, addFavoriteFolder } =
+    useFavoriteFolder(user?.userId, user?.userType);
+
+  const handleRenameFavoriteFolder = async () => {
+    try {
+      await renameFavoriteFolder({ folderId, folderName });
+      setMode("normal");
+    } catch {
+      Alert.alert("Error");
+    }
+  };
+
+  const handleDeleteFavoriteFolder = async () => {
+    try {
+      await deleteFavoriteFolder({ folderId });
+      setModalVisible(false);
+      setMode("normal");
+    } catch {
+      Alert.alert("Error");
+    }
+  };
+
+  const handleAddFavoriteFolder = async () => {
+    try {
+      await addFavoriteFolder({
+        userId: user?.userId ?? "",
+        userType: "firebase",
+        folderName,
+      });
+      setModalVisible(false);
+      setMode("normal");
+    } catch {
+      Alert.alert("Error");
+    }
+  };
+
+  switch (mode) {
+    case "normal":
+      return (
+        <>
+          <ListItem
+            onPress={() => {
+              setModalVisible(false);
+              router.push("profile/favorite/detail");
+            }}
+          >
+            <Enter size={20} />
+            <Text style={{ fontSize: 14, fontWeight: "bold" }}>開啟資料夾</Text>
+          </ListItem>
+          <Divider />
+          <ListItem onPress={() => setMode("edit")}>
+            <EditFile size={20} />
+            <Text style={{ fontSize: 14, fontWeight: "bold" }}>重新命名</Text>
+          </ListItem>
+          <Divider />
+          <ListItem
+            onPress={async () => {
+              setMode("delete");
+            }}
+          >
+            <Delete color={COLORS("red")} size={20} />
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: "bold",
+                color: COLORS("red"),
+              }}
+            >
+              刪除資料夾
+            </Text>
+          </ListItem>
+        </>
+      );
+    case "edit":
+    case "delete":
+      return (
+        <CheckWrapper>
+          <Button
+            onPress={() => setMode("normal")}
+            style={{
+              //   backgroundColor: COLORS("mustard.300"),
+              paddingVertical: 10,
+              borderWidth: 1,
+              borderColor:
+                mode === "edit" ? COLORS("red.500") : COLORS("blue.500"),
+            }}
+          >
+            <Text
+              style={{
+                color: mode === "edit" ? COLORS("red.500") : COLORS("blue.500"),
+              }}
+            >
+              取消
+            </Text>
+          </Button>
+          <Button
+            onPress={
+              mode === "edit"
+                ? handleRenameFavoriteFolder
+                : handleDeleteFavoriteFolder
+            }
+            style={{
+              backgroundColor:
+                mode === "edit" ? COLORS("blue.500") : COLORS("red.500"),
+              paddingVertical: 10,
+            }}
+          >
+            確認
+          </Button>
+        </CheckWrapper>
+      );
+    case "add":
+      return (
+        <Button
+          onPress={handleAddFavoriteFolder}
+          style={{
+            paddingVertical: 10,
+            backgroundColor: COLORS("coldblue.600"),
+          }}
+          disabled={!folderName}
+        >
+          <Text style={{ color: "white" }}>確認新增</Text>
+        </Button>
+      );
+    default:
+      return null;
+  }
+};
+
+export function FavoriteFolderModal({
+  modalProps,
+  folder: { title, folderId },
+  setFolder,
+}: FavoriteFolderModalProps) {
+  const { mode, setMode } = modalProps;
+
+  if (title === undefined || folderId === undefined) return null;
+
+  return (
+    <Modal
+      {...modalProps}
+      beforeModalCancel={() => setMode("normal")}
+      warning={mode === "delete"}
+      {...(mode === "add" && { animation: "fade" })}
+    >
+      <FavoriteFolderModalTitle
+        mode={mode}
+        title={title}
+        setFolder={setFolder}
+      />
       <List>
         <Divider />
-        {mode === "normal" ? (
-          <>
-            <ListItem
-              onPress={() => {
-                setModalVisible(false);
-                router.push("profile/favorite/detail");
-              }}
-            >
-              <Enter size={20} />
-              <Text style={{ fontSize: 14, fontWeight: "bold" }}>
-                開啟資料夾
-              </Text>
-            </ListItem>
-            <Divider />
-            <ListItem onPress={() => setMode("edit")}>
-              <EditFile size={20} />
-              <Text style={{ fontSize: 14, fontWeight: "bold" }}>重新命名</Text>
-            </ListItem>
-            <Divider />
-            <ListItem
-              onPress={async () => {
-                await deleteFavoriteFolder({ folderId });
-                setModalVisible(false);
-              }}
-            >
-              <Delete color={COLORS("red")} size={20} />
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: "bold",
-                  color: COLORS("red"),
-                }}
-              >
-                刪除資料夾
-              </Text>
-            </ListItem>
-          </>
-        ) : (
-          <CheckWrapper>
-            <Button
-              onPress={() => setMode("normal")}
-              style={{
-                //   backgroundColor: COLORS("mustard.300"),
-                paddingVertical: 10,
-                borderWidth: 1,
-                borderColor: COLORS("red.500"),
-              }}
-            >
-              <Text style={{ color: COLORS("red.500") }}>取消</Text>
-            </Button>
-            <Button
-              onPress={handleRenameFavoriteFolder}
-              style={{
-                backgroundColor: COLORS("mustard.300"),
-                paddingVertical: 10,
-              }}
-            >
-              確認
-            </Button>
-          </CheckWrapper>
-        )}
+        <FavoriteFolderModalBody
+          {...modalProps}
+          folderId={folderId}
+          folderName={title}
+        />
         <Divider />
       </List>
     </Modal>

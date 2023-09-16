@@ -5,6 +5,8 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { styled } from "styled-components/native";
 
+import type { ModeType } from "@/modules/favorite";
+
 import Fab from "@/components/Fab";
 import Folder from "@/components/svg/Folder";
 import { COLORS, ICONS } from "@/constant";
@@ -70,12 +72,10 @@ const FolderTitle = styled.Text`
 export default function Page() {
   const router = useRouter();
   const { user } = useUser();
-  const { favoriteFolder, addFavoriteFolder } = useFavoriteFolder(
-    user?.userId,
-    user?.userType
-  );
+  const { favoriteFolder } = useFavoriteFolder(user?.userId, user?.userType);
   const { width } = useWidthOnResize();
 
+  const [mode, setMode] = useState<ModeType>("normal");
   const [modalVisible, setModalVisible] = useState(false);
   const [folder, setFolder] = useState<{ title?: string; folderId?: number }>(
     {}
@@ -138,20 +138,18 @@ export default function Page() {
           <Fab
             position={{ right: 20, bottom: 50 }}
             size={70}
-            onPress={() =>
-              addFavoriteFolder({
-                userId: user?.userId ?? "",
-                userType: "firebase",
-                folderName: "新增資料夾",
-              })
-            }
+            onPress={() => {
+              setMode("add");
+              setFolder({ title: "", folderId: 0 });
+              setModalVisible(true);
+            }}
           >
             <Plus size={30} />
           </Fab>
         </View>
       </ContentContainer>
       <FavoriteFolderModal
-        modalProps={{ modalVisible, setModalVisible }}
+        modalProps={{ mode, setMode, modalVisible, setModalVisible }}
         folder={folder}
         setFolder={setFolder}
       />

@@ -1,12 +1,15 @@
 import type { ViewStyle } from "react-native";
 import { Modal, Pressable, StyleSheet } from "react-native";
 
+import Warning from "@/utils/components/Warning";
+
 export interface ModalProps {
   modalVisible: boolean;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   children: React.ReactNode;
   animation?: "fade" | "slide";
   style?: ViewStyle;
+  warning?: boolean;
   beforeModalCancel?: () => void;
 }
 
@@ -16,25 +19,45 @@ export default function lgsModal({
   children,
   animation = "slide",
   style,
+  warning,
   beforeModalCancel = () => {},
 }: ModalProps) {
   return (
     <Modal animationType={animation} transparent={true} visible={modalVisible}>
       <Pressable
-        style={{ ...styles.centeredView, ...style }}
+        style={{
+          ...styles.centeredView,
+          ...(animation === "fade" && {
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+          }),
+          ...style,
+        }}
         onPress={() => {
           beforeModalCancel();
           setModalVisible(false);
         }}
       >
-        <Pressable
-          style={{ ...styles.modalView }}
-          onPress={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          {children}
-        </Pressable>
+        {warning ? (
+          <Warning
+            style={styles.modalView}
+            onPress={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            {children}
+          </Warning>
+        ) : (
+          <Pressable
+            style={{
+              ...styles.modalView,
+            }}
+            onPress={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            {children}
+          </Pressable>
+        )}
       </Pressable>
     </Modal>
   );
@@ -60,5 +83,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    maxWidth: "90%",
   },
 });

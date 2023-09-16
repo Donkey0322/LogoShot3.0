@@ -45,14 +45,6 @@ const fetchError: Middleware = async (url, init, next) => {
   return res;
 };
 
-// const tokenExpirationHandler: Middleware = async (url, init, next) => {
-//   const res = await next(url, init);
-//   if (!res.ok && res.data.error.toString() === 'LoginExpired') {
-//     useAuthStore.getState().clear();
-//   }
-//   return res;
-// };
-
 const api = Fetcher.for<paths>();
 
 api.configure({
@@ -62,7 +54,6 @@ api.configure({
     logger,
     // authTokenInjector,
     fetchError,
-    // tokenExpirationHandler
   ],
 });
 
