@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-const NAVIGATE_ITEM = ["index", "favorite"];
+const NAVIGATE_ITEM = ["index", "favorite", "history"];
 const Modal = [
   { name: "auth/login", title: "Welcome" },
   { name: "auth/signup", title: "Welcome" },
