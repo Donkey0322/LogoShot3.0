@@ -26,9 +26,6 @@ import { CLASS_CODE, COLORS, COLOR_CODE, FONTS, ICONS } from "@/constant";
 
 const { Camera, Album } = ICONS;
 
-// import middleware from "../../middleware";
-// const { imageSearch } = middleware;
-
 const ImageUpload = styled.TouchableOpacity`
   background-color: white;
   margin-top: 10px;
@@ -222,7 +219,7 @@ export default function ImageSearch() {
                   </Text>
                   <TouchableOpacity onPress={() => setModalVisible(true)}>
                     <Image
-                      source={require("../../../assets/readdImageButton.png")}
+                      source={require("@/assets/readdImageButton.png")}
                       style={{ height: 28, width: 28 }}
                     />
                   </TouchableOpacity>
@@ -231,7 +228,7 @@ export default function ImageSearch() {
             ) : (
               <ImageUpload onPress={() => setModalVisible(true)}>
                 <Image
-                  source={require("../../../assets/addImageButton.png")}
+                  source={require("@/assets/addImageButton.png")}
                   style={{ height: 72, width: 64 }}
                 />
               </ImageUpload>

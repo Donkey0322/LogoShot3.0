@@ -86,7 +86,7 @@ export default function ImageSearch() {
         endTime: format(data["endTime"], "yyyy-mm-dd"),
       });
       setResults(results?.results);
-      router.push("search/result");
+      router.push("/search/result/");
     } catch (e) {
       console.log(e);
     } finally {

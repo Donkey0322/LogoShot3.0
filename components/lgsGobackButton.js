@@ -12,7 +12,7 @@ const LgsGobackButton = ({ goBack }) => {
       }}
     >
       <Image
-        source={require("../assets/back.png")}
+        source={require("@/assets/back.png")}
         style={{ height: 50, width: 50 }}
       />
     </TouchableOpacity>

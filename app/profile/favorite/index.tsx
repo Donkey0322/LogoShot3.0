@@ -120,7 +120,7 @@ export default function Page() {
                 <View style={{ zIndex: -1 }}>
                   <TouchableOpacity
                     onPress={() => {
-                      router.push("profile/favorite/detail");
+                      router.push("/profile/favorite/detail");
                     }}
                     hitSlop={{ top: -50, bottom: -50, left: -20, right: -20 }}
                   >

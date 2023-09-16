@@ -2,7 +2,9 @@ import { useRouter } from "expo-router";
 import { TouchableOpacity } from "react-native";
 // import { TouchableOpacity } from "react-native-gesture-handler";
 import { styled } from "styled-components/native";
-import { COLORS, ICONS } from "../../../constant";
+
+import { COLORS, ICONS } from "@/constant";
+
 const { Back } = ICONS;
 
 const Background = styled.View<{ color?: string }>`

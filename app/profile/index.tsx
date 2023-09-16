@@ -127,7 +127,7 @@ export default function Page() {
                   flex: 0.8,
                   width: 0.8 * imageWidth,
                 }}
-                source={require("../../assets/figure.png")}
+                source={require("@/assets/figure.png")}
                 // placeholder={blurhash}
                 // contentFit="cover"
                 transition={1000}
@@ -143,7 +143,7 @@ export default function Page() {
         <List>
           {login ? (
             <>
-              <ListItem onPress={() => {}}>
+              <ListItem onPress={() => router.push("/profile/history/")}>
                 <Search />
                 <Text style={{ fontSize: 14, fontWeight: "bold" }}>
                   搜尋紀錄
