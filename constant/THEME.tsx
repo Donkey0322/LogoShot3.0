@@ -72,6 +72,16 @@ const colors = {
     700: "#343434",
     mid: "#808080",
   },
+  blue: {
+    100: "#e2eeff",
+    200: "#afd0ff",
+    300: "#7cb3ff",
+    400: "#1677ff",
+    500: "#005ee2",
+    600: "#0049af",
+    700: "#00347c",
+    mid: "#1677ff",
+  },
 };
 
 export const COLORS = (routes: NestedKeys<typeof colors>) => {
