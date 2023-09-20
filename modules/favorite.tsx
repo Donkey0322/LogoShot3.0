@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { Dispatch, useRef } from "react";
+import { Dispatch, useMemo, useRef } from "react";
 import { Alert, StyleSheet, Text, TextInput } from "react-native";
 import { styled } from "styled-components/native";
 
@@ -13,6 +13,14 @@ import useFavoriteFolder from "@/libs/useFavoriteFolder";
 import type { ModalProps } from "@/components/lgsModal";
 
 export type ModeType = "normal" | "edit" | "delete" | "add";
+export interface FolderType {
+  folderName?: string;
+  folderId?: number;
+}
+export interface FolderProps {
+  folder: FolderType;
+  setFolder: Dispatch<React.SetStateAction<FolderType>>;
+}
 
 const { Delete, EditFile, Enter } = ICONS;
 
@@ -21,10 +29,7 @@ interface FavoriteFolderModalProps {
     mode: ModeType;
     setMode: Dispatch<React.SetStateAction<ModeType>>;
   };
-  folder: { title?: string; folderId?: number };
-  setFolder: Dispatch<
-    React.SetStateAction<{ title?: string; folderId?: number }>
-  >;
+  folderProps: FolderProps;
 }
 
 const List = styled.View`
@@ -62,13 +67,11 @@ const styles = StyleSheet.create({
 
 const FavoriteFolderModalTitle = ({
   mode,
-  title,
+  folder: { folderName },
   setFolder,
 }: {
   mode: ModeType;
-  title: string;
-  setFolder: FavoriteFolderModalProps["setFolder"];
-}) => {
+} & FolderProps) => {
   const TitleInputRef = useRef<TextInput | null>(null);
   switch (mode) {
     case "edit":
@@ -78,32 +81,36 @@ const FavoriteFolderModalTitle = ({
           ref={TitleInputRef}
           onFocus={() =>
             TitleInputRef.current?.setNativeProps({
-              selection: { start: 0, end: title.length },
+              selection: { start: 0, end: folderName?.length },
             })
           }
-          onChangeText={(title) => setFolder((prev) => ({ ...prev, title }))}
+          onChangeText={(folderName) =>
+            setFolder((prev) => ({ ...prev, folderName }))
+          }
           autoFocus
         >
-          {title}
+          {folderName}
         </TextInput>
       );
     case "add":
       return (
         <TextInput
           style={styles.FavoriteFolderModalTitle}
-          onChangeText={(title) => setFolder((prev) => ({ ...prev, title }))}
+          onChangeText={(folderName) =>
+            setFolder((prev) => ({ ...prev, folderName }))
+          }
           autoFocus
           placeholder="輸入新資料夾名稱"
         >
-          {title}
+          {folderName}
         </TextInput>
       );
     default:
       return (
         <Text style={styles.FavoriteFolderModalTitle}>
           {mode === "delete"
-            ? `Are you sure you want to delete ${title}?`
-            : title}
+            ? `Are you sure you want to delete ${folderName}?`
+            : folderName}
         </Text>
       );
   }
@@ -112,14 +119,13 @@ const FavoriteFolderModalTitle = ({
 const FavoriteFolderModalBody = ({
   mode,
   setMode,
-  folderId,
-  folderName,
   setModalVisible,
-}: {
-  folderId: number;
-  folderName: string;
-} & FavoriteFolderModalProps["modalProps"]) => {
+  folder,
+  setFolder,
+}: FavoriteFolderModalProps["folderProps"] &
+  Omit<FavoriteFolderModalProps["modalProps"], "modalVisible">) => {
   const router = useRouter();
+  const originalFolder = useMemo(() => folder, []);
 
   const { user } = useUser();
   const { deleteFavoriteFolder, renameFavoriteFolder, addFavoriteFolder } =
@@ -127,7 +133,7 @@ const FavoriteFolderModalBody = ({
 
   const handleRenameFavoriteFolder = async () => {
     try {
-      await renameFavoriteFolder({ folderId, folderName });
+      await renameFavoriteFolder(folder);
       setMode("normal");
     } catch {
       Alert.alert("Error");
@@ -136,7 +142,7 @@ const FavoriteFolderModalBody = ({
 
   const handleDeleteFavoriteFolder = async () => {
     try {
-      await deleteFavoriteFolder({ folderId });
+      await deleteFavoriteFolder({ folderId: folder.folderId });
       setModalVisible(false);
       setMode("normal");
     } catch {
@@ -149,7 +155,7 @@ const FavoriteFolderModalBody = ({
       await addFavoriteFolder({
         userId: user?.userId ?? "",
         userType: "firebase",
-        folderName,
+        folderName: folder.folderName,
       });
       setModalVisible(false);
       setMode("normal");
@@ -165,7 +171,7 @@ const FavoriteFolderModalBody = ({
           <ListItem
             onPress={() => {
               setModalVisible(false);
-              router.push("profile/favorite/detail");
+              router.push("/profile/favorite/detail");
             }}
           >
             <Enter size={20} />
@@ -200,7 +206,10 @@ const FavoriteFolderModalBody = ({
       return (
         <CheckWrapper>
           <Button
-            onPress={() => setMode("normal")}
+            onPress={() => {
+              setFolder(originalFolder);
+              setMode("normal");
+            }}
             style={{
               //   backgroundColor: COLORS("mustard.300"),
               paddingVertical: 10,
@@ -241,7 +250,7 @@ const FavoriteFolderModalBody = ({
             paddingVertical: 10,
             backgroundColor: COLORS("coldblue.600"),
           }}
-          disabled={!folderName}
+          disabled={!folder.folderName}
         >
           <Text style={{ color: "white" }}>確認新增</Text>
         </Button>
@@ -253,12 +262,14 @@ const FavoriteFolderModalBody = ({
 
 export function FavoriteFolderModal({
   modalProps,
-  folder: { title, folderId },
-  setFolder,
+  folderProps,
 }: FavoriteFolderModalProps) {
   const { mode, setMode } = modalProps;
+  const {
+    folder: { folderName, folderId },
+  } = folderProps;
 
-  if (title === undefined || folderId === undefined) return null;
+  if (folderName === undefined || folderId === undefined) return null;
 
   return (
     <Modal
@@ -267,18 +278,10 @@ export function FavoriteFolderModal({
       warning={mode === "delete"}
       {...(mode === "add" && { animation: "fade" })}
     >
-      <FavoriteFolderModalTitle
-        mode={mode}
-        title={title}
-        setFolder={setFolder}
-      />
+      <FavoriteFolderModalTitle mode={mode} {...folderProps} />
       <List>
         <Divider />
-        <FavoriteFolderModalBody
-          {...modalProps}
-          folderId={folderId}
-          folderName={title}
-        />
+        <FavoriteFolderModalBody {...modalProps} {...folderProps} />
         <Divider />
       </List>
     </Modal>

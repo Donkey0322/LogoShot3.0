@@ -5,7 +5,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { styled } from "styled-components/native";
 
-import type { ModeType } from "@/modules/favorite";
+import type { FolderType, ModeType } from "@/modules/favorite";
 
 import Fab from "@/components/Fab";
 import Folder from "@/components/svg/Folder";
@@ -77,9 +77,7 @@ export default function Page() {
 
   const [mode, setMode] = useState<ModeType>("normal");
   const [modalVisible, setModalVisible] = useState(false);
-  const [folder, setFolder] = useState<{ title?: string; folderId?: number }>(
-    {}
-  );
+  const [folder, setFolder] = useState<FolderType>({});
 
   return (
     <Background>
@@ -111,7 +109,10 @@ export default function Page() {
                 <MenuContainer
                   style={styles.menu}
                   onPress={() => {
-                    setFolder({ title: item.fileName, folderId: item.fileId });
+                    setFolder({
+                      folderName: item.fileName,
+                      folderId: item.fileId,
+                    });
                     setModalVisible(true);
                   }}
                 >
@@ -140,7 +141,7 @@ export default function Page() {
             size={70}
             onPress={() => {
               setMode("add");
-              setFolder({ title: "", folderId: 0 });
+              setFolder({ folderName: "", folderId: 0 });
               setModalVisible(true);
             }}
           >
@@ -150,8 +151,7 @@ export default function Page() {
       </ContentContainer>
       <FavoriteFolderModal
         modalProps={{ mode, setMode, modalVisible, setModalVisible }}
-        folder={folder}
-        setFolder={setFolder}
+        folderProps={{ folder, setFolder }}
       />
     </Background>
   );
