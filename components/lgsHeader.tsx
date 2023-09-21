@@ -13,7 +13,7 @@ export default function LgsLogo() {
 
   return (
     <ImageBackground
-      source={require("../assets/logobg.jpg")}
+      source={require("@/assets/logobg.jpg")}
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
@@ -48,7 +48,7 @@ export default function LgsLogo() {
 
       <Button
         onPress={() => {
-          router.push("/profile");
+          router.push("/profile/");
         }}
         style={{ backgroundColor: COLORS("mustard.300"), paddingVertical: 10 }}
       >

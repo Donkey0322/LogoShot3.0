@@ -84,7 +84,7 @@ export default function PhotoIndicator({
           imageHeight={height}
         >
           <Image
-            source={require("../assets/indicator.png")}
+            source={require("@/assets/indicator.png")}
             style={{ width: 30, height: 30 }}
           />
         </LgsDraggablePin>

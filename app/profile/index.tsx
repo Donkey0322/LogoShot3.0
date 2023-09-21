@@ -1,5 +1,5 @@
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { useMemo, useState } from "react";
 import { Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -73,7 +73,7 @@ const ListItem = styled.TouchableOpacity`
 // "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 export default function Page() {
-  const router = useRouter();
+  // const router = useRouter();
   const [imageWidth, setImageWidth] = useState(0);
   const { logOut } = useAuth();
   const { user } = useUser();
@@ -127,7 +127,7 @@ export default function Page() {
                   flex: 0.8,
                   width: 0.8 * imageWidth,
                 }}
-                source={require("../../assets/figure.png")}
+                source={require("@/assets/figure.png")}
                 // placeholder={blurhash}
                 // contentFit="cover"
                 transition={1000}
@@ -143,13 +143,13 @@ export default function Page() {
         <List>
           {login ? (
             <>
-              <ListItem onPress={() => {}}>
+              <ListItem onPress={() => router.push("/profile/history/")}>
                 <Search />
                 <Text style={{ fontSize: 14, fontWeight: "bold" }}>
                   搜尋紀錄
                 </Text>
               </ListItem>
-              <ListItem onPress={() => router.push("profile/favorite")}>
+              <ListItem onPress={() => router.push("/profile/favorite/")}>
                 <Star color="#f7dd72" />
                 <Text style={{ fontSize: 14, fontWeight: "bold" }}>
                   我的最愛
@@ -170,11 +170,11 @@ export default function Page() {
             </>
           ) : (
             <>
-              <ListItem onPress={() => router.push("profile/auth/login")}>
+              <ListItem onPress={() => router.push("/profile/auth/login")}>
                 <Login />
                 <Text style={{ fontSize: 14, fontWeight: "bold" }}>登入</Text>
               </ListItem>
-              <ListItem onPress={() => router.push("profile/auth/signup")}>
+              <ListItem onPress={() => router.push("/profile/auth/signup")}>
                 <Member color={COLORS("coldblue")} />
                 <Text style={{ fontSize: 14, fontWeight: "bold" }}>註冊</Text>
               </ListItem>
