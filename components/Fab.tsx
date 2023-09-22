@@ -1,7 +1,7 @@
 import { styled } from "styled-components/native";
 
 import type { Color } from "@/utils/types";
-import type { CSSProperties, ReactNode } from "react";
+import type { TouchableOpacityProps } from "react-native";
 
 import { COLORS } from "@/constant";
 
@@ -14,9 +14,6 @@ interface FabProps {
   };
   size?: number;
   color?: Color;
-  children?: ReactNode;
-  style?: CSSProperties;
-  onPress?: () => void;
 }
 
 const FAB_SIZE = 70;
@@ -26,7 +23,7 @@ const Fab = styled.TouchableOpacity<FabProps>`
   width: ${({ size }) => size ?? FAB_SIZE}px;
   height: ${({ size }) => size ?? FAB_SIZE}px;
   border-radius: 50%;
-  background-color: ${FAB_CONSTANT};
+  background-color: ${({ color }) => color ?? FAB_CONSTANT};
   position: absolute;
   ${({ position: { right } }) => right && `right: ${right}px;`}
   ${({ position: { left } }) => left && `left: ${left}px;`}
@@ -37,7 +34,13 @@ const Fab = styled.TouchableOpacity<FabProps>`
   justify-content: center;
 `;
 
-export default ({ position, size, color, onPress, ...rest }: FabProps) => {
+export default ({
+  position,
+  size,
+  color,
+  onPress,
+  ...rest
+}: FabProps & TouchableOpacityProps) => {
   return (
     <Fab
       position={position}

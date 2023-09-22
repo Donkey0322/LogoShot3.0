@@ -1,30 +1,26 @@
-import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet } from "react-native";
 
-export default function LgsCheckbox({
+import type { TouchableOpacityProps } from "react-native";
+
+import { ICONS } from "@/constant";
+
+const { Check } = ICONS;
+
+export default function Checkbox({
   status,
   onPress,
+  ...rest
 }: {
   status: boolean;
-  onPress: () => void;
-}) {
+} & TouchableOpacityProps) {
   return (
     <Pressable
       style={[styles.checkboxBase, status && styles.checkboxChecked]}
       onPress={onPress}
+      {...rest}
     >
-      {status && <Ionicons name="checkmark" size={22} color="white" />}
+      {status && <Check size={22} color="white" />}
     </Pressable>
-    // <TouchableOpacity onPress={onPress} style={styles.container}>
-    //   {status ? (
-    //     <Image style={styles.image} source={require("../assets/checked.png")} />
-    //   ) : (
-    //     <Image
-    //       style={styles.image}
-    //       source={require("../assets/unchecked.png")}
-    //     />
-    //   )}
-    // </TouchableOpacity>
   );
 }
 

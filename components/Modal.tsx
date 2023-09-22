@@ -13,7 +13,7 @@ export interface ModalProps {
   beforeModalCancel?: () => void;
 }
 
-export default function lgsModal({
+export default ({
   modalVisible,
   setModalVisible,
   children,
@@ -21,7 +21,7 @@ export default function lgsModal({
   style,
   warning,
   beforeModalCancel = () => {},
-}: ModalProps) {
+}: ModalProps) => {
   return (
     <Modal animationType={animation} transparent={true} visible={modalVisible}>
       <Pressable
@@ -61,7 +61,7 @@ export default function lgsModal({
       </Pressable>
     </Modal>
   );
-}
+};
 
 const styles = StyleSheet.create({
   centeredView: {

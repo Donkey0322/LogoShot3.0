@@ -6,7 +6,7 @@ import Button from "@/components/Button";
 import { COLORS, FONTS } from "@/constant";
 import { useUser } from "@/contexts/useUser";
 
-export default function LgsLogo() {
+export default function Header() {
   const router = useRouter();
   const { user } = useUser();
   const login = useMemo(() => user?.userId ?? false, [user?.userId]);
