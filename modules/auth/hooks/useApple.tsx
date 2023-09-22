@@ -5,7 +5,7 @@ import { Alert } from "react-native";
 
 import type { Color } from "@/utils/types";
 
-import { IconButton } from "@/components/lgsButton";
+import { IconButton } from "@/components/Button";
 import { ICONS } from "@/constant";
 import { useUser } from "@/contexts/useUser";
 

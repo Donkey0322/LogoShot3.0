@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 
-import DateTimePicker from "@/components/LgsDatePicker";
-import Button from "@/components/lgsButton";
-import Checkbox from "@/components/lgsCheckbox";
-import Header from "@/components/lgsHeader";
-import Input from "@/components/lgsTextInput";
+import Button from "@/components/Button";
+import Checkbox from "@/components/Checkbox";
+import DateTimePicker from "@/components/DatePicker";
+import Header from "@/components/Header";
+import Input from "@/components/TextInput";
 import { CLASS_CODE, COLORS, COLOR_CODE, FONTS } from "@/constant";
 import { useResults } from "@/contexts/useResults";
 import useTextSearch from "@/libs/useTextSearch";

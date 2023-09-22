@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Dimensions, Image } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import LgsDraggablePin from "./lgsDraggablePin";
+import LgsDraggablePin from "./DraggablePin";
 
 // const windowWidth = Dimensions.get("window").width;
 // const windowHeight = Dimensions.get("window").height;

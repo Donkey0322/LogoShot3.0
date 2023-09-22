@@ -3,14 +3,14 @@ import { Dispatch, useMemo, useRef } from "react";
 import { Alert, StyleSheet, Text, TextInput } from "react-native";
 import { styled } from "styled-components/native";
 
-import Button from "@/components/lgsButton";
-import Divider from "@/components/lgsDivider";
-import Modal from "@/components/lgsModal";
+import Button from "@/components/Button";
+import Divider from "@/components/Divider";
+import Modal from "@/components/Modal";
 import { COLORS, ICONS } from "@/constant";
 import { useUser } from "@/contexts/useUser";
 import useFavoriteFolder from "@/libs/useFavoriteFolder";
 
-import type { ModalProps } from "@/components/lgsModal";
+import type { ModalProps } from "@/components/Modal";
 
 export type ModeType = "normal" | "edit" | "delete" | "add";
 export interface FolderType {

@@ -1,17 +1,14 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  type ViewStyle,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { styled } from "styled-components/native";
 
 import type { Color } from "@/utils/types";
+import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 
 interface ButtonProp {
   children: React.ReactNode;
   onPress: () => void;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
+  fontStyle?: StyleProp<TextStyle>;
   disabled?: boolean;
 }
 
@@ -19,19 +16,16 @@ export default function Button({
   children,
   onPress,
   style,
+  fontStyle,
   disabled,
 }: ButtonProp) {
   return (
     <TouchableOpacity
-      style={{
-        ...styles.container,
-        ...style,
-        ...(disabled && styles.disabled),
-      }}
+      style={[styles.container, style, disabled && styles.disabled]}
       onPress={onPress}
       disabled={disabled}
     >
-      <Text style={styles.title}>{children}</Text>
+      <Text style={[styles.title, fontStyle]}>{children}</Text>
     </TouchableOpacity>
   );
 }
@@ -43,6 +37,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 20,
+    alignSelf: "center",
   },
   disabled: {
     backgroundColor: "#dad7cd",

@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { useMemo } from "react";
 import { ImageBackground, Text, View } from "react-native";
 
-import Button from "@/components/lgsButton";
+import Button from "@/components/Button";
 import { COLORS, FONTS } from "@/constant";
 import { useUser } from "@/contexts/useUser";
 

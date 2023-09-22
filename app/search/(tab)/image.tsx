@@ -13,13 +13,13 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 import styled from "styled-components/native";
 
-import DateTimePicker from "@/components/LgsDatePicker";
-import Button from "@/components/lgsButton";
-import Checkbox from "@/components/lgsCheckbox";
-import Header from "@/components/lgsHeader";
-import Modal from "@/components/lgsModal";
-import PhotoIndicator from "@/components/lgsPhotoIndicator";
-import Input from "@/components/lgsTextInput";
+import Button from "@/components/Button";
+import Checkbox from "@/components/Checkbox";
+import DateTimePicker from "@/components/DatePicker";
+import Header from "@/components/Header";
+import Modal from "@/components/Modal";
+import PhotoIndicator from "@/components/PhotoIndicator";
+import Input from "@/components/TextInput";
 import { CLASS_CODE, COLORS, COLOR_CODE, FONTS, ICONS } from "@/constant";
 import * as AppFrame from "@/modules/search/Background";
 import useData from "@/modules/search/hooks/useData";

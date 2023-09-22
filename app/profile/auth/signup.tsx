@@ -2,8 +2,8 @@ import { StyleSheet, View } from "react-native";
 import { styled } from "styled-components/native";
 // import Facebook from "../../../hooks/useFacebook";
 
-import Button from "@/components/lgsButton";
-import Input from "@/components/lgsTextInput";
+import Button from "@/components/Button";
+import Input from "@/components/TextInput";
 import { COLORS } from "@/constant";
 import useAuth from "@/libs/useAuth";
 import Apple from "@/modules/auth/hooks/useApple";
