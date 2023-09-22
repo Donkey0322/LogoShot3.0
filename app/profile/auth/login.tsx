@@ -1,14 +1,13 @@
 import Button from "@/components/lgsButton";
 import Input from "@/components/lgsTextInput";
 import { COLORS } from "@/constant";
-import Apple from "@/hooks/useApple";
-import Facebook from "@/hooks/useFacebook";
-import Google from "@/hooks/useGoogle";
-import useLogin from "@/hooks/useLogin";
 import useAuth from "@/libs/useAuth";
+import Apple from "@/modules/auth/hooks/useApple";
+import Facebook from "@/modules/auth/hooks/useFacebook";
+import Google from "@/modules/auth/hooks/useGoogle";
+import useLogin from "@/modules/auth/hooks/useLogin";
 import { StyleSheet, View } from "react-native";
 import { styled } from "styled-components/native";
-// import Facebook from "../../../hooks/useFacebook";
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
@@ -48,6 +47,7 @@ export default function Page() {
           backgroundColor: COLORS("mustard.500"),
           marginHorizontal: 100,
         }}
+        fontStyle={[{ fontSize: 18 }]}
       >
         登入
       </Button>

@@ -5,11 +5,11 @@ import { styled } from "styled-components/native";
 import Button from "@/components/lgsButton";
 import Input from "@/components/lgsTextInput";
 import { COLORS } from "@/constant";
-import Apple from "@/hooks/useApple";
-import Facebook from "@/hooks/useFacebook";
-import Google from "@/hooks/useGoogle";
-import useSignup from "@/hooks/useSignup";
 import useAuth from "@/libs/useAuth";
+import Apple from "@/modules/auth/hooks/useApple";
+import Facebook from "@/modules/auth/hooks/useFacebook";
+import Google from "@/modules/auth/hooks/useGoogle";
+import useSignup from "@/modules/auth/hooks/useSignup";
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
