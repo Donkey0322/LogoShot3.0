@@ -1,11 +1,11 @@
 import { CellContainer, FlashList } from "@shopify/flash-list";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { forwardRef } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { styled } from "styled-components/native";
 
-import Folder from "@/components/svg/Folder";
 import { COLORS, ICONS } from "@/constant";
 import { useResults } from "@/contexts/useResults";
 import useWidthOnResize from "@/utils/hooks/useWidthOnResize";
@@ -13,6 +13,8 @@ import useWidthOnResize from "@/utils/hooks/useWidthOnResize";
 const { Back } = ICONS;
 const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 const FOLDER_SIZE = 150;
+const blurhash =
+  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
@@ -40,18 +42,39 @@ const ContentContainer = styled.View`
 `;
 
 const FileTitle = styled.Text`
-  position: absolute;
   font-weight: bold;
-  margin-top: 35px;
-  padding-left: 10px;
-  width: 70%;
-  /* line-height: 20px; */
+  /* margin-top: 35px; */
+  /* padding-left: 10px; */
+  width: auto;
+  text-align: center;
+  line-height: 30px;
+`;
+
+const ResultContainer = styled.View`
+  align-items: center;
+  justify-content: center;
+  width: ${FOLDER_SIZE}px;
+  height: 150px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  background-color: white;
 `;
 
 export default function Page() {
   const router = useRouter();
 
-  const { results } = useResults();
+  const {
+    results = [
+      [1, "李昀宸", ""],
+      [2, "林立起", ""],
+      [3, "陳傑同", ""],
+      [4, "賴奕蓁", ""],
+      [5, "劉宥儀", ""],
+      [6, "鄭安芸", ""],
+    ],
+  } = useResults();
   const { width } = useWidthOnResize();
 
   return (
@@ -63,7 +86,7 @@ export default function Page() {
       </ToolBar>
 
       <ContentContainer>
-        <View style={{ width: "100%", height: "100%", position: "relative" }}>
+        <View style={{ width: "90%", height: "100%", position: "relative" }}>
           <FlashList
             data={results}
             CellRendererComponent={forwardRef((props, ref) => (
@@ -78,22 +101,21 @@ export default function Page() {
               />
             ))}
             renderItem={({ item: [id, name, url], index }) => (
-              <View style={{ position: "relative" }} key={index}>
-                <FileTitle>{name}</FileTitle>
-
-                <View style={{ zIndex: -1 }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      // router.push("profile/favorite/detail");
+              <View style={styles["Flashlist.renderItem"]} key={index}>
+                <ResultContainer>
+                  <Image
+                    style={{
+                      flex: 1,
+                      width: 150,
+                      backgroundColor: "#0553",
                     }}
-                    hitSlop={{ top: -50, bottom: -50, left: -20, right: -20 }}
-                  >
-                    <Folder
-                      size={FOLDER_SIZE}
-                      backgroundColor={COLORS("joy.orange")}
-                    />
-                  </TouchableOpacity>
-                </View>
+                    source={`http://140.112.106.88:8082/${url}`}
+                    placeholder={blurhash}
+                    contentFit="cover"
+                    transition={1000}
+                  />
+                  <FileTitle numberOfLines={1}>{name}</FileTitle>
+                </ResultContainer>
               </View>
             )}
             estimatedItemSize={100}
@@ -104,3 +126,17 @@ export default function Page() {
     </Background>
   );
 }
+
+const styles = StyleSheet.create({
+  "Flashlist.renderItem": {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+    elevation: 6,
+    position: "relative",
+  },
+});

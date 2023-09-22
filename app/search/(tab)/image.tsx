@@ -11,7 +11,6 @@ import {
   View,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styled from "styled-components/native";
 
 import DateTimePicker from "@/components/LgsDatePicker";
@@ -20,9 +19,11 @@ import Checkbox from "@/components/lgsCheckbox";
 import Header from "@/components/lgsHeader";
 import Modal from "@/components/lgsModal";
 import PhotoIndicator from "@/components/lgsPhotoIndicator";
-import { Background, ContentContainer } from "@/components/lgsScreen";
 import Input from "@/components/lgsTextInput";
 import { CLASS_CODE, COLORS, COLOR_CODE, FONTS, ICONS } from "@/constant";
+import * as AppFrame from "@/modules/search/Background";
+import useData from "@/modules/search/hooks/useData";
+import useDropdown from "@/modules/search/hooks/useDropdown";
 
 const { Camera, Album } = ICONS;
 
@@ -48,56 +49,21 @@ const ModalOption = styled.TouchableOpacity`
 
 export default function ImageSearch() {
   /*input kit*/
-  const [data, setData] = useState({
-    searchKeywords: "",
-    targetClasscodes: [],
-    targetColor: "",
-    targetApplicant: "",
-    targetStartTime: new Date(),
-    targetEndTime: new Date(),
-    targetDraftC: "",
-    targetDraftE: "",
-    targetDraftJ: "",
-    image: "",
-    imageWidth: 0,
-    imageHeight: 0,
-    indicatorX: 0,
-    indicatorY: 0,
-    isOldImage: true,
-  });
-
-  const handleDataChange =
-    (name: keyof typeof data) => (value?: (typeof data)[keyof typeof data]) => {
-      setData((prev) => ({ ...prev, [name]: value }));
-    };
+  const { data, handleDataChange, setIndicator, advance, setAdvance } =
+    useData();
   /******************************************************/
 
   /*DropDownPicker 套組*/
-  const [open, setOpen] = useState(false);
-  const [colorOpen, setColorOpen] = useState(false);
-
-  const [targetClasscodes, setTargetClasscodes] = useState([]);
-  const [targetColor, setTargetColor] = useState("");
-  useEffect(() => {
-    handleDataChange("targetClasscodes")(targetClasscodes);
-  }, [targetClasscodes]);
-  useEffect(() => {
-    handleDataChange("targetColor")(targetColor);
-  }, [targetColor]);
-  /******************************************************/
-
-  /*advance kit*/
-  const [advance, setAdvance] = useState(false);
-  useEffect(() => {
-    if (!advance) {
-      setData((prev) => ({
-        ...prev,
-        targetDraftC: "",
-        targetDraftE: "",
-        targetDraftJ: "",
-      }));
-    }
-  }, [advance]);
+  const {
+    classDropdownOpen,
+    setClassDropdownOpen,
+    colorDropdownOpen,
+    setColorDropdownOpen,
+    classCode,
+    setClassCode,
+    color,
+    setColor,
+  } = useDropdown<typeof data>(handleDataChange);
   /******************************************************/
 
   const [isLoading, setIsLoading] = useState(false);
@@ -174,24 +140,12 @@ export default function ImageSearch() {
   };
   /******************************************************/
 
-  const setIndicator = (x: number, y: number) => {
-    setData((prev) => ({
-      ...prev,
-      indicatorX: x,
-      indicatorY: y,
-    }));
-  };
-
   return (
-    <Background>
-      <View style={{ minHeight: "100%" }}>
+    <AppFrame.Background style={{ backgroundColor: "#FFFFFF" }}>
+      <AppFrame.ScrollBeyond style={{ backgroundColor: "#E3DFFD" }}>
         <Header />
-        <KeyboardAwareScrollView
-          contentContainerStyle={{
-            minHeight: "100%",
-          }}
-        >
-          <ContentContainer style={styles.container}>
+        <AppFrame.ScrollView>
+          <AppFrame.ContentContainer>
             {data.image ? (
               <>
                 <PhotoIndicator
@@ -248,11 +202,11 @@ export default function ImageSearch() {
               }}
               placeholder="商標搜尋類別"
               searchable={true}
-              open={open}
-              value={targetClasscodes}
+              open={classDropdownOpen}
+              value={classCode}
               items={CLASS_CODE}
-              setOpen={setOpen}
-              setValue={setTargetClasscodes}
+              setOpen={setClassDropdownOpen}
+              setValue={setClassCode}
               dropDownDirection="BOTTOM"
               theme="LIGHT"
               multiple={true}
@@ -263,11 +217,11 @@ export default function ImageSearch() {
             />
             <DropDownPicker
               placeholder="商標色彩"
-              open={colorOpen}
-              value={targetColor}
+              open={colorDropdownOpen}
+              value={color}
               items={COLOR_CODE}
-              setOpen={setColorOpen}
-              setValue={setTargetColor}
+              setOpen={setColorDropdownOpen}
+              setValue={setColor}
               dropDownDirection="BOTTOM"
               theme="LIGHT"
               multiple={false}
@@ -315,7 +269,7 @@ export default function ImageSearch() {
                 alignItems: "center",
                 justifyContent: "center",
                 columnGap: 10,
-                marginTop: 30,
+                marginTop: 10,
               }}
             >
               <Text style={{ color: "#406E9F", fontWeight: "bold" }}>
@@ -367,8 +321,8 @@ export default function ImageSearch() {
               <Text>搜尋</Text>
             </Button>
             <View style={{ height: tabBarHeight / 2 }} />
-          </ContentContainer>
-        </KeyboardAwareScrollView>
+          </AppFrame.ContentContainer>
+        </AppFrame.ScrollView>
         <Modal
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
@@ -393,18 +347,12 @@ export default function ImageSearch() {
             </ModalOption>
           </View>
         </Modal>
-      </View>
-    </Background>
+      </AppFrame.ScrollBeyond>
+    </AppFrame.Background>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    rowGap: 10,
-    backgroundColor: "#E3DFFD",
-    alignItems: "center",
-  },
   rangeContainer: {
     flexDirection: "row",
     justifyContent: "center",

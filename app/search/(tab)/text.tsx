@@ -4,17 +4,16 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import DateTimePicker from "@/components/LgsDatePicker";
 import Button from "@/components/lgsButton";
 import Checkbox from "@/components/lgsCheckbox";
 import Header from "@/components/lgsHeader";
-import { Background, ContentContainer } from "@/components/lgsScreen";
 import Input from "@/components/lgsTextInput";
 import { CLASS_CODE, COLORS, COLOR_CODE, FONTS } from "@/constant";
 import { useResults } from "@/contexts/useResults";
 import useTextSearch from "@/libs/useTextSearch";
+import * as AppFrame from "@/modules/search/Background";
 
 export default function ImageSearch() {
   const router = useRouter();
@@ -103,15 +102,11 @@ export default function ImageSearch() {
   const tabBarHeight = useBottomTabBarHeight();
 
   return (
-    <Background>
-      <View style={{ minHeight: "100%" }}>
+    <AppFrame.Background style={{ backgroundColor: "#FFFFFF" }}>
+      <AppFrame.ScrollBeyond style={{ backgroundColor: "#E3DFFD" }}>
         <Header />
-        <KeyboardAwareScrollView
-          contentContainerStyle={{
-            minHeight: "100%",
-          }}
-        >
-          <ContentContainer style={styles.container}>
+        <AppFrame.ScrollView>
+          <AppFrame.ContentContainer style={{ paddingTop: 15 }}>
             <Input
               value={data.keywords}
               onChangeText={handleDataChange("keywords")}
@@ -285,21 +280,14 @@ export default function ImageSearch() {
               <Text>搜尋</Text>
             </Button>
             <View style={{ height: tabBarHeight / 2 }} />
-          </ContentContainer>
-        </KeyboardAwareScrollView>
-      </View>
-    </Background>
+          </AppFrame.ContentContainer>
+        </AppFrame.ScrollView>
+      </AppFrame.ScrollBeyond>
+    </AppFrame.Background>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    rowGap: 10,
-    backgroundColor: "#E3DFFD",
-    alignItems: "center",
-    paddingTop: 15,
-  },
   rangeContainer: {
     flexDirection: "row",
     justifyContent: "center",
