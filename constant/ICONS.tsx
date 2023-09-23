@@ -11,6 +11,8 @@ import {
   Octicons,
 } from "@expo/vector-icons";
 
+import type { ViewProps } from "react-native";
+
 type IconComponentsType = {
   AntDesign: typeof AntDesign;
   Entypo: typeof Entypo;
@@ -76,7 +78,7 @@ const ICONS: {
   Member: { name: "wallet-membership", Component: MaterialCommunityIcons },
   Login: { name: "login", Component: AntDesign },
   Logout: { name: "logout", Component: MaterialCommunityIcons },
-  Person: { name: "feed-person", Component: Octicons },
+  Person: { name: "person-fill", Component: Octicons },
   ImageSearchIcon: { name: "image-search", Component: MaterialIcons },
   TextSearchIcon: {
     name: "text-recognition",
@@ -91,17 +93,22 @@ const ICONS: {
 
 type ICONSTYPE = Record<
   keyof typeof ICONS,
-  ({ color, size }: { color?: string; size?: number }) => JSX.Element
+  ({
+    color,
+    size,
+    ...rest
+  }: { color?: string; size?: number } & ViewProps) => JSX.Element
 >;
 
 export default Object.keys(ICONS).reduce((acc, curr) => {
   const { name, Component } = ICONS[curr as keyof typeof ICONS];
-  acc[curr as keyof typeof ICONS] = ({
-    color,
-    size,
-  }: {
-    color?: string;
-    size?: number;
-  }) => <Component name={name} size={size ?? 24} color={color ?? "black"} />;
+  acc[curr as keyof typeof ICONS] = ({ color, size, ...rest }) => (
+    <Component
+      name={name}
+      size={size ?? 24}
+      color={color ?? "black"}
+      {...rest}
+    />
+  );
   return acc;
 }, {} as ICONSTYPE);
