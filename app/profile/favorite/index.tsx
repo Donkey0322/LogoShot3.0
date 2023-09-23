@@ -1,8 +1,6 @@
-import { CellContainer, FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
-import { forwardRef, useState } from "react";
+import { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import Animated from "react-native-reanimated";
 import { styled } from "styled-components/native";
 
 import type { FolderType, ModeType } from "@/modules/favorite/components/Modal";
@@ -10,14 +8,13 @@ import type { FolderType, ModeType } from "@/modules/favorite/components/Modal";
 import { BackButton } from "@/components/Button";
 import Fab from "@/components/Fab";
 import Folder from "@/components/svg/Folder";
+import FlashList from "@/components/util/FlashList";
 import { COLORS, ICONS } from "@/constant";
 import { useUser } from "@/contexts/useUser";
 import useFavoriteFolder from "@/libs/useFavoriteFolder";
 import { FavoriteFolderModal } from "@/modules/favorite/components/Modal";
-import useWidthOnResize from "@/utils/hooks/useWidthOnResize";
 
 const { Menu, Plus } = ICONS;
-const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 const FOLDER_SIZE = 150;
 
 const Background = styled.View<{ color?: string }>`
@@ -73,7 +70,6 @@ const FolderTitle = styled.Text`
 export default function Page() {
   const { user } = useUser();
   const { favoriteFolder } = useFavoriteFolder(user?.userId, user?.userType);
-  const { width } = useWidthOnResize();
 
   const [mode, setMode] = useState<ModeType>("normal");
   const [modalVisible, setModalVisible] = useState(false);
@@ -88,20 +84,9 @@ export default function Page() {
       <ContentContainer>
         {/* <Text>{Math.floor((width - 100) / FOLDER_SIZE)}</Text> */}
         <View style={{ width: "100%", height: "100%", position: "relative" }}>
-          <FlashList
+          <FlashList<typeof favoriteFolder>
             data={favoriteFolder}
-            CellRendererComponent={forwardRef((props, ref) => (
-              <AnimatedCellContainer
-                {...props}
-                style={{
-                  ...props.style,
-                  flexDirection: "row",
-                  justifyContent: "space-evenly",
-                }}
-                ref={ref}
-              />
-            ))}
-            renderItem={({ item, index }) => (
+            items={({ item, index }) => (
               <View style={{ position: "relative" }} key={index}>
                 <FolderTitle>{item.fileName}</FolderTitle>
                 <MenuContainer
@@ -131,8 +116,7 @@ export default function Page() {
                 </View>
               </View>
             )}
-            estimatedItemSize={100}
-            numColumns={Math.floor((width - 50) / FOLDER_SIZE)}
+            itemSize={FOLDER_SIZE}
           />
           <Fab
             position={{ right: 20, bottom: 50 }}

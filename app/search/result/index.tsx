@@ -1,17 +1,14 @@
-import { CellContainer, FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
-import { forwardRef } from "react";
-import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { styled } from "styled-components/native";
 
 import { BackButton } from "@/components/Button";
+import FlashList from "@/components/util/FlashList";
 import { COLORS } from "@/constant";
 import { useResults } from "@/contexts/useResults";
-import useWidthOnResize from "@/utils/hooks/useWidthOnResize";
 
-const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 const FOLDER_SIZE = 150;
+const TRADEMARK_CONTAINER_BORDER_RADIUS = 10;
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
@@ -42,8 +39,7 @@ const ContentContainer = styled.View`
 
 const FileTitle = styled.Text`
   font-weight: bold;
-  /* margin-top: 35px; */
-  /* padding-left: 10px; */
+  padding: 0px 10%;
   width: auto;
   text-align: center;
   line-height: 30px;
@@ -53,18 +49,15 @@ const ResultContainer = styled.View`
   align-items: center;
   justify-content: center;
   width: ${FOLDER_SIZE}px;
-  height: 150px;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
+  border-top-right-radius: ${TRADEMARK_CONTAINER_BORDER_RADIUS}px;
+  border-top-left-radius: ${TRADEMARK_CONTAINER_BORDER_RADIUS}px;
   overflow: hidden;
-  margin-bottom: 10px;
-  background-color: white;
 `;
 
 export default function Page() {
   const {
     results = [
-      [1, "李昀宸", ""],
+      [1, "李昀宸sdfghjiugghnmkjhg", ""],
       [2, "林立起", ""],
       [3, "陳傑同", ""],
       [4, "賴奕蓁", ""],
@@ -72,7 +65,6 @@ export default function Page() {
       [6, "鄭安芸", ""],
     ],
   } = useResults();
-  const { width } = useWidthOnResize();
 
   return (
     <Background>
@@ -82,39 +74,35 @@ export default function Page() {
 
       <ContentContainer>
         <View style={{ width: "90%", height: "100%", position: "relative" }}>
-          <FlashList
+          <FlashList<typeof results>
             data={results}
-            CellRendererComponent={forwardRef((props, ref) => (
-              <AnimatedCellContainer
-                {...props}
-                style={{
-                  ...props.style,
-                  flexDirection: "row",
-                  justifyContent: "space-evenly",
-                }}
-                ref={ref}
-              />
-            ))}
-            renderItem={({ item: [id, name, url], index }) => (
-              <View style={styles["Flashlist.renderItem"]} key={index}>
+            items={({ item: [, name], index }) => (
+              <TouchableOpacity
+                style={styles["Flashlist.renderItem"]}
+                key={index}
+              >
                 <ResultContainer>
                   <Image
                     style={{
                       flex: 1,
                       width: 150,
+                      height: 130,
                       backgroundColor: "#0553",
+                      overflow: "hidden",
                     }}
-                    source={`http://140.112.106.88:8082/${url}`}
+                    source={
+                      // `http://140.112.106.88:8082/${url}`
+                      require("@/assets/figure.png")
+                    }
                     placeholder={blurhash}
-                    contentFit="cover"
+                    contentFit="contain"
                     transition={1000}
                   />
                   <FileTitle numberOfLines={1}>{name}</FileTitle>
                 </ResultContainer>
-              </View>
+              </TouchableOpacity>
             )}
-            estimatedItemSize={100}
-            numColumns={Math.floor((width - 50) / FOLDER_SIZE)}
+            itemSize={FOLDER_SIZE}
           />
         </View>
       </ContentContainer>
@@ -127,11 +115,15 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 7,
     },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
+    shadowOpacity: 0.4,
+    shadowRadius: 5,
     elevation: 6,
     position: "relative",
+    marginBottom: 20,
+    borderTopLeftRadius: TRADEMARK_CONTAINER_BORDER_RADIUS,
+    borderTopRightRadius: TRADEMARK_CONTAINER_BORDER_RADIUS,
+    backgroundColor: "white",
   },
 });
