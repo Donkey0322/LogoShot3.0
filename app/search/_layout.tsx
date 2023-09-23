@@ -4,10 +4,6 @@ import { ResultsProvider } from "@/contexts/useResults";
 
 const NAVIGATE_ITEM = ["(tab)", "result"];
 
-export const unstable_settings = {
-  initialRouteName: "(tab)",
-};
-
 export default function Layout() {
   return (
     <ResultsProvider>

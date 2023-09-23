@@ -9,8 +9,6 @@ import { useResults } from "@/contexts/useResults";
 
 const FOLDER_SIZE = 150;
 const TRADEMARK_CONTAINER_BORDER_RADIUS = 10;
-const blurhash =
-  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
@@ -94,7 +92,7 @@ export default function Page() {
                       // `http://140.112.106.88:8082/${url}`
                       require("@/assets/figure.png")
                     }
-                    placeholder={blurhash}
+                    // placeholder={blurhash}
                     contentFit="contain"
                     transition={1000}
                   />

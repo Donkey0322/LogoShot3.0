@@ -6,10 +6,6 @@ import { useEffect } from "react";
 
 const NAVIGATE_ITEM = ["search", "profile"];
 
-export const unstable_settings = {
-  initialRouteName: "search",
-};
-
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {

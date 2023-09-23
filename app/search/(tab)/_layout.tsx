@@ -45,8 +45,3 @@ export default function Layout() {
     </Tabs>
   );
 }
-
-export const unstable_settings = {
-  // Ensure any route can link back to `/`
-  initialRouteName: "search/image",
-};

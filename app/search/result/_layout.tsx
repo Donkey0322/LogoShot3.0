@@ -2,10 +2,6 @@ import { Stack } from "expo-router";
 
 const NAVIGATE_ITEM = ["index"];
 
-export const unstable_settings = {
-  initialRouteName: "index",
-};
-
 export default function Layout() {
   return (
     <Stack initialRouteName="index">
