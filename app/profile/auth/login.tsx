@@ -1,13 +1,16 @@
+import { StyleSheet, View } from "react-native";
+import { styled } from "styled-components/native";
+
 import Button from "@/components/Button";
 import Input from "@/components/TextInput";
 import { COLORS } from "@/constant";
 import useAuth from "@/libs/useAuth";
-import Apple from "@/modules/auth/hooks/useApple";
-import Facebook from "@/modules/auth/hooks/useFacebook";
-import Google from "@/modules/auth/hooks/useGoogle";
-import useLogin from "@/modules/auth/hooks/useLogin";
-import { StyleSheet, View } from "react-native";
-import { styled } from "styled-components/native";
+import {
+  useApple as Apple,
+  useFacebook as Facebook,
+  useGoogle as Google,
+  useLogin,
+} from "@/modules/auth/hooks";
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;

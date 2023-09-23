@@ -5,7 +5,7 @@ import { COLORS, ICONS } from "@/constant";
 
 const { Google } = ICONS;
 
-export default function useApple({
+export default function useGoogle({
   buttonColor,
   iconColor = COLORS("white"),
 }: {

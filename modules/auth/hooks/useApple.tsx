@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as AppleAuthentication from "expo-apple-authentication";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { Alert } from "react-native";
 
 import type { Color } from "@/utils/types";
@@ -19,7 +19,6 @@ export default function useApple({
   iconColor?: Color;
 }) {
   const { setUser } = useUser();
-  const router = useRouter();
 
   const handlePress = async () => {
     try {

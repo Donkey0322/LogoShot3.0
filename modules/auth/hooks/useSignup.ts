@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useLogin() {
+export default function useSignup() {
   const [signupData, setSignupData] = useState({
     email: "b09705015@ntu.edu.tw",
     user: "donkey",
