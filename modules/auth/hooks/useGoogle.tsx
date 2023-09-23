@@ -1,13 +1,13 @@
 import type { Color } from "@/utils/types";
 
 import { IconButton } from "@/components/Button";
-import { ICONS } from "@/constant";
+import { COLORS, ICONS } from "@/constant";
 
 const { Google } = ICONS;
 
 export default function useApple({
   buttonColor,
-  iconColor,
+  iconColor = COLORS("white"),
 }: {
   buttonColor?: Color;
   iconColor?: Color;

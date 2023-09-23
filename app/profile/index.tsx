@@ -29,7 +29,7 @@ const ToolBar = styled.View`
 
 const ContentContainer = styled.View`
   flex: 1;
-  background-color: #ffffff;
+  background-color: ${COLORS("white")};
   border-top-right-radius: 30px;
   border-top-left-radius: 30px;
   width: 100%;
@@ -63,7 +63,7 @@ const List = styled.View`
 
 const ListItem = styled.TouchableOpacity`
   padding: 20px;
-  border: 1px solid #d8d8d8;
+  border: 1px solid ${COLORS("gray.200")};
   border-radius: 20px;
   flex-direction: row;
   align-items: center;
@@ -108,7 +108,7 @@ export default function Page() {
         )}
       </ToolBar>
       <ContentContainer>
-        <ImageBorder color={!login ? COLORS("gray.300") : null}>
+        <ImageBorder {...(!login && { color: COLORS("gray.300") })}>
           <ImageContainer
             onLayout={({
               nativeEvent: {
@@ -119,7 +119,7 @@ export default function Page() {
                 layout: { width: number };
               };
             }) => setImageWidth(width)}
-            color={!login ? "#FFFFFF" : undefined}
+            color={!login ? COLORS("white") : undefined}
           >
             {login ? (
               <Image
@@ -150,7 +150,7 @@ export default function Page() {
                 </Text>
               </ListItem>
               <ListItem onPress={() => router.push("/profile/favorite/")}>
-                <Star color="#f7dd72" />
+                <Star color={COLORS("icons.star")} />
                 <Text style={{ fontSize: 14, fontWeight: "bold" }}>
                   我的最愛
                 </Text>

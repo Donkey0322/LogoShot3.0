@@ -2,7 +2,7 @@ import { Pressable, StyleSheet } from "react-native";
 
 import type { TouchableOpacityProps } from "react-native";
 
-import { ICONS } from "@/constant";
+import { COLORS, ICONS } from "@/constant";
 
 const { Check } = ICONS;
 
@@ -32,10 +32,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: "#ffca3d",
-    backgroundColor: "transparent",
+    borderColor: COLORS("yellow"),
+    backgroundColor: "white",
   },
   checkboxChecked: {
-    backgroundColor: "#ffca3d",
+    backgroundColor: COLORS("yellow"),
   },
 });

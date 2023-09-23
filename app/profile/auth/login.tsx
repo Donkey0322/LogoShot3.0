@@ -52,9 +52,12 @@ export default function Page() {
         登入
       </Button>
       <View style={styles.icons}>
-        <Facebook buttonColor={COLORS("facebook")} iconColor="#FFFFFF" />
-        <Apple buttonColor="#000000" iconColor="#FFFFFF" />
-        <Google buttonColor={COLORS("google")} iconColor="#FFFFFF" />
+        <Facebook
+          buttonColor={COLORS("facebook")}
+          iconColor={COLORS("white")}
+        />
+        <Apple buttonColor="#000000" iconColor={COLORS("white")} />
+        <Google buttonColor={COLORS("google")} iconColor={COLORS("white")} />
       </View>
       {/* <Facebook /> */}
     </Background>

@@ -1,13 +1,13 @@
 import type { Color } from "@/utils/types";
 
 import { IconButton } from "@/components/Button";
-import { ICONS } from "@/constant";
+import { COLORS, ICONS } from "@/constant";
 
 const { Facebook } = ICONS;
 
 export default function useFacebook({
   buttonColor,
-  iconColor,
+  iconColor = COLORS("white"),
 }: {
   buttonColor?: Color;
   iconColor?: Color;

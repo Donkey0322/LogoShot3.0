@@ -6,14 +6,14 @@ import { Alert } from "react-native";
 import type { Color } from "@/utils/types";
 
 import { IconButton } from "@/components/Button";
-import { ICONS } from "@/constant";
+import { COLORS, ICONS } from "@/constant";
 import { useUser } from "@/contexts/useUser";
 
 const { Apple } = ICONS;
 
 export default function useApple({
   buttonColor,
-  iconColor,
+  iconColor = COLORS("white"),
 }: {
   buttonColor?: Color;
   iconColor?: Color;

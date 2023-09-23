@@ -1,5 +1,6 @@
 import { Dimensions } from "react-native";
 
+import { Color } from "@/utils/types";
 import type { AllKeys, NestedKeys } from "@/utils/types/constant";
 
 const { width, height } = Dimensions.get("window");
@@ -30,7 +31,6 @@ const colors = {
     500: "#31557b",
     600: "#233c56",
     700: "#142332",
-    mid: "#406e9f",
   },
   mustard: {
     100: "#ffffff",
@@ -40,7 +40,6 @@ const colors = {
     500: "#ffbc0a",
     600: "#d69c00",
     700: "#a37600",
-    mid: "#ffca3d",
   },
   purple: {
     100: "#daceef",
@@ -50,7 +49,6 @@ const colors = {
     500: "#512e90",
     600: "#3b216a",
     700: "#261543",
-    mid: "#673ab7",
   },
   red: {
     100: "#f7d7d7",
@@ -60,7 +58,6 @@ const colors = {
     500: "#ab2424",
     600: "#811b1b",
     700: "#571212",
-    mid: "#d32f2f",
   },
   gray: {
     100: "#e6e6e6",
@@ -70,7 +67,6 @@ const colors = {
     500: "#676767",
     600: "#4d4d4d",
     700: "#343434",
-    mid: "#808080",
   },
   blue: {
     100: "#e2eeff",
@@ -80,11 +76,23 @@ const colors = {
     500: "#005ee2",
     600: "#0049af",
     700: "#00347c",
-    mid: "#1677ff",
+  },
+  white: "#ffffff",
+  yellow: {
+    100: "#ffffff",
+    200: "#fff4d6",
+    300: "#ffe6a3",
+    400: "#ffca3d",
+    500: "#ffbc0a",
+    600: "#d69c00",
+    700: "#a37600",
+  },
+  icons: {
+    star: "#f7dd72",
   },
 };
 
-export const COLORS = (routes: NestedKeys<typeof colors>) => {
+export const COLORS = (routes: NestedKeys<typeof colors>): Color => {
   const hex = (routes.split(".") as AllKeys<typeof colors>[]).reduce(
     (acc, curr) => {
       if (!acc[curr]) {
@@ -94,7 +102,7 @@ export const COLORS = (routes: NestedKeys<typeof colors>) => {
     },
     colors as any
   );
-  return typeof hex === "string" ? hex : hex?.mid ?? undefined;
+  return typeof hex === "string" ? hex : hex?.[400] ?? undefined;
 };
 
 export const SIZES = {
