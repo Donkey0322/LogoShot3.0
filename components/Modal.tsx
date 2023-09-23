@@ -1,3 +1,4 @@
+import { COLORS } from "@/constant";
 import type { ViewStyle } from "react-native";
 import { Modal, Pressable, StyleSheet } from "react-native";
 
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: COLORS("black"),
     shadowOffset: {
       width: 0,
       height: 5,

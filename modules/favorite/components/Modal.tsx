@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   FavoriteFolderModalTitle: {
     marginBottom: 25,
     fontWeight: "bold",
-    color: "#000000",
+    color: COLORS("black"),
     fontSize: 18,
     alignSelf: "flex-start",
     // borderBottomColor: COLORS("gray.300"),

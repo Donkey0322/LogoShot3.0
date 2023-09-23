@@ -27,20 +27,6 @@ export const ScrollBeyond = styled.View`
   min-height: 100%;
   background-color: inherit;
 `;
-// ({ children, style, ...rest }: ViewProps) => (
-//   <View
-//     style={[
-//       {
-//         minHeight: "100%",
-//         backgroundColor: "#E3DFFD",
-//       },
-//       style,
-//     ]}
-//     {...rest}
-//   >
-//     {children}
-//   </View>
-// );
 
 /**
  *

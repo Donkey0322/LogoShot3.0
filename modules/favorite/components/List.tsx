@@ -18,8 +18,6 @@ const List = styled.View`
 export const ListItem = styled.TouchableOpacity`
   padding-top: 20px;
   padding-bottom: 20px;
-  border-top: 1px solid #d8d8d8;
-  border-color: #d8d8d8;
   flex-direction: row;
   align-items: center;
   column-gap: 8px;

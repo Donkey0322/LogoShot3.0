@@ -78,6 +78,7 @@ const colors = {
     700: "#00347c",
   },
   white: "#ffffff",
+  black: "#000000",
   yellow: {
     100: "#ffffff",
     200: "#fff4d6",
