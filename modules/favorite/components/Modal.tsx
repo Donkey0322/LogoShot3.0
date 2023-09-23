@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { Dispatch, useMemo, useRef } from "react";
 import { Alert, StyleSheet, Text, TextInput } from "react-native";
 import { styled } from "styled-components/native";
@@ -111,7 +111,6 @@ const FavoriteFolderModalBody = ({
   setFolder,
 }: FavoriteFolderModalProps["folderProps"] &
   Omit<FavoriteFolderModalProps["modalProps"], "modalVisible">) => {
-  const router = useRouter();
   const originalFolder = useMemo(() => folder, []);
 
   const { user } = useUser();

@@ -1,5 +1,5 @@
 import { CellContainer, FlashList } from "@shopify/flash-list";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { forwardRef, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
@@ -71,7 +71,6 @@ const FolderTitle = styled.Text`
 `;
 
 export default function Page() {
-  const router = useRouter();
   const { user } = useUser();
   const { favoriteFolder } = useFavoriteFolder(user?.userId, user?.userType);
   const { width } = useWidthOnResize();

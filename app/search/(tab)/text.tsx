@@ -1,6 +1,6 @@
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { format } from "date-fns";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -16,8 +16,6 @@ import useTextSearch from "@/libs/useTextSearch";
 import * as AppFrame from "@/modules/search/Background";
 
 export default function ImageSearch() {
-  const router = useRouter();
-
   const { textSearch } = useTextSearch();
   const { setResults } = useResults();
 
@@ -89,6 +87,7 @@ export default function ImageSearch() {
     } catch (e) {
       console.log(e);
     } finally {
+      router.push("/search/result/");
       setIsLoading(false);
     }
     // if (data) {

@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { useMemo } from "react";
 import { ImageBackground, Text, View } from "react-native";
 
@@ -7,7 +7,6 @@ import { COLORS, FONTS } from "@/constant";
 import { useUser } from "@/contexts/useUser";
 
 export default function Header() {
-  const router = useRouter();
   const { user } = useUser();
   const login = useMemo(() => user?.userId ?? false, [user?.userId]);
 
