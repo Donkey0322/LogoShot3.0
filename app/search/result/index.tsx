@@ -1,39 +1,14 @@
 import { Image } from "expo-image";
+import { router } from "expo-router";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { styled } from "styled-components/native";
 
-import { BackButton } from "@/components/Button";
+import Stack from "@/components/stack";
 import FlashList from "@/components/util/FlashList";
-import { COLORS } from "@/constant";
 import { useResults } from "@/contexts/useResults";
 
 const FOLDER_SIZE = 150;
 const TRADEMARK_CONTAINER_BORDER_RADIUS = 10;
-
-const Background = styled.View<{ color?: string }>`
-  flex: 1;
-  background-color: ${COLORS("mustard.200")};
-  align-items: center;
-  padding-top: 25px;
-`;
-
-const ToolBar = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 20px 25px;
-  width: 100%;
-  margin-top: 10px;
-`;
-
-const ContentContainer = styled.View`
-  flex: 1;
-  background-color: #ffffff;
-  border-top-right-radius: 30px;
-  border-top-left-radius: 30px;
-  width: 100%;
-  padding-top: 24px;
-  align-items: center;
-`;
 
 const FileTitle = styled.Text`
   font-weight: bold;
@@ -65,46 +40,46 @@ export default function Page() {
   } = useResults();
 
   return (
-    <Background>
-      <ToolBar>
-        <BackButton />
-      </ToolBar>
-
-      <ContentContainer>
-        <View style={{ width: "90%", height: "100%", position: "relative" }}>
-          <FlashList<typeof results>
-            data={results}
-            items={({ item: [, name], index }) => (
-              <TouchableOpacity
-                style={styles["Flashlist.renderItem"]}
-                key={index}
-              >
-                <ResultContainer>
-                  <Image
-                    style={{
-                      flex: 1,
-                      width: 150,
-                      height: 130,
-                      backgroundColor: "#0553",
-                      overflow: "hidden",
-                    }}
-                    source={
-                      // `http://140.112.106.88:8082/${url}`
-                      require("@/assets/figure.png")
-                    }
-                    // placeholder={blurhash}
-                    contentFit="contain"
-                    transition={1000}
-                  />
-                  <FileTitle numberOfLines={1}>{name}</FileTitle>
-                </ResultContainer>
-              </TouchableOpacity>
-            )}
-            itemSize={FOLDER_SIZE}
-          />
-        </View>
-      </ContentContainer>
-    </Background>
+    <Stack>
+      <View style={{ width: "90%", height: "100%", position: "relative" }}>
+        <FlashList<typeof results>
+          data={results}
+          items={({ item: [id, name], index }) => (
+            <TouchableOpacity
+              style={styles["Flashlist.renderItem"]}
+              key={index}
+              onPress={() =>
+                router.push({
+                  pathname: "/search/result/detail/[id]",
+                  params: { id },
+                })
+              }
+            >
+              <ResultContainer>
+                <Image
+                  style={{
+                    flex: 1,
+                    width: 150,
+                    height: 130,
+                    backgroundColor: "#0553",
+                    overflow: "hidden",
+                  }}
+                  source={
+                    // `http://140.112.106.88:8082/${url}`
+                    require("@/assets/figure.png")
+                  }
+                  // placeholder={blurhash}
+                  contentFit="contain"
+                  transition={1000}
+                />
+                <FileTitle numberOfLines={1}>{name}</FileTitle>
+              </ResultContainer>
+            </TouchableOpacity>
+          )}
+          itemSize={FOLDER_SIZE}
+        />
+      </View>
+    </Stack>
   );
 }
 

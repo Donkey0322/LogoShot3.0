@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 
-const NAVIGATE_ITEM = ["index"];
+const NAVIGATE_ITEM = ["index", "detail/[id]"];
 
 export default function Layout() {
   return (
