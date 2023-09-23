@@ -5,14 +5,14 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { styled } from "styled-components/native";
 
-import type { FolderType, ModeType } from "@/modules/favorite";
+import type { FolderType, ModeType } from "@/modules/favorite/components/Modal";
 
 import Fab from "@/components/Fab";
 import Folder from "@/components/svg/Folder";
 import { COLORS, ICONS } from "@/constant";
 import { useUser } from "@/contexts/useUser";
 import useFavoriteFolder from "@/libs/useFavoriteFolder";
-import { FavoriteFolderModal } from "@/modules/favorite";
+import { FavoriteFolderModal } from "@/modules/favorite/components/Modal";
 import useWidthOnResize from "@/utils/hooks/useWidthOnResize";
 
 const { Menu, Back, Plus } = ICONS;

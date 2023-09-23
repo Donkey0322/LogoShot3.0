@@ -4,11 +4,11 @@ import { Alert, StyleSheet, Text, TextInput } from "react-native";
 import { styled } from "styled-components/native";
 
 import Button from "@/components/Button";
-import Divider from "@/components/Divider";
 import Modal from "@/components/Modal";
 import { COLORS, ICONS } from "@/constant";
 import { useUser } from "@/contexts/useUser";
 import useFavoriteFolder from "@/libs/useFavoriteFolder";
+import List, { ListItem } from "@/modules/favorite/components/List";
 
 import type { ModalProps } from "@/components/Modal";
 
@@ -32,21 +32,6 @@ interface FavoriteFolderModalProps {
   folderProps: FolderProps;
 }
 
-const List = styled.View`
-  width: 200px;
-`;
-
-const ListItem = styled.TouchableOpacity`
-  padding-top: 20px;
-  padding-bottom: 20px;
-  border-top: 1px solid #d8d8d8;
-  /* border-bottom-width: 1px; */
-  border-color: #d8d8d8;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 8px;
-`;
-
 const CheckWrapper = styled.View`
   flex-direction: row;
   justify-content: center;
@@ -62,6 +47,8 @@ const styles = StyleSheet.create({
     color: "#000000",
     fontSize: 18,
     alignSelf: "flex-start",
+    // borderBottomColor: COLORS("gray.300"),
+    // borderBottomWidth: 1,
   },
 });
 
@@ -167,7 +154,7 @@ const FavoriteFolderModalBody = ({
   switch (mode) {
     case "normal":
       return (
-        <>
+        <List>
           <ListItem
             onPress={() => {
               setModalVisible(false);
@@ -177,12 +164,10 @@ const FavoriteFolderModalBody = ({
             <Enter size={20} />
             <Text style={{ fontSize: 14, fontWeight: "bold" }}>開啟資料夾</Text>
           </ListItem>
-          <Divider />
           <ListItem onPress={() => setMode("edit")}>
             <EditFile size={20} />
             <Text style={{ fontSize: 14, fontWeight: "bold" }}>重新命名</Text>
           </ListItem>
-          <Divider />
           <ListItem
             onPress={async () => {
               setMode("delete");
@@ -199,61 +184,67 @@ const FavoriteFolderModalBody = ({
               刪除資料夾
             </Text>
           </ListItem>
-        </>
+        </List>
       );
     case "edit":
     case "delete":
       return (
-        <CheckWrapper>
-          <Button
-            onPress={() => {
-              setFolder(originalFolder);
-              setMode("normal");
-            }}
-            style={{
-              //   backgroundColor: COLORS("mustard.300"),
-              paddingVertical: 10,
-              borderWidth: 1,
-              borderColor:
-                mode === "edit" ? COLORS("red.500") : COLORS("blue.500"),
-            }}
-          >
-            <Text
+        <List boundary={false}>
+          <CheckWrapper>
+            <Button
+              onPress={() => {
+                setFolder(originalFolder);
+                setMode("normal");
+              }}
               style={{
-                color: mode === "edit" ? COLORS("red.500") : COLORS("blue.500"),
+                //   backgroundColor: COLORS("mustard.300"),
+                paddingVertical: 10,
+                borderWidth: 1,
+                borderColor:
+                  mode === "edit" ? COLORS("red.500") : COLORS("blue.500"),
               }}
             >
-              取消
-            </Text>
-          </Button>
-          <Button
-            onPress={
-              mode === "edit"
-                ? handleRenameFavoriteFolder
-                : handleDeleteFavoriteFolder
-            }
-            style={{
-              backgroundColor:
-                mode === "edit" ? COLORS("blue.500") : COLORS("red.500"),
-              paddingVertical: 10,
-            }}
-          >
-            確認
-          </Button>
-        </CheckWrapper>
+              <Text
+                style={{
+                  color:
+                    mode === "edit" ? COLORS("red.500") : COLORS("blue.500"),
+                }}
+              >
+                取消
+              </Text>
+            </Button>
+            <Button
+              onPress={
+                mode === "edit"
+                  ? handleRenameFavoriteFolder
+                  : handleDeleteFavoriteFolder
+              }
+              style={{
+                backgroundColor:
+                  mode === "edit" ? COLORS("blue.500") : COLORS("red.500"),
+                paddingVertical: 10,
+              }}
+            >
+              確認
+            </Button>
+          </CheckWrapper>
+        </List>
       );
     case "add":
       return (
-        <Button
-          onPress={handleAddFavoriteFolder}
-          style={{
-            paddingVertical: 10,
-            backgroundColor: COLORS("coldblue.600"),
-          }}
-          disabled={!folder.folderName}
-        >
-          <Text style={{ color: "white" }}>確認新增</Text>
-        </Button>
+        <List boundary={false}>
+          <Button
+            onPress={handleAddFavoriteFolder}
+            style={{
+              paddingVertical: 10,
+              backgroundColor: COLORS("coldblue.600"),
+              alignSelf: "stretch",
+            }}
+            disabled={!folder.folderName}
+          >
+            <Text style={{ color: "white" }}>確認新增</Text>
+          </Button>
+        </List>
       );
     default:
       return null;
@@ -279,11 +270,7 @@ export function FavoriteFolderModal({
       {...(mode === "add" && { animation: "fade" })}
     >
       <FavoriteFolderModalTitle mode={mode} {...folderProps} />
-      <List>
-        <Divider />
-        <FavoriteFolderModalBody {...modalProps} {...folderProps} />
-        <Divider />
-      </List>
+      <FavoriteFolderModalBody {...modalProps} {...folderProps} />
     </Modal>
   );
 }
