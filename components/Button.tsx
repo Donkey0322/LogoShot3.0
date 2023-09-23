@@ -1,8 +1,12 @@
+import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { styled } from "styled-components/native";
 
 import type { Color } from "@/utils/types";
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
+
+import { ICONS } from "@/constant";
+const { Back } = ICONS;
 
 interface ButtonProp {
   children: React.ReactNode;
@@ -59,3 +63,11 @@ export const IconButton = styled.TouchableOpacity<{ color?: Color }>`
   justify-content: center;
   background-color: ${({ color }) => color};
 `;
+
+export const BackButton = () => {
+  return (
+    <TouchableOpacity onPress={router.back}>
+      <Back />
+    </TouchableOpacity>
+  );
+};

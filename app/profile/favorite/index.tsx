@@ -7,6 +7,7 @@ import { styled } from "styled-components/native";
 
 import type { FolderType, ModeType } from "@/modules/favorite/components/Modal";
 
+import { BackButton } from "@/components/Button";
 import Fab from "@/components/Fab";
 import Folder from "@/components/svg/Folder";
 import { COLORS, ICONS } from "@/constant";
@@ -15,7 +16,7 @@ import useFavoriteFolder from "@/libs/useFavoriteFolder";
 import { FavoriteFolderModal } from "@/modules/favorite/components/Modal";
 import useWidthOnResize from "@/utils/hooks/useWidthOnResize";
 
-const { Menu, Back, Plus } = ICONS;
+const { Menu, Plus } = ICONS;
 const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 const FOLDER_SIZE = 150;
 
@@ -82,9 +83,7 @@ export default function Page() {
   return (
     <Background>
       <ToolBar>
-        <TouchableOpacity onPress={router.back}>
-          <Back />
-        </TouchableOpacity>
+        <BackButton />
       </ToolBar>
 
       <ContentContainer>

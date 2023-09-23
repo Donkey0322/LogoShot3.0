@@ -1,10 +1,8 @@
-import { Stack, router } from "expo-router";
-import { TouchableOpacity } from "react-native";
+import { Stack } from "expo-router";
 import { styled } from "styled-components/native";
 
-import { COLORS, ICONS } from "@/constant";
-
-const { Back } = ICONS;
+import { BackButton } from "@/components/Button";
+import { COLORS } from "@/constant";
 
 const NAVIGATE_ITEM = ["(tab)", "index"];
 
@@ -26,9 +24,7 @@ export default function Layout() {
   return (
     <Background>
       <ToolBar>
-        <TouchableOpacity onPress={router.back}>
-          <Back />
-        </TouchableOpacity>
+        <BackButton />
       </ToolBar>
       <Stack initialRouteName="(tab)">
         {NAVIGATE_ITEM.map((t, index) => (

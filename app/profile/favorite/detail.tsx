@@ -1,11 +1,8 @@
-import { useRouter } from "expo-router";
 import { TouchableOpacity } from "react-native";
-// import { TouchableOpacity } from "react-native-gesture-handler";
 import { styled } from "styled-components/native";
 
-import { COLORS, ICONS } from "@/constant";
-
-const { Back } = ICONS;
+import { BackButton } from "@/components/Button";
+import { COLORS } from "@/constant";
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
@@ -39,14 +36,10 @@ const ContentContainer = styled.View`
 `;
 
 export default function Page() {
-  const router = useRouter();
-
   return (
     <Background>
       <ToolBar>
-        <TouchableOpacity onPress={router.back}>
-          <Back />
-        </TouchableOpacity>
+        <BackButton />
       </ToolBar>
       <ContentContainer>
         {[0, 0, 0, 0, 0, 0, 0, 0].map((m, index) => (

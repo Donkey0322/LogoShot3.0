@@ -1,16 +1,15 @@
 import { CellContainer, FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
 import { forwardRef } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { styled } from "styled-components/native";
 
-import { COLORS, ICONS } from "@/constant";
+import { BackButton } from "@/components/Button";
+import { COLORS } from "@/constant";
 import { useResults } from "@/contexts/useResults";
 import useWidthOnResize from "@/utils/hooks/useWidthOnResize";
 
-const { Back } = ICONS;
 const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 const FOLDER_SIZE = 150;
 const blurhash =
@@ -63,8 +62,6 @@ const ResultContainer = styled.View`
 `;
 
 export default function Page() {
-  const router = useRouter();
-
   const {
     results = [
       [1, "李昀宸", ""],
@@ -80,9 +77,7 @@ export default function Page() {
   return (
     <Background>
       <ToolBar>
-        <TouchableOpacity onPress={router.back}>
-          <Back />
-        </TouchableOpacity>
+        <BackButton />
       </ToolBar>
 
       <ContentContainer>
