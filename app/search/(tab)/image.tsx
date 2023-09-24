@@ -56,7 +56,6 @@ export default function ImageSearch() {
     color,
     setColor,
   } = useDropdown(handleDataChange);
-  handleDataChange('targetClasscodes')(classCode);
   /******************************************************/
 
   const [isLoading, setIsLoading] = useState(false);

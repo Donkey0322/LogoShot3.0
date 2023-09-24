@@ -13,8 +13,8 @@ interface PhotoIndicatorProps {
   source: string;
   width: number;
   height: number;
-  setWidth: (value?: string | number | boolean | never[] | Date | undefined) => void;
-  setHeight: (value?: string | number | boolean | never[] | Date | undefined) => void;
+  setWidth: (value?: number) => void;
+  setHeight: (value?: number) => void;
   setIndicator: (x: number, y: number) => void;
 }
 
