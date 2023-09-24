@@ -1,11 +1,11 @@
-import { ReactNode, useEffect } from "react";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import { ReactNode, useEffect } from 'react';
+import { PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
 interface DraggablePinProps {
   children: ReactNode;
@@ -67,7 +67,7 @@ const LgsDraggablePin = ({
       <Animated.View
         style={[
           {
-            position: "absolute",
+            position: 'absolute',
           },
           useAnimatedStyle(() => {
             return {

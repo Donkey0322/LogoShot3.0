@@ -1,14 +1,14 @@
-import { styled } from "styled-components/native";
+import { styled } from 'styled-components/native';
 
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
+import type { ViewStyle } from 'react-native';
 
-import { BackButton } from "@/components/Button";
-import { COLORS } from "@/constant";
-import type { ViewStyle } from "react-native";
+import { BackButton } from '@/components/Button';
+import { COLORS } from '@/constant';
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
-  background-color: ${COLORS("mustard.200")};
+  background-color: ${COLORS('mustard.200')};
   align-items: center;
   padding-top: 25px;
 `;
@@ -23,7 +23,7 @@ export const ToolBar = styled.View`
 
 const ContentContainer = styled.View`
   flex: 1;
-  background-color: ${COLORS("white")};
+  background-color: ${COLORS('white')};
   border-top-right-radius: 30px;
   border-top-left-radius: 30px;
   width: 100%;
@@ -37,11 +37,7 @@ interface ScreenProps {
   customedToolBar?: ReactNode;
 }
 
-export default function Screen({
-  children,
-  contentContainerStyle,
-  customedToolBar,
-}: ScreenProps) {
+export default function Screen({ children, contentContainerStyle, customedToolBar }: ScreenProps) {
   return (
     <Background>
       {customedToolBar ?? (
@@ -49,9 +45,7 @@ export default function Screen({
           <BackButton />
         </ToolBar>
       )}
-      <ContentContainer style={[contentContainerStyle]}>
-        {children}
-      </ContentContainer>
+      <ContentContainer style={[contentContainerStyle]}>{children}</ContentContainer>
     </Background>
   );
 }

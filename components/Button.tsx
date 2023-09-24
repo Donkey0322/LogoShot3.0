@@ -1,11 +1,12 @@
-import { router } from "expo-router";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import { styled } from "styled-components/native";
+import { router } from 'expo-router';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { styled } from 'styled-components/native';
 
-import type { Color } from "@/utils/types";
-import type { StyleProp, TextStyle, ViewStyle } from "react-native";
+import type { Color } from '@/utils/types';
+import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
-import { ICONS } from "@/constant";
+import { ICONS } from '@/constant';
+
 const { Back } = ICONS;
 
 interface ButtonProp {
@@ -16,13 +17,7 @@ interface ButtonProp {
   disabled?: boolean;
 }
 
-export default function Button({
-  children,
-  onPress,
-  style,
-  fontStyle,
-  disabled,
-}: ButtonProp) {
+export default function Button({ children, onPress, style, fontStyle, disabled }: ButtonProp) {
   return (
     <TouchableOpacity
       style={[styles.container, style, disabled && styles.disabled]}
@@ -38,20 +33,20 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 5,
     paddingHorizontal: 10,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 20,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   disabled: {
-    backgroundColor: "#dad7cd",
+    backgroundColor: '#dad7cd',
     borderWidth: 1,
-    borderColor: "white",
+    borderColor: 'white',
     borderRadius: 20,
   },
   title: {
-    color: "white",
-    fontWeight: "bold",
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 

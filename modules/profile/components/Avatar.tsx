@@ -1,10 +1,10 @@
-import { Image } from "expo-image";
-import { useState } from "react";
-import { styled } from "styled-components/native";
+import { Image } from 'expo-image';
+import { useState } from 'react';
+import { styled } from 'styled-components/native';
 
-import type { Color } from "@/utils/types";
+import type { Color } from '@/utils/types';
 
-import { COLORS, ICONS } from "@/constant";
+import { COLORS, ICONS } from '@/constant';
 const { Person } = ICONS;
 
 const ImageBorder = styled.View<{ color: string }>`
@@ -24,7 +24,7 @@ const ImageContainer = styled.View<{ color: string }>`
 `;
 
 export default function Avatar({
-  theme = COLORS("joy.orange"),
+  theme = COLORS('joy.orange'),
   image,
 }: {
   theme: Color;
@@ -48,13 +48,13 @@ export default function Avatar({
               flex: 0.8,
               width: imageWidth,
             }}
-            source={require("@/assets/figure.png")}
+            source={require('@/assets/figure.png')}
             // placeholder={blurhash}
             // contentFit="cover"
             transition={1000}
           />
         ) : (
-          <Person size={imageWidth} color={COLORS("white")} />
+          <Person size={imageWidth} color={COLORS('white')} />
         )}
       </ImageContainer>
     </ImageBorder>

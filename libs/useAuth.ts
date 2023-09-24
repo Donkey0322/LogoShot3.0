@@ -1,25 +1,16 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
-import { Alert } from "react-native";
-import useSWRMutation from "swr/mutation";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
+import { Alert } from 'react-native';
+import useSWRMutation from 'swr/mutation';
 
-import { useUser } from "@/contexts/useUser";
-import {
-  loginAsGeneralUser,
-  signupAsGeneralUser,
-} from "@/libs/api/fetchers/account";
-import { swrMutationFetcher } from "@/libs/api/functions";
+import { useUser } from '@/contexts/useUser';
+import { loginAsGeneralUser, signupAsGeneralUser } from '@/libs/api/fetchers/account';
+import { swrMutationFetcher } from '@/libs/api/functions';
 
 export default function useAuth() {
   const router = useRouter();
-  const useLoginSWR = useSWRMutation(
-    `/account/login`,
-    swrMutationFetcher(loginAsGeneralUser)
-  );
-  const useSignupSWR = useSWRMutation(
-    `/account/signup`,
-    swrMutationFetcher(signupAsGeneralUser)
-  );
+  const useLoginSWR = useSWRMutation(`/account/login`, swrMutationFetcher(loginAsGeneralUser));
+  const useSignupSWR = useSWRMutation(`/account/signup`, swrMutationFetcher(signupAsGeneralUser));
   const { setUser } = useUser();
 
   const logIn = async (data: { email: string; password: string }) => {
@@ -28,29 +19,27 @@ export default function useAuth() {
         data: { data: user },
       } = await useLoginSWR.trigger(data);
       if (user?.userId) {
-        AsyncStorage.setItem("userId", `${user.userId}`);
-        setUser({ userId: user.userId, userType: "general" });
+        AsyncStorage.setItem('userId', `${user.userId}`);
+        setUser({ userId: user.userId, userType: 'general' });
         router.back();
-        Alert.alert("Logged in", `Hi ${user.userId}`);
+        Alert.alert('Logged in', `Hi ${user.userId}`);
       }
     } catch (e) {
       if (e instanceof Error)
         switch (e.message) {
-          case "INVALID_EMAIL":
-            Alert.alert("請輸入有效信箱");
+          case 'INVALID_EMAIL':
+            Alert.alert('請輸入有效信箱');
             break;
-          case "INVALID_PASSWORD":
-            Alert.alert("密碼錯誤");
+          case 'INVALID_PASSWORD':
+            Alert.alert('密碼錯誤');
             break;
-          case "EMAIL_NOT_FOUND":
-            Alert.alert(
-              "帳戶未註冊，請先登入至頁面註冊，或利用 Facebook、Apple 帳戶登入"
-            );
+          case 'EMAIL_NOT_FOUND':
+            Alert.alert('帳戶未註冊，請先登入至頁面註冊，或利用 Facebook、Apple 帳戶登入');
             break;
           default:
             Alert.alert(
-              "伺服器出錯，請檢查帳戶是否已註冊，或聯繫聯絡系統服務人員協助處理",
-              "來訊信箱：ntuim2022@gmail.com"
+              '伺服器出錯，請檢查帳戶是否已註冊，或聯繫聯絡系統服務人員協助處理',
+              '來訊信箱：ntuim2022@gmail.com',
             );
             break;
         }
@@ -63,22 +52,22 @@ export default function useAuth() {
         data: { data: res },
       } = await useSignupSWR.trigger(data);
       Alert.alert(
-        `驗證信已寄至${res?.email}， 請至信箱中點擊連結完成驗證。（請小心驗證信有可能在信箱中被歸類為垃圾信件）`
+        `驗證信已寄至${res?.email}， 請至信箱中點擊連結完成驗證。（請小心驗證信有可能在信箱中被歸類為垃圾信件）`,
       );
-      router.replace("profile");
+      router.replace('/profile/');
     } catch (e) {
       if (e instanceof Error)
         switch (e.message) {
-          case "INVALID_EMAIL":
-            Alert.alert("請輸入有效信箱");
+          case 'INVALID_EMAIL':
+            Alert.alert('請輸入有效信箱');
             break;
-          case "EMAIL_EXISTS":
-            Alert.alert("此信箱已註冊過");
+          case 'EMAIL_EXISTS':
+            Alert.alert('此信箱已註冊過');
             break;
           default:
             Alert.alert(
-              "伺服器出錯，請檢查帳戶是否已註冊，或聯繫聯絡系統服務人員協助處理",
-              "來訊信箱：ntuim2022@gmail.com"
+              '伺服器出錯，請檢查帳戶是否已註冊，或聯繫聯絡系統服務人員協助處理',
+              '來訊信箱：ntuim2022@gmail.com',
             );
             break;
         }
@@ -87,13 +76,13 @@ export default function useAuth() {
 
   const logOut = async () => {
     try {
-      await AsyncStorage.removeItem("userId");
+      await AsyncStorage.removeItem('userId');
       setUser(undefined);
-      Alert.alert("登出成功！");
+      Alert.alert('登出成功！');
     } catch (e) {
       Alert.alert(
-        "伺服器出錯，請檢查帳戶是否已註冊，或聯繫聯絡系統服務人員協助處理",
-        "來訊信箱：ntuim2022@gmail.com"
+        '伺服器出錯，請檢查帳戶是否已註冊，或聯繫聯絡系統服務人員協助處理',
+        '來訊信箱：ntuim2022@gmail.com',
       );
     }
   };

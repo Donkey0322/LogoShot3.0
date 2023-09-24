@@ -1,13 +1,6 @@
-import {
-  createContext,
-  memo,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, memo, useContext, useEffect, useMemo, useState } from 'react';
 
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 type Results = string[][];
 
@@ -20,22 +13,20 @@ interface ContextType {
 
 const ResultsContext = createContext<ContextType>({
   results: undefined,
-  setResults: (value: ResultsType) => {},
+  setResults: () => {},
 });
 
 export type UseResultsProps = {
   children?: ReactNode;
 };
 
-export const ResultsProvider = memo(function ({ children }: UseResultsProps) {
+export const ResultsProvider = memo(function ResultsProvider({ children }: UseResultsProps) {
   const [results, setResults] = useState<ResultsType>(undefined);
   const value = useMemo(() => ({ results, setResults }), [results, setResults]);
   useEffect(() => {
     console.log(results);
   }, [results]);
-  return (
-    <ResultsContext.Provider value={value}>{children}</ResultsContext.Provider>
-  );
+  return <ResultsContext.Provider value={value}>{children}</ResultsContext.Provider>;
 });
 
 export const useResults = () => useContext(ResultsContext);

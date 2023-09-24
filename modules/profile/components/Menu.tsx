@@ -1,12 +1,12 @@
-import { router } from "expo-router";
-import { useMemo } from "react";
-import { Text } from "react-native";
-import { styled } from "styled-components/native";
+import { router } from 'expo-router';
+import { useMemo } from 'react';
+import { Text } from 'react-native';
+import { styled } from 'styled-components/native';
 
-import type { TextStyle, TouchableOpacityProps } from "react-native";
+import type { TextStyle, TouchableOpacityProps } from 'react-native';
 
-import { COLORS, ICONS } from "@/constant";
-import { useUser } from "@/contexts/useUser";
+import { COLORS, ICONS } from '@/constant';
+import { useUser } from '@/contexts/useUser';
 const { Star, Search, Delete, Member, Login } = ICONS;
 
 interface ItemType extends TouchableOpacityProps {
@@ -23,7 +23,7 @@ const List = styled.View`
 
 const ListItem = styled.TouchableOpacity`
   padding: 20px;
-  border: 1px solid ${COLORS("gray.200")};
+  border: 1px solid ${COLORS('gray.200')};
   border-radius: 20px;
   flex-direction: row;
   align-items: center;
@@ -39,37 +39,35 @@ export default function Menu() {
         ? [
             {
               icon: <Search />,
-              content: "搜尋紀錄",
-              onPress: () => router.push("/profile/history/"),
+              content: '搜尋紀錄',
+              onPress: () => router.push('/profile/history/'),
             },
             {
-              icon: <Star color={COLORS("icons.star")} />,
-              content: "我的最愛",
-              onPress: () => router.push("/profile/favorite/"),
+              icon: <Star color={COLORS('icons.star')} />,
+              content: '我的最愛',
+              onPress: () => router.push('/profile/favorite/'),
             },
             {
-              icon: (
-                <Delete color={COLORS("red.500")} style={{ marginRight: 5 }} />
-              ),
-              content: "刪除帳戶",
+              icon: <Delete color={COLORS('red.500')} style={{ marginRight: 5 }} />,
+              content: '刪除帳戶',
               contentStyle: {
-                color: COLORS("red.500"),
+                color: COLORS('red.500'),
               },
             },
           ]
         : [
             {
               icon: <Login />,
-              content: "登入",
-              onPress: () => router.push("/profile/auth/login"),
+              content: '登入',
+              onPress: () => router.push('/profile/auth/login'),
             },
             {
-              icon: <Member color={COLORS("coldblue")} />,
-              content: "註冊",
-              onPress: () => router.push("/profile/auth/signup"),
+              icon: <Member color={COLORS('coldblue')} />,
+              content: '註冊',
+              onPress: () => router.push('/profile/auth/signup'),
             },
           ],
-    [user?.userId]
+    [user?.userId],
   );
 
   return (
@@ -77,9 +75,7 @@ export default function Menu() {
       {items.map(({ icon, content, contentStyle, onPress }, index) => (
         <ListItem onPress={onPress} key={index}>
           {icon}
-          <Text style={[{ fontSize: 16, fontWeight: "bold" }, contentStyle]}>
-            {content}
-          </Text>
+          <Text style={[{ fontSize: 16, fontWeight: 'bold' }, contentStyle]}>{content}</Text>
         </ListItem>
       ))}
     </List>

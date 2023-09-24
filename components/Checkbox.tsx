@@ -1,8 +1,8 @@
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet } from 'react-native';
 
-import type { TouchableOpacityProps } from "react-native";
+import type { TouchableOpacityProps } from 'react-native';
 
-import { COLORS, ICONS } from "@/constant";
+import { COLORS, ICONS } from '@/constant';
 
 const { Check } = ICONS;
 
@@ -28,14 +28,14 @@ const styles = StyleSheet.create({
   checkboxBase: {
     width: 24,
     height: 24,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: COLORS("yellow"),
-    backgroundColor: "white",
+    borderColor: COLORS('yellow'),
+    backgroundColor: 'white',
   },
   checkboxChecked: {
-    backgroundColor: COLORS("yellow"),
+    backgroundColor: COLORS('yellow'),
   },
 });

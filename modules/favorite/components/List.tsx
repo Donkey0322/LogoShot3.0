@@ -1,10 +1,10 @@
-import { Fragment } from "react";
-import { styled } from "styled-components/native";
+import { Fragment } from 'react';
+import { styled } from 'styled-components/native';
 
-import type { ReactNode } from "react";
-import type { ViewProps } from "react-native";
+import type { ReactNode } from 'react';
+import type { ViewProps } from 'react-native';
 
-import Divider from "@/components/Divider";
+import Divider from '@/components/Divider';
 
 interface ListProps extends ViewProps {
   children: ReactNode[] | ReactNode;
@@ -27,7 +27,7 @@ export const ListItem = styled.TouchableOpacity`
  * @param boundary whether the header and tail divider is shown.
  * @description children can be referenced to a list of {@link ListItem}
  */
-export default ({ children, boundary = true, ...rest }: ListProps) => {
+export default function Menu({ children, boundary = true, ...rest }: ListProps) {
   return (
     <List {...rest}>
       {boundary && <Divider />}
@@ -42,4 +42,4 @@ export default ({ children, boundary = true, ...rest }: ListProps) => {
       {boundary && <Divider />}
     </List>
   );
-};
+}

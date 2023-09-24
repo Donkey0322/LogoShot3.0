@@ -1,9 +1,9 @@
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { SafeAreaView } from "react-native-safe-area-context";
-import styled from "styled-components/native";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import styled from 'styled-components/native';
 
-import type { KeyboardAwareScrollViewProps } from "react-native-keyboard-aware-scroll-view";
-import type { SafeAreaViewProps } from "react-native-safe-area-context";
+import type { KeyboardAwareScrollViewProps } from 'react-native-keyboard-aware-scroll-view';
+import type { SafeAreaViewProps } from 'react-native-safe-area-context';
 
 /**
  *
@@ -32,16 +32,12 @@ export const ScrollBeyond = styled.View`
  *
  * @param style - the alias of contentContainerStyle for this component
  */
-export const ScrollView = ({
-  children,
-  style,
-  ...rest
-}: KeyboardAwareScrollViewProps) => (
+export const ScrollView = ({ children, style, ...rest }: KeyboardAwareScrollViewProps) => (
   <KeyboardAwareScrollView
     contentContainerStyle={[
       {
         flex: 1,
-        backgroundColor: "inherit",
+        backgroundColor: 'inherit',
       },
       style,
     ]}

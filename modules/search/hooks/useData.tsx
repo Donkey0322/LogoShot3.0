@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export interface ImageDataType {
   searchKeywords: string;
@@ -18,18 +18,19 @@ export interface ImageDataType {
   isOldImage: boolean;
 }
 
-export default function useData(mode: "image" | "text" = "image") {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function useData(mode: 'image' | 'text' = 'image') {
   const [data, setData] = useState<ImageDataType>({
-    searchKeywords: "",
+    searchKeywords: '',
     targetClasscodes: [],
-    targetColor: "",
-    targetApplicant: "",
+    targetColor: '',
+    targetApplicant: '',
     targetStartTime: new Date(),
     targetEndTime: new Date(),
-    targetDraftC: "",
-    targetDraftE: "",
-    targetDraftJ: "",
-    image: "",
+    targetDraftC: '',
+    targetDraftE: '',
+    targetDraftJ: '',
+    image: '',
     imageWidth: 0,
     imageHeight: 0,
     indicatorX: 0,
@@ -41,9 +42,9 @@ export default function useData(mode: "image" | "text" = "image") {
     if (!advance) {
       setData((prev) => ({
         ...prev,
-        targetDraftC: "",
-        targetDraftE: "",
-        targetDraftJ: "",
+        targetDraftC: '',
+        targetDraftE: '',
+        targetDraftJ: '',
       }));
     }
   }, [advance]);

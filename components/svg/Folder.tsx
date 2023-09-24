@@ -1,10 +1,10 @@
-import Svg, { Path } from "react-native-svg";
+import Svg, { Path } from 'react-native-svg';
 
-import type { Color } from "@/utils/types";
+import type { Color } from '@/utils/types';
 
 export default function Folder({
   size = 400,
-  backgroundColor = "#FAFAFA",
+  backgroundColor = '#FAFAFA',
 }: {
   size?: number;
   backgroundColor?: Color;

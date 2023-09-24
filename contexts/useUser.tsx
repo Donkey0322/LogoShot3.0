@@ -1,10 +1,10 @@
-import { createContext, memo, useContext, useMemo, useState } from "react";
+import { createContext, memo, useContext, useMemo, useState } from 'react';
 
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 export interface UserType {
   userId: string;
-  userType: "apple" | "general" | "facebook";
+  userType: 'apple' | 'general' | 'facebook';
   name?: string;
   image?: string;
 }
@@ -18,14 +18,14 @@ export interface ContextType {
 
 const UserContext = createContext<ContextType>({
   user: undefined,
-  setUser: (value: UserPropsType) => {},
+  setUser: () => {},
 });
 
 export type UserProps = {
   children?: ReactNode;
 };
 
-export const UserProvider = memo(function ({ children }: UserProps) {
+export const UserProvider = memo(function UserProvider({ children }: UserProps) {
   const [user, setUser] = useState<UserPropsType>(undefined);
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);
 

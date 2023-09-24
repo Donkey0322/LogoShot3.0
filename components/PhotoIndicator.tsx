@@ -1,7 +1,8 @@
-import { useEffect } from "react";
-import { Dimensions, Image } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import LgsDraggablePin from "./DraggablePin";
+import { useEffect } from 'react';
+import { Dimensions, Image } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+import LgsDraggablePin from './DraggablePin';
 
 // const windowWidth = Dimensions.get("window").width;
 // const windowHeight = Dimensions.get("window").height;
@@ -12,12 +13,8 @@ interface PhotoIndicatorProps {
   source: string;
   width: number;
   height: number;
-  setWidth: (
-    value?: string | number | boolean | never[] | Date | undefined
-  ) => void;
-  setHeight: (
-    value?: string | number | boolean | never[] | Date | undefined
-  ) => void;
+  setWidth: (value?: string | number | boolean | never[] | Date | undefined) => void;
+  setHeight: (value?: string | number | boolean | never[] | Date | undefined) => void;
   setIndicator: (x: number, y: number) => void;
 }
 
@@ -31,7 +28,7 @@ export default function PhotoIndicator({
   setHeight,
   setIndicator,
 }: PhotoIndicatorProps) {
-  const drag = (x: number, y: number) => {
+  const drag = () => {
     // console.log("dragging", x, y);
     // setIndicator(x, y);
   };
@@ -43,25 +40,25 @@ export default function PhotoIndicator({
     Image.getSize(
       source,
       (srcWidth, srcHeight) => {
-        const maxHeight = Dimensions.get("window").height * 0.7; // or something else
-        const maxWidth = Dimensions.get("window").width * 0.7;
+        const maxHeight = Dimensions.get('window').height * 0.7; // or something else
+        const maxWidth = Dimensions.get('window').width * 0.7;
 
         const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
         setWidth(srcWidth * ratio);
         setHeight(srcHeight * ratio);
       },
       (error) => {
-        console.log("error:", error);
-      }
+        console.log('error:', error);
+      },
     );
   }, [source]);
 
   return (
     <GestureHandlerRootView
       style={{
-        position: "relative",
-        alignItems: "center",
-        justifyContent: "center",
+        position: 'relative',
+        alignItems: 'center',
+        justifyContent: 'center',
         marginTop: 20,
         borderRadius: 30,
       }}
@@ -83,10 +80,7 @@ export default function PhotoIndicator({
           imageWidth={width}
           imageHeight={height}
         >
-          <Image
-            source={require("@/assets/indicator.png")}
-            style={{ width: 30, height: 30 }}
-          />
+          <Image source={require('@/assets/indicator.png')} style={{ width: 30, height: 30 }} />
         </LgsDraggablePin>
       ) : null}
     </GestureHandlerRootView>

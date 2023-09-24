@@ -1,15 +1,12 @@
-import Constants from "expo-constants";
-import { Fetcher, Middleware } from "openapi-typescript-fetch";
+import Constants from 'expo-constants';
+import { Fetcher, Middleware } from 'openapi-typescript-fetch';
 
-import { paths } from "@/types/schema";
+import { paths } from '@/types/schema';
 
 const baseURL = `${
-  Constants.expoConfig?.extra?.REACT_APP_SERVER_USE_HTTPS === "true"
-    ? "https"
-    : "http"
-}://${Constants.expoConfig?.extra?.REACT_APP_SERVER_DOMAIN}:${
-  Constants.expoConfig?.extra?.REACT_APP_SERVER_PORT
-}`;
+  Constants.expoConfig?.extra?.REACT_APP_SERVER_USE_HTTPS === 'true' ? 'https' : 'http'
+}://${Constants.expoConfig?.extra?.REACT_APP_SERVER_DOMAIN}:${Constants.expoConfig?.extra
+  ?.REACT_APP_SERVER_PORT}`;
 
 const logger: Middleware = async (url, init, next) => {
   // eslint-disable-next-line no-console
@@ -30,7 +27,7 @@ const logger: Middleware = async (url, init, next) => {
 // };
 
 const interceptUndefinedParams: Middleware = async (url, init, next) => {
-  if (url.includes("undefined")) {
+  if (url.includes('undefined')) {
     // eslint-disable-next-line no-console
     console.log('Requesting url contains "undefined".', url);
     throw new Error('Requesting url contains "undefined".');

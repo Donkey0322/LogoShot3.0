@@ -1,13 +1,13 @@
-import { Stack } from "expo-router";
-import { styled } from "styled-components/native";
+import { Stack } from 'expo-router';
+import { styled } from 'styled-components/native';
 
-import { BackButton } from "@/components/Button";
-import { COLORS } from "@/constant";
+import { BackButton } from '@/components/Button';
+import { COLORS } from '@/constant';
 
-const NAVIGATE_ITEM = ["(tab)", "index"];
+const NAVIGATE_ITEM = ['(tab)', 'index'];
 
 const Background = styled.View<{ color?: string }>`
-  background-color: ${COLORS("mustard.200")};
+  background-color: ${COLORS('mustard.200')};
   padding-top: 25px;
   flex: 1;
 `;

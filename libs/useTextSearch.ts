@@ -1,13 +1,10 @@
-import useSWRMutation from "swr/mutation";
+import useSWRMutation from 'swr/mutation';
 
-import { textSearch } from "@/libs/api/fetchers/search";
-import { swrMutationFetcher } from "@/libs/api/functions";
+import { textSearch } from '@/libs/api/fetchers/search';
+import { swrMutationFetcher } from '@/libs/api/functions';
 
 export default function useTextSearch() {
-  const useTextSearchSWR = useSWRMutation(
-    `/search/text`,
-    swrMutationFetcher(textSearch)
-  );
+  const useTextSearchSWR = useSWRMutation(`/search/text`, swrMutationFetcher(textSearch));
 
   return {
     textSearch: useTextSearchSWR.trigger,

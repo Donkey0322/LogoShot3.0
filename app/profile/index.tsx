@@ -1,13 +1,13 @@
-import { useMemo } from "react";
-import { Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { useMemo } from 'react';
+import { Text } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { BackButton } from "@/components/Button";
-import Screen, { ToolBar } from "@/components/stack";
-import { COLORS, ICONS } from "@/constant";
-import { useUser } from "@/contexts/useUser";
-import useAuth from "@/libs/useAuth";
-import { Avatar, Menu } from "@/modules/profile/components";
+import { BackButton } from '@/components/Button';
+import Screen, { ToolBar } from '@/components/stack';
+import { COLORS, ICONS } from '@/constant';
+import { useUser } from '@/contexts/useUser';
+import useAuth from '@/libs/useAuth';
+import { Avatar, Menu } from '@/modules/profile/components';
 
 const { Logout } = ICONS;
 
@@ -24,22 +24,22 @@ export default function Profile() {
           {login && (
             <TouchableOpacity
               style={{
-                flexDirection: "row",
+                flexDirection: 'row',
                 columnGap: 8,
-                alignItems: "center",
+                alignItems: 'center',
               }}
               onPress={logOut}
             >
               <Text
                 style={{
-                  color: COLORS("coldblue.500"),
-                  fontWeight: "bold",
+                  color: COLORS('coldblue.500'),
+                  fontWeight: 'bold',
                   fontSize: 17,
                 }}
               >
                 登出
               </Text>
-              <Logout color={COLORS("coldblue.500")} />
+              <Logout color={COLORS('coldblue.500')} />
             </TouchableOpacity>
           )}
         </ToolBar>
@@ -47,11 +47,11 @@ export default function Profile() {
       contentContainerStyle={{ paddingTop: 48 }}
     >
       <Avatar
-        theme={login ? COLORS("joy.orange") : COLORS("gray.300")}
-        image={login ? "@/assets/figure.png" : undefined}
+        theme={login ? COLORS('joy.orange') : COLORS('gray.300')}
+        image={login ? '@/assets/figure.png' : undefined}
       />
-      <Text style={{ fontSize: 31, marginTop: 32, fontWeight: "bold" }}>
-        {login ? user?.name ?? "Olivia Rodrigo" : "未登入"}
+      <Text style={{ fontSize: 31, marginTop: 32, fontWeight: 'bold' }}>
+        {login ? user?.name ?? 'Olivia Rodrigo' : '未登入'}
       </Text>
       <Menu />
     </Screen>

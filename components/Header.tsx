@@ -1,10 +1,10 @@
-import { router } from "expo-router";
-import { useMemo } from "react";
-import { ImageBackground, Text, View } from "react-native";
+import { router } from 'expo-router';
+import { useMemo } from 'react';
+import { ImageBackground, Text, View } from 'react-native';
 
-import Button from "@/components/Button";
-import { COLORS, FONTS } from "@/constant";
-import { useUser } from "@/contexts/useUser";
+import Button from '@/components/Button';
+import { COLORS, FONTS } from '@/constant';
+import { useUser } from '@/contexts/useUser';
 
 export default function Header() {
   const { user } = useUser();
@@ -12,24 +12,22 @@ export default function Header() {
 
   return (
     <ImageBackground
-      source={require("@/assets/logobg.jpg")}
+      source={require('@/assets/logobg.jpg')}
       style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         paddingHorizontal: 20,
-        backgroundColor: COLORS("black"),
+        backgroundColor: COLORS('black'),
         paddingVertical: 5,
       }}
     >
-      <View
-        style={{ flexDirection: "row", alignItems: "center", marginLeft: 45 }}
-      >
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 45 }}>
         <Text
           style={{
             ...FONTS.h1,
-            color: COLORS("purple"),
-            fontWeight: "bold",
+            color: COLORS('purple'),
+            fontWeight: 'bold',
           }}
         >
           Logo
@@ -37,8 +35,8 @@ export default function Header() {
         <Text
           style={{
             ...FONTS.h1,
-            color: COLORS("mustard"),
-            fontWeight: "bold",
+            color: COLORS('mustard'),
+            fontWeight: 'bold',
           }}
         >
           shot
@@ -47,13 +45,11 @@ export default function Header() {
 
       <Button
         onPress={() => {
-          router.push("/profile/");
+          router.push('/profile/');
         }}
-        style={{ backgroundColor: COLORS("mustard.300"), paddingVertical: 10 }}
+        style={{ backgroundColor: COLORS('mustard.300'), paddingVertical: 10 }}
       >
-        <Text style={{ color: "black" }}>
-          {login ? user?.name ?? "Olivia Rodrigo" : "登入"}
-        </Text>
+        <Text style={{ color: 'black' }}>{login ? user?.name ?? 'Olivia Rodrigo' : '登入'}</Text>
       </Button>
     </ImageBackground>
   );
