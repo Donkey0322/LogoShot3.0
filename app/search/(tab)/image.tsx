@@ -1,9 +1,10 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import * as FileSystem from 'expo-file-system';
+import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
+import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components/native';
 
 import Button from '@/components/Button';
@@ -11,11 +12,12 @@ import Checkbox from '@/components/Checkbox';
 import DateTimePicker from '@/components/DatePicker';
 import Header from '@/components/Header';
 import Modal from '@/components/Modal';
-import PhotoIndicator from '@/components/PhotoIndicator';
 import Input from '@/components/TextInput';
-import { CLASS_CODE, COLOR_CODE, COLORS, FONTS, ICONS } from '@/constant';
+import { COLORS, FONTS, ICONS } from '@/constant';
+import { useResults } from '@/contexts/useResults';
+import useImageSearch from '@/libs/useImageSearch';
 import * as AppFrame from '@/modules/search/Background';
-import useData from '@/modules/search/hooks/useData';
+import useData, { imageInitData } from '@/modules/search/hooks/useData';
 import useDropdown from '@/modules/search/hooks/useDropdown';
 
 const { Camera, Album } = ICONS;
@@ -41,35 +43,29 @@ const ModalOption = styled.TouchableOpacity`
 `;
 
 export default function ImageSearch() {
+  const { imageSearch } = useImageSearch();
+  const { setResults } = useResults();
   /*input kit*/
-  const { data, handleDataChange, setIndicator, advance, setAdvance } = useData();
+  const { data, handleDataChange, advance, setAdvance } = useData(imageInitData);
   /******************************************************/
 
   /*DropDownPicker 套組*/
-  const {
-    classDropdownOpen,
-    setClassDropdownOpen,
-    colorDropdownOpen,
-    setColorDropdownOpen,
-    classCode,
-    setClassCode,
-    color,
-    setColor,
-  } = useDropdown(handleDataChange);
+  const { ClassCodeDropDownPicker, ColorDropDownPicker } = useDropdown(handleDataChange);
   /******************************************************/
 
   const [isLoading, setIsLoading] = useState(false);
 
   const onSearch = async () => {
     try {
-      // setIsLoading(true);
-      // const userInfoStr = await AsyncStorage.getItem("@userInfo");
-      // const userInfo = userInfoStr != null ? JSON.parse(userInfoStr) : null;
-      // const { data: imageData } = await imageSearch({
-      //   ...data,
-      //   userId: userInfo?.userId ?? "1234",
-      //   userType: userInfo?.userType ?? "manual",
-      // });
+      setIsLoading(true);
+      const {
+        data: { data: results },
+      } = await imageSearch({
+        base64_img: data['image'],
+      });
+      setResults(results?.results);
+      console.log(results);
+      router.push('/search/result/');
     } catch (e) {
       console.log(e);
     } finally {
@@ -137,15 +133,14 @@ export default function ImageSearch() {
           <AppFrame.ContentContainer>
             {data.image ? (
               <>
-                <PhotoIndicator
-                  initialX={data.indicatorX}
-                  initialY={data.indicatorY}
-                  width={data.imageWidth}
-                  height={data.imageHeight}
-                  setWidth={handleDataChange('imageWidth')}
-                  setHeight={handleDataChange('imageHeight')}
-                  setIndicator={setIndicator}
-                  source={source}
+                <Image
+                  resizeMode="cover"
+                  source={{ uri: source }}
+                  style={{
+                    width: data.imageWidth,
+                    height: data.imageHeight,
+                  }}
+                  transition={1000}
                 />
                 <View
                   style={{
@@ -174,58 +169,17 @@ export default function ImageSearch() {
                 />
               </ImageUpload>
             )}
-
-            <DropDownPicker
-              dropDownContainerStyle={{
-                backgroundColor: '#ffffff',
-              }}
-              badgeStyle={{
-                padding: 5,
-              }}
-              badgeTextStyle={{
-                width: 100,
-                height: 20,
-                fontSize: 8,
-              }}
-              placeholder="商標搜尋類別"
-              searchable={true}
-              open={classDropdownOpen}
-              value={classCode}
-              items={CLASS_CODE}
-              setOpen={setClassDropdownOpen}
-              setValue={setClassCode}
-              dropDownDirection="BOTTOM"
-              theme="LIGHT"
-              multiple={true}
-              mode="BADGE"
-              zIndex={3000}
-              zIndexInverse={1000}
-              listMode="SCROLLVIEW"
-            />
-            <DropDownPicker
-              placeholder="商標色彩"
-              open={colorDropdownOpen}
-              value={color}
-              items={COLOR_CODE}
-              setOpen={setColorDropdownOpen}
-              setValue={setColor}
-              dropDownDirection="BOTTOM"
-              theme="LIGHT"
-              multiple={false}
-              mode="BADGE"
-              zIndex={990}
-              zIndexInverse={3000}
-              listMode="SCROLLVIEW"
-            />
+            <ClassCodeDropDownPicker />
+            <ColorDropDownPicker />
             <Input
-              value={data.searchKeywords}
-              onChangeText={handleDataChange('searchKeywords')}
+              value={data.keywords}
+              onChangeText={handleDataChange('keywords')}
               style={styles.input}
               placeholder={'輸入關鍵字'}
             />
             <Input
-              value={data.targetApplicant}
-              onChangeText={handleDataChange('targetApplicant')}
+              value={data.applicant}
+              onChangeText={handleDataChange('applicant')}
               style={styles.input}
               placeholder={'輸入申請人'}
             />
@@ -239,15 +193,9 @@ export default function ImageSearch() {
               －商標註冊期間－
             </Text>
             <View style={styles.rangeContainer}>
-              <DateTimePicker
-                value={data.targetStartTime}
-                onChange={handleDataChange('targetStartTime')}
-              />
+              <DateTimePicker value={data.startTime} onChange={handleDataChange('startTime')} />
               <Text style={{ marginLeft: 10 }}>~</Text>
-              <DateTimePicker
-                value={data.targetEndTime}
-                onChange={handleDataChange('targetEndTime')}
-              />
+              <DateTimePicker value={data.endTime} onChange={handleDataChange('endTime')} />
             </View>
             <View
               style={{
@@ -270,20 +218,20 @@ export default function ImageSearch() {
             {advance && (
               <>
                 <Input
-                  value={data.targetDraftC}
-                  onChangeText={handleDataChange('targetDraftC')}
+                  value={data.chinese}
+                  onChangeText={handleDataChange('chinese')}
                   placeholder="輸入圖樣中文"
                   style={styles.input}
                 />
                 <Input
-                  value={data.targetDraftE}
-                  onChangeText={handleDataChange('targetDraftE')}
+                  value={data.english}
+                  onChangeText={handleDataChange('english')}
                   placeholder="輸入圖樣英文"
                   style={styles.input}
                 />
                 <Input
-                  value={data.targetDraftJ}
-                  onChangeText={handleDataChange('targetDraftJ')}
+                  value={data.japan}
+                  onChangeText={handleDataChange('japan')}
                   placeholder="輸入圖樣日文"
                   style={styles.input}
                 />

@@ -4,6 +4,9 @@
  */
 
 export interface paths {
+  "/Image_Search/image": {
+    post: operations["post_image_search"];
+  };
   "/account": {
     delete: operations["delete_account"];
   };
@@ -32,6 +35,14 @@ export interface paths {
     parameters: {
       path: {
         folderId: number;
+      };
+    };
+  };
+  "/search/result/{resultId}": {
+    get: operations["get_result"];
+    parameters: {
+      path: {
+        resultId: number;
       };
     };
   };
@@ -81,10 +92,6 @@ export interface definitions {
   DeleteFavoriteFolder: {
     folderId?: number;
   };
-  RenameFavoriteFolder: {
-    folderId?: number;
-    folderName?: string;
-  };
   AddFavoriteFolderRequest: {
     /** @description User ID */
     userId: string;
@@ -96,14 +103,9 @@ export interface definitions {
     userType: "apple" | "general" | "facebook" | "firebase";
     folderName?: string;
   };
-  FormattedReadFavoriteFolderResponse: {
-    data?: definitions["ReadFavoriteFolderResponse"][];
-    error?: string;
-    success?: boolean;
-  };
-  ReadFavoriteFolderResponse: {
-    fileId?: number;
-    fileName?: string;
+  RenameFavoriteFolder: {
+    folderId?: number;
+    folderName?: string;
   };
   FormattedFavoriteFolderResponse: {
     data?: definitions["FavoriteFolderResponse"];
@@ -111,6 +113,15 @@ export interface definitions {
     success?: boolean;
   };
   FavoriteFolderResponse: {
+    fileId?: number;
+    fileName?: string;
+  };
+  FormattedReadFavoriteFolderResponse: {
+    data?: definitions["ReadFavoriteFolderResponse"][];
+    error?: string;
+    success?: boolean;
+  };
+  ReadFavoriteFolderResponse: {
     fileId?: number;
     fileName?: string;
   };
@@ -143,6 +154,19 @@ export interface definitions {
   TextSearchResponse: {
     results?: string[][];
   };
+  ImageSearchRequest: {
+    base64_img?: string;
+    indicatorX?: number;
+    indicatorY?: number;
+  };
+  FormattedImageSearchResponse: {
+    data?: definitions["ImageSearchResponse"];
+    error?: string;
+    success?: boolean;
+  };
+  ImageSearchResponse: {
+    results?: string[][];
+  };
 }
 
 export interface responses {
@@ -153,6 +177,23 @@ export interface responses {
 }
 
 export interface operations {
+  post_image_search: {
+    parameters: {
+      body: {
+        payload: definitions["ImageSearchRequest"];
+      };
+      header: {
+        /** An optional fields mask */
+        "X-Fields"?: string;
+      };
+    };
+    responses: {
+      /** Success */
+      200: {
+        schema: definitions["FormattedImageSearchResponse"];
+      };
+    };
+  };
   delete_account: {
     parameters: {
       body: {
@@ -322,6 +363,17 @@ export interface operations {
       };
       body: {
         payload: definitions["DeleteFavoriteFile"];
+      };
+    };
+    responses: {
+      /** Success */
+      200: unknown;
+    };
+  };
+  get_result: {
+    parameters: {
+      path: {
+        resultId: number;
       };
     };
     responses: {
