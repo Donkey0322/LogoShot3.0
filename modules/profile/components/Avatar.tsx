@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { useState } from 'react';
-import { styled } from 'styled-components/native';
+import styled from 'styled-components/native';
 
 import type { Color } from '@/utils/types';
 

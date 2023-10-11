@@ -1,71 +1,30 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { format } from 'date-fns';
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
 
 import Button from '@/components/Button';
 import Checkbox from '@/components/Checkbox';
 import DateTimePicker from '@/components/DatePicker';
 import Header from '@/components/Header';
 import Input from '@/components/TextInput';
-import { CLASS_CODE, COLOR_CODE, COLORS, FONTS } from '@/constant';
+import { COLORS, FONTS } from '@/constant';
 import { useResults } from '@/contexts/useResults';
 import useTextSearch from '@/libs/useTextSearch';
 import * as AppFrame from '@/modules/search/Background';
+import useData, { textInitData } from '@/modules/search/hooks/useData';
+import useDropdown from '@/modules/search/hooks/useDropdown';
 
 export default function ImageSearch() {
   const { textSearch } = useTextSearch();
   const { setResults } = useResults();
-
   /*input kit*/
-  const [data, setData] = useState({
-    keywords: '海底撈',
-    classcodes: [],
-    color: '',
-    applicant: '',
-    startTime: new Date(),
-    endTime: new Date(),
-    chinese: '',
-    english: '',
-    japan: '',
-    isShape: false,
-    isSound: false,
-  });
-
-  const handleDataChange =
-    (name: keyof typeof data) => (value?: (typeof data)[keyof typeof data]) => {
-      setData((prev) => ({ ...prev, [name]: value }));
-    };
+  const { data, handleDataChange, advance, setAdvance } = useData(textInitData);
   /******************************************************/
 
   /*DropDownPicker 套組*/
-  const [open, setOpen] = useState(false);
-  const [colorOpen, setColorOpen] = useState(false);
-
-  const [classcodes, setClasscodes] = useState([]);
-  const [color, setColor] = useState('');
-  useEffect(() => {
-    handleDataChange('classcodes')(classcodes);
-  }, [classcodes]);
-  useEffect(() => {
-    handleDataChange('color')(color);
-  }, [color]);
-  /******************************************************/
-
-  /*advance kit*/
-  const [advance, setAdvance] = useState(false);
-  useEffect(() => {
-    if (!advance) {
-      setData((prev) => ({
-        ...prev,
-        chinese: '',
-        english: '',
-        japan: '',
-      }));
-    }
-  }, [advance]);
+  const { ClassCodeDropDownPicker, ColorDropDownPicker } = useDropdown(handleDataChange);
   /******************************************************/
 
   const [isLoading, setIsLoading] = useState(false);
@@ -79,6 +38,7 @@ export default function ImageSearch() {
         data: { data: results },
       } = await textSearch({
         ...data,
+        classcodes: data['classcodes'].map(Number),
         startTime: format(data['startTime'], 'yyyy-mm-dd'),
         endTime: format(data['endTime'], 'yyyy-mm-dd'),
       });
@@ -152,48 +112,8 @@ export default function ImageSearch() {
                 />
               </View>
             </View>
-            <DropDownPicker
-              dropDownContainerStyle={{
-                backgroundColor: '#ffffff',
-              }}
-              badgeStyle={{
-                padding: 5,
-              }}
-              badgeTextStyle={{
-                width: 100,
-                height: 20,
-                fontSize: 8,
-              }}
-              placeholder="商標搜尋類別"
-              searchable={true}
-              open={open}
-              value={classcodes}
-              items={CLASS_CODE}
-              setOpen={setOpen}
-              setValue={setClasscodes}
-              dropDownDirection="BOTTOM"
-              theme="LIGHT"
-              multiple={true}
-              mode="BADGE"
-              zIndex={3000}
-              zIndexInverse={1000}
-              listMode="SCROLLVIEW"
-            />
-            <DropDownPicker
-              placeholder="商標色彩"
-              open={colorOpen}
-              value={color}
-              items={COLOR_CODE}
-              setOpen={setColorOpen}
-              setValue={setColor}
-              dropDownDirection="BOTTOM"
-              theme="LIGHT"
-              multiple={false}
-              mode="BADGE"
-              zIndex={990}
-              zIndexInverse={3000}
-              listMode="SCROLLVIEW"
-            />
+            <ClassCodeDropDownPicker />
+            <ColorDropDownPicker />
             <Input
               value={data.applicant}
               onChangeText={handleDataChange('applicant')}
