@@ -1,25 +1,24 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as AppleAuthentication from "expo-apple-authentication";
-import { useRouter } from "expo-router";
-import { Alert } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as AppleAuthentication from 'expo-apple-authentication';
+import { router } from 'expo-router';
+import { Alert } from 'react-native';
 
-import type { Color } from "@/utils/types";
+import type { Color } from '@/utils/types';
 
-import { IconButton } from "@/components/lgsButton";
-import { ICONS } from "@/constant";
-import { useUser } from "@/contexts/useUser";
+import { IconButton } from '@/components/Button';
+import { COLORS, ICONS } from '@/constant';
+import { useUser } from '@/contexts/useUser';
 
 const { Apple } = ICONS;
 
 export default function useApple({
   buttonColor,
-  iconColor,
+  iconColor = COLORS('white'),
 }: {
   buttonColor?: Color;
   iconColor?: Color;
 }) {
   const { setUser } = useUser();
-  const router = useRouter();
 
   const handlePress = async () => {
     try {
@@ -30,10 +29,10 @@ export default function useApple({
         ],
       });
       if (credential?.fullName?.givenName) {
-        AsyncStorage.setItem("userId", `${credential.user}`);
-        setUser({ userId: credential.user, userType: "apple" });
+        AsyncStorage.setItem('userId', `${credential.user}`);
+        setUser({ userId: credential.user, userType: 'apple' });
         router.back();
-        Alert.alert("Logged in", `Hi ${credential?.fullName?.givenName}`);
+        Alert.alert('Logged in', `Hi ${credential?.fullName?.givenName}`);
       }
     } catch (e) {
       // if (e.code === "ERR_REQUEST_CANCELED") {
@@ -41,7 +40,7 @@ export default function useApple({
       // } else {
       //   Alert.alert("Apple Login Error !");
       // }
-      Alert.alert("Apple Login Error !");
+      Alert.alert('Apple Login Error !');
     }
   };
   return (

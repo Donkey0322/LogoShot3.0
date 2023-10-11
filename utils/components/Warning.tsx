@@ -1,5 +1,5 @@
-import React from "react";
-import { Pressable, StyleSheet } from "react-native";
+import React from 'react';
+import { Pressable, StyleSheet } from 'react-native';
 import Animated, {
   Easing,
   interpolateColor,
@@ -7,10 +7,10 @@ import Animated, {
   useSharedValue,
   withRepeat,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-import type { ReactNode } from "react";
-import type { PressableProps } from "react-native";
+import type { ReactNode } from 'react';
+import type { PressableProps } from 'react-native';
 
 const duration = 500;
 const easing = Easing.linear;
@@ -28,28 +28,17 @@ export default function Warning({
 
   React.useEffect(() => {
     // highlight-next-line
-    progress.value = withRepeat(
-      withTiming(1 - progress.value, { duration, easing }),
-      -1,
-      true
-    );
+    progress.value = withRepeat(withTiming(1 - progress.value, { duration, easing }), -1, true);
   }, []);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      borderColor: interpolateColor(
-        progress.value,
-        [0, 1],
-        ["red", "transparent"]
-      ),
+      borderColor: interpolateColor(progress.value, [0, 1], ['red', 'transparent']),
     };
   });
 
   return (
-    <AnimatedPressable
-      style={[styles.container, animatedStyle, style]}
-      {...rest}
-    >
+    <AnimatedPressable style={[styles.container, animatedStyle, style]} {...rest}>
       {children}
     </AnimatedPressable>
   );

@@ -1,38 +1,34 @@
-import useSWR from "swr";
-import useSWRMutation from "swr/mutation";
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 
-import type { UserType } from "@/contexts/useUser";
+import type { UserType } from '@/contexts/useUser';
 
 import {
   addFavoriteFolder,
   deleteFavoriteFolder,
   readFavoriteFolder,
   renameFavoriteFolder,
-} from "@/libs/api/fetchers/favorite";
-import { swrMutationFetcher } from "@/libs/api/functions";
+} from '@/libs/api/fetchers/favorite';
+import { swrMutationFetcher } from '@/libs/api/functions';
 
 export default function useFavoriteFolder(
   userId?: string | null,
-  userType?: UserType["userType"] | null
+  userType?: UserType['userType'] | null,
 ) {
-  const useFavoriteFolderSWR = useSWR(
-    userId && userType ? `/favorite/folder` : null,
-    () =>
-      userId && userType
-        ? readFavoriteFolder({ userId, userType: "firebase" })
-        : null
+  const useFavoriteFolderSWR = useSWR(userId && userType ? `/favorite/folder` : null, () =>
+    userId && userType ? readFavoriteFolder({ userId, userType: 'firebase' }) : null,
   );
   const useAddFavoriteFolderSWR = useSWRMutation(
     userId && userType ? `/favorite/folder` : null,
-    swrMutationFetcher(addFavoriteFolder)
+    swrMutationFetcher(addFavoriteFolder),
   );
   const useRenameFavoriteFolderSWR = useSWRMutation(
     userId && userType ? `/favorite/folder` : null,
-    swrMutationFetcher(renameFavoriteFolder)
+    swrMutationFetcher(renameFavoriteFolder),
   );
   const useDeleteFavoriteFolderSWR = useSWRMutation(
     userId && userType ? `/favorite/folder` : null,
-    swrMutationFetcher(deleteFavoriteFolder)
+    swrMutationFetcher(deleteFavoriteFolder),
   );
 
   return {

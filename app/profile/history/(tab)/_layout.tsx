@@ -1,14 +1,14 @@
-import { Text } from "react-native";
+import { Text } from 'react-native';
 
-import { Toptab } from "@/components/navigator/TopTab";
-import { COLORS } from "@/constant";
+import { Toptab } from '@/components/navigator/TopTab';
+import { COLORS } from '@/constant';
 
 const NAVIGATE_ITEM = {
   image: {
-    label: "圖片搜尋",
+    label: '圖片搜尋',
   },
   text: {
-    label: "文字搜尋",
+    label: '文字搜尋',
   },
 };
 
@@ -23,14 +23,14 @@ export default function Layout() {
             tabBarLabel: ({ focused }: { focused: boolean }) => (
               <Text
                 style={[
-                  { ...(focused && { fontWeight: "bold" }) },
-                  { ...(!focused && { color: COLORS("gray.300") }) },
+                  { ...(focused && { fontWeight: 'bold' }) },
+                  { ...(!focused && { color: COLORS('gray.300') }) },
                 ]}
               >
                 {NAVIGATE_ITEM[title as keyof typeof NAVIGATE_ITEM].label}
               </Text>
             ),
-            tabBarIndicatorStyle: { backgroundColor: COLORS("blue") },
+            tabBarIndicatorStyle: { backgroundColor: COLORS('blue') },
           }}
         />
       ))}

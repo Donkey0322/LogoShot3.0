@@ -1,22 +1,18 @@
-import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
+import { useFonts } from 'expo-font';
+import { SplashScreen, Stack } from 'expo-router';
+import { useEffect } from 'react';
 
-import { UserProvider } from "@/contexts/useUser";
-import { useEffect } from "react";
+import { UserProvider } from '@/contexts/useUser';
 
-const NAVIGATE_ITEM = ["search", "profile"];
-
-export const unstable_settings = {
-  initialRouteName: "search",
-};
+const NAVIGATE_ITEM = ['search', 'profile'];
 
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
   const [fontsLoaded, fontError] = useFonts({
-    "Roboto-Black": require("@/assets/fonts/Roboto-Black.ttf"),
-    "Roboto-Bold": require("@/assets/fonts/Roboto-Bold.ttf"),
-    "Roboto-Regular": require("@/assets/fonts/Roboto-Regular.ttf"),
+    'Roboto-Black': require('@/assets/fonts/Roboto-Black.ttf'),
+    'Roboto-Bold': require('@/assets/fonts/Roboto-Bold.ttf'),
+    'Roboto-Regular': require('@/assets/fonts/Roboto-Regular.ttf'),
   });
 
   useEffect(() => {

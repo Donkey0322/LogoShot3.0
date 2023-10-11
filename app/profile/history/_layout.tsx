@@ -1,15 +1,13 @@
-import { Stack, router } from "expo-router";
-import { TouchableOpacity } from "react-native";
-import { styled } from "styled-components/native";
+import { Stack } from 'expo-router';
+import { styled } from 'styled-components/native';
 
-import { COLORS, ICONS } from "@/constant";
+import { BackButton } from '@/components/Button';
+import { COLORS } from '@/constant';
 
-const { Back } = ICONS;
-
-const NAVIGATE_ITEM = ["(tab)", "index"];
+const NAVIGATE_ITEM = ['(tab)', 'index'];
 
 const Background = styled.View<{ color?: string }>`
-  background-color: ${COLORS("mustard.200")};
+  background-color: ${COLORS('mustard.200')};
   padding-top: 25px;
   flex: 1;
 `;
@@ -26,9 +24,7 @@ export default function Layout() {
   return (
     <Background>
       <ToolBar>
-        <TouchableOpacity onPress={router.back}>
-          <Back />
-        </TouchableOpacity>
+        <BackButton />
       </ToolBar>
       <Stack initialRouteName="(tab)">
         {NAVIGATE_ITEM.map((t, index) => (

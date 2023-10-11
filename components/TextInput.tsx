@@ -1,12 +1,8 @@
-import {
-  Keyboard,
-  TextInput,
-  View,
-  type StyleProp,
-  type ViewStyle,
-} from "react-native";
+import { Keyboard, TextInput, View } from 'react-native';
 
-export default function LgsTextInput({
+import type { StyleProp, ViewStyle } from 'react-native';
+
+export default function Input({
   placeholder,
   style,
   value,
@@ -26,7 +22,7 @@ export default function LgsTextInput({
           padding: 10,
           borderRadius: 15,
           height: 50,
-          backgroundColor: "white",
+          backgroundColor: 'white',
           borderWidth: 0,
         }}
         placeholder={placeholder}
@@ -34,7 +30,7 @@ export default function LgsTextInput({
         onSubmitEditing={Keyboard.dismiss}
         value={value}
         onChangeText={onChangeText}
-        autoCapitalize={"none"}
+        autoCapitalize={'none'}
       />
     </View>
   );

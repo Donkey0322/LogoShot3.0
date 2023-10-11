@@ -1,48 +1,21 @@
-import { CellContainer, FlashList } from "@shopify/flash-list";
-import { useRouter } from "expo-router";
-import { forwardRef, useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import Animated from "react-native-reanimated";
-import { styled } from "styled-components/native";
+import { router } from 'expo-router';
+import { useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { styled } from 'styled-components/native';
 
-import type { FolderType, ModeType } from "@/modules/favorite";
+import type { FolderType, ModeType } from '@/modules/favorite/components/Modal';
 
-import Fab from "@/components/Fab";
-import Folder from "@/components/svg/Folder";
-import { COLORS, ICONS } from "@/constant";
-import { useUser } from "@/contexts/useUser";
-import useFavoriteFolder from "@/libs/useFavoriteFolder";
-import { FavoriteFolderModal } from "@/modules/favorite";
-import useWidthOnResize from "@/utils/hooks/useWidthOnResize";
+import Fab from '@/components/Fab';
+import Screen from '@/components/stack';
+import Folder from '@/components/svg/Folder';
+import FlashList from '@/components/util/FlashList';
+import { COLORS, ICONS } from '@/constant';
+import { useUser } from '@/contexts/useUser';
+import useFavoriteFolder from '@/libs/useFavoriteFolder';
+import { FavoriteFolderModal } from '@/modules/favorite/components/Modal';
 
-const { Menu, Back, Plus } = ICONS;
-const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
+const { Menu, Plus } = ICONS;
 const FOLDER_SIZE = 150;
-
-const Background = styled.View<{ color?: string }>`
-  flex: 1;
-  background-color: ${COLORS("mustard.200")};
-  align-items: center;
-  padding-top: 25px;
-`;
-
-const ToolBar = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 20px 25px;
-  width: 100%;
-  margin-top: 10px;
-`;
-
-const ContentContainer = styled.View`
-  flex: 1;
-  background-color: #ffffff;
-  border-top-right-radius: 30px;
-  border-top-left-radius: 30px;
-  width: 100%;
-  padding-top: 24px;
-  align-items: center;
-`;
 
 const MenuContainer = styled.TouchableOpacity`
   width: 25px;
@@ -70,90 +43,64 @@ const FolderTitle = styled.Text`
 `;
 
 export default function Page() {
-  const router = useRouter();
   const { user } = useUser();
   const { favoriteFolder } = useFavoriteFolder(user?.userId, user?.userType);
-  const { width } = useWidthOnResize();
 
-  const [mode, setMode] = useState<ModeType>("normal");
+  const [mode, setMode] = useState<ModeType>('normal');
   const [modalVisible, setModalVisible] = useState(false);
   const [folder, setFolder] = useState<FolderType>({});
 
   return (
-    <Background>
-      <ToolBar>
-        <TouchableOpacity onPress={router.back}>
-          <Back />
-        </TouchableOpacity>
-      </ToolBar>
-
-      <ContentContainer>
-        {/* <Text>{Math.floor((width - 100) / FOLDER_SIZE)}</Text> */}
-        <View style={{ width: "100%", height: "100%", position: "relative" }}>
-          <FlashList
-            data={favoriteFolder}
-            CellRendererComponent={forwardRef((props, ref) => (
-              <AnimatedCellContainer
-                {...props}
-                style={{
-                  ...props.style,
-                  flexDirection: "row",
-                  justifyContent: "space-evenly",
+    <Screen>
+      <View style={{ width: '100%', height: '100%', position: 'relative' }}>
+        <FlashList<typeof favoriteFolder>
+          data={favoriteFolder}
+          items={({ item, index }) => (
+            <View style={{ position: 'relative' }} key={index}>
+              <FolderTitle>{item.fileName}</FolderTitle>
+              <MenuContainer
+                style={styles.menu}
+                onPress={() => {
+                  setFolder({
+                    folderName: item.fileName,
+                    folderId: item.fileId,
+                  });
+                  setModalVisible(true);
                 }}
-                ref={ref}
-              />
-            ))}
-            renderItem={({ item, index }) => (
-              <View style={{ position: "relative" }} key={index}>
-                <FolderTitle>{item.fileName}</FolderTitle>
-                <MenuContainer
-                  style={styles.menu}
+              >
+                <Menu color="#FFFFFF" size={20} />
+              </MenuContainer>
+              <View style={{ zIndex: -1 }}>
+                <TouchableOpacity
                   onPress={() => {
-                    setFolder({
-                      folderName: item.fileName,
-                      folderId: item.fileId,
-                    });
-                    setModalVisible(true);
+                    router.push('/profile/favorite/detail');
                   }}
+                  hitSlop={{ top: -50, bottom: -50, left: -20, right: -20 }}
                 >
-                  <Menu color="#FFFFFF" size={20} />
-                </MenuContainer>
-                <View style={{ zIndex: -1 }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      router.push("/profile/favorite/detail");
-                    }}
-                    hitSlop={{ top: -50, bottom: -50, left: -20, right: -20 }}
-                  >
-                    <Folder
-                      size={FOLDER_SIZE}
-                      backgroundColor={COLORS("joy.orange")}
-                    />
-                  </TouchableOpacity>
-                </View>
+                  <Folder size={FOLDER_SIZE} backgroundColor={COLORS('joy.orange')} />
+                </TouchableOpacity>
               </View>
-            )}
-            estimatedItemSize={100}
-            numColumns={Math.floor((width - 50) / FOLDER_SIZE)}
-          />
-          <Fab
-            position={{ right: 20, bottom: 50 }}
-            size={70}
-            onPress={() => {
-              setMode("add");
-              setFolder({ folderName: "", folderId: 0 });
-              setModalVisible(true);
-            }}
-          >
-            <Plus size={30} />
-          </Fab>
-        </View>
-      </ContentContainer>
+            </View>
+          )}
+          itemSize={FOLDER_SIZE}
+        />
+        <Fab
+          position={{ right: 20, bottom: 50 }}
+          size={70}
+          onPress={() => {
+            setMode('add');
+            setFolder({ folderName: '', folderId: 0 });
+            setModalVisible(true);
+          }}
+        >
+          <Plus size={30} />
+        </Fab>
+      </View>
       <FavoriteFolderModal
         modalProps={{ mode, setMode, modalVisible, setModalVisible }}
         folderProps={{ folder, setFolder }}
       />
-    </Background>
+    </Screen>
   );
 }
 
@@ -161,13 +108,13 @@ const styles = StyleSheet.create({
   menu: {
     width: 25,
     height: 25,
-    backgroundColor: "#000000",
-    position: "absolute",
+    backgroundColor: '#000000',
+    position: 'absolute',
     right: 0,
     top: 0,
     marginTop: 18,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 1,
     borderRadius: 100,
     elevation: 3,

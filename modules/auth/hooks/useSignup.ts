@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-export default function useLogin() {
+export default function useSignup() {
   const [signupData, setSignupData] = useState({
-    email: "b09705015@ntu.edu.tw",
-    user: "donkey",
-    password: "12345678",
-    confirm: "12345678",
+    email: 'b09705015@ntu.edu.tw',
+    user: 'donkey',
+    password: '12345678',
+    confirm: '12345678',
   });
 
   const handleSignupDataChange = (
     value: (typeof signupData)[keyof typeof signupData],
-    key: keyof typeof signupData
+    key: keyof typeof signupData,
   ) => {
     setSignupData((prev) => ({ ...prev, [key]: value }));
   };

@@ -1,106 +1,102 @@
-import { CellContainer, FlashList } from "@shopify/flash-list";
-import { useRouter } from "expo-router";
-import { forwardRef } from "react";
-import { TouchableOpacity, View } from "react-native";
-import Animated from "react-native-reanimated";
-import { styled } from "styled-components/native";
+import { Image } from 'expo-image';
+import { router } from 'expo-router';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { styled } from 'styled-components/native';
 
-import Folder from "@/components/svg/Folder";
-import { COLORS, ICONS } from "@/constant";
-import { useResults } from "@/contexts/useResults";
-import useWidthOnResize from "@/utils/hooks/useWidthOnResize";
+import Stack from '@/components/stack';
+import FlashList from '@/components/util/FlashList';
+import { useResults } from '@/contexts/useResults';
 
-const { Back } = ICONS;
-const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 const FOLDER_SIZE = 150;
-
-const Background = styled.View<{ color?: string }>`
-  flex: 1;
-  background-color: ${COLORS("mustard.200")};
-  align-items: center;
-  padding-top: 25px;
-`;
-
-const ToolBar = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 20px 25px;
-  width: 100%;
-  margin-top: 10px;
-`;
-
-const ContentContainer = styled.View`
-  flex: 1;
-  background-color: #ffffff;
-  border-top-right-radius: 30px;
-  border-top-left-radius: 30px;
-  width: 100%;
-  padding-top: 24px;
-  align-items: center;
-`;
+const TRADEMARK_CONTAINER_BORDER_RADIUS = 10;
 
 const FileTitle = styled.Text`
-  position: absolute;
   font-weight: bold;
-  margin-top: 35px;
-  padding-left: 10px;
-  width: 70%;
-  /* line-height: 20px; */
+  padding: 0px 10%;
+  width: auto;
+  text-align: center;
+  line-height: 30px;
+`;
+
+const ResultContainer = styled.View`
+  align-items: center;
+  justify-content: center;
+  width: ${FOLDER_SIZE}px;
+  border-top-right-radius: ${TRADEMARK_CONTAINER_BORDER_RADIUS}px;
+  border-top-left-radius: ${TRADEMARK_CONTAINER_BORDER_RADIUS}px;
+  overflow: hidden;
 `;
 
 export default function Page() {
-  const router = useRouter();
-
-  const { results } = useResults();
-  const { width } = useWidthOnResize();
+  const {
+    results = [
+      [1, '李昀宸sdfghjiugghnmkjhg', ''],
+      [2, '林立起', ''],
+      [3, '陳傑同', ''],
+      [4, '賴奕蓁', ''],
+      [5, '劉宥儀', ''],
+      [6, '鄭安芸', ''],
+    ],
+  } = useResults();
 
   return (
-    <Background>
-      <ToolBar>
-        <TouchableOpacity onPress={router.back}>
-          <Back />
-        </TouchableOpacity>
-      </ToolBar>
-
-      <ContentContainer>
-        <View style={{ width: "100%", height: "100%", position: "relative" }}>
-          <FlashList
-            data={results}
-            CellRendererComponent={forwardRef((props, ref) => (
-              <AnimatedCellContainer
-                {...props}
-                style={{
-                  ...props.style,
-                  flexDirection: "row",
-                  justifyContent: "space-evenly",
-                }}
-                ref={ref}
-              />
-            ))}
-            renderItem={({ item: [id, name, url], index }) => (
-              <View style={{ position: "relative" }} key={index}>
-                <FileTitle>{name}</FileTitle>
-
-                <View style={{ zIndex: -1 }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      // router.push("profile/favorite/detail");
-                    }}
-                    hitSlop={{ top: -50, bottom: -50, left: -20, right: -20 }}
-                  >
-                    <Folder
-                      size={FOLDER_SIZE}
-                      backgroundColor={COLORS("joy.orange")}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-            estimatedItemSize={100}
-            numColumns={Math.floor((width - 50) / FOLDER_SIZE)}
-          />
-        </View>
-      </ContentContainer>
-    </Background>
+    <Stack>
+      <View style={{ width: '90%', height: '100%', position: 'relative' }}>
+        <FlashList<typeof results>
+          data={results}
+          items={({ item: [id, name, url], index }) => (
+            <TouchableOpacity
+              style={styles['Flashlist.renderItem']}
+              key={index}
+              onPress={() =>
+                router.push({
+                  pathname: '/search/result/detail/[id]',
+                  params: { id },
+                })
+              }
+            >
+              <ResultContainer>
+                <Image
+                  style={{
+                    flex: 1,
+                    width: 150,
+                    height: 130,
+                    backgroundColor: '#0553',
+                    overflow: 'hidden',
+                  }}
+                  source={
+                    { uri: `http://140.112.106.88:8082/${url}` }
+                    // require("@/assets/figure.png")
+                  }
+                  // placeholder={blurhash}
+                  contentFit="contain"
+                  transition={1000}
+                />
+                <FileTitle numberOfLines={1}>{name}</FileTitle>
+              </ResultContainer>
+            </TouchableOpacity>
+          )}
+          itemSize={FOLDER_SIZE}
+        />
+      </View>
+    </Stack>
   );
 }
+
+const styles = StyleSheet.create({
+  'Flashlist.renderItem': {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 5,
+    elevation: 6,
+    position: 'relative',
+    marginBottom: 20,
+    borderTopLeftRadius: TRADEMARK_CONTAINER_BORDER_RADIUS,
+    borderTopRightRadius: TRADEMARK_CONTAINER_BORDER_RADIUS,
+    backgroundColor: 'white',
+  },
+});

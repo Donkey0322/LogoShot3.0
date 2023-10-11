@@ -1,8 +1,8 @@
-import { Stack } from "expo-router";
-const NAVIGATE_ITEM = ["index", "favorite", "history"];
+import { Stack } from 'expo-router';
+const NAVIGATE_ITEM = ['index', 'favorite', 'history'];
 const Modal = [
-  { name: "auth/login", title: "Welcome" },
-  { name: "auth/signup", title: "Welcome" },
+  { name: 'auth/login', title: 'Welcome' },
+  { name: 'auth/signup', title: 'Welcome' },
 ];
 
 export default function Layout() {
@@ -22,7 +22,7 @@ export default function Layout() {
           key={name}
           name={name}
           options={{
-            presentation: "modal",
+            presentation: 'modal',
             title,
           }}
         />
