@@ -31,10 +31,10 @@ export default function Page() {
     <Background>
       <Label>帳號</Label>
       <Input
-        value={loginData.email}
+        value={loginData.username}
         style={styles.input}
-        placeholder={'輸入帳號'}
-        onChangeText={(text) => handleLoginDataChange(text, 'email')}
+        placeholder={'輸入名字'}
+        onChangeText={(text) => handleLoginDataChange(text, 'username')}
       />
       <Label>密碼</Label>
       <Input

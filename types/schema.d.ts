@@ -4,397 +4,290 @@
  */
 
 export interface paths {
-  "/Image_Search/image": {
-    post: operations["post_image_search"];
+  "/login": {
+    post: operations["login_login_post"];
+  };
+  "/signin": {
+    post: operations["add_account_signin_post"];
   };
   "/account": {
-    delete: operations["delete_account"];
+    get: operations["get_user_info_account_get"];
   };
-  "/account/firebase": {
-    delete: operations["delete_firebase_account"];
+  "/account/edit-info": {
+    patch: operations["edit_account_account_edit_info_patch"];
   };
-  "/account/history": {
-    get: operations["get_history"];
+  "/account/edit-photo": {
+    put: operations["edit_photo_account_edit_photo_put"];
   };
-  "/account/login": {
-    post: operations["post_login"];
+  "/new-folder": {
+    post: operations["new_folder_new_folder_post"];
   };
-  "/account/signup": {
-    post: operations["post_signup"];
+  "/add-logo": {
+    post: operations["add_logo_add_logo_post"];
   };
-  "/favorite/folder": {
-    get: operations["get_favorite_folder"];
-    put: operations["put_favorite_folder"];
-    post: operations["post_favorite_folder"];
-    delete: operations["delete_favorite_folder"];
-  };
-  "/favorite/folder/{folderId}/file": {
-    get: operations["get_favorite_file"];
-    post: operations["post_favorite_file"];
-    delete: operations["delete_favorite_file"];
-    parameters: {
-      path: {
-        folderId: number;
-      };
-    };
-  };
-  "/search/result/{resultId}": {
-    get: operations["get_result"];
-    parameters: {
-      path: {
-        resultId: number;
-      };
-    };
-  };
-  "/search/text": {
-    post: operations["post_text_search"];
+  "/read-all": {
+    get: operations["read_all_folders_read_all_get"];
   };
 }
 
-export interface definitions {
-  LoginRequest: {
-    /**
-     * @description 帳號 / 信箱
-     * @example a0909182197@gmail.com
-     */
-    email: string;
-    password: string;
+export interface components {
+  schemas: {
+    /** AddAccountInput */
+    AddAccountInput: {
+      /** Username */
+      username: string;
+      /** Password */
+      password: string;
+      /** Email */
+      email: string;
+    };
+    /** AddLogoInput */
+    AddLogoInput: {
+      /** Folder Id */
+      folder_id: number;
+      /** Appl No */
+      appl_no: string;
+    };
+    /** Body_edit_photo_account_edit_photo_put */
+    Body_edit_photo_account_edit_photo_put: {
+      /**
+       * File
+       * Format: binary
+       */
+      file: string;
+    };
+    /** EditUserInput */
+    EditUserInput: {
+      /** Old Password */
+      old_password?: string;
+      /** New Password */
+      new_password?: string;
+    };
+    /** HTTPValidationError */
+    HTTPValidationError: {
+      /** Detail */
+      detail?: components["schemas"]["ValidationError"][];
+    };
+    /** LoginInput */
+    LoginInput: {
+      /** Username */
+      username: string;
+      /** Password */
+      password: string;
+    };
+    /** LoginOutput */
+    LoginOutput: {
+      /** Username */
+      username: string;
+      /** Token */
+      token: string;
+    };
+    /** ValidationError */
+    ValidationError: {
+      /** Location */
+      loc: string[];
+      /** Message */
+      msg: string;
+      /** Error Type */
+      type: string;
+    };
   };
-  FormattedLoginResponse: {
-    data?: definitions["LoginResponse"];
-    error?: string;
-    success?: boolean;
-  };
-  LoginResponse: {
-    userId?: string;
-    email?: string;
-  };
-  SignupRequest: {
-    /**
-     * @description 帳號 / 信箱
-     * @example a0909182197@gmail.com
-     */
-    email: string;
-    password: string;
-  };
-  DeleteFirebaseAccountRequest: {
-    /**
-     * @description 帳號 / 信箱
-     * @example a0909182197@gmail.com
-     */
-    email: string;
-    password: string;
-  };
-  DeleteAccountRequest: {
-    userId: string;
-    userType: string;
-  };
-  DeleteFavoriteFolder: {
-    folderId?: number;
-  };
-  AddFavoriteFolderRequest: {
-    /** @description User ID */
-    userId: string;
-    /**
-     * @description User Type
-     * @example apple
-     * @enum {string}
-     */
-    userType: "apple" | "general" | "facebook" | "firebase";
-    folderName?: string;
-  };
-  RenameFavoriteFolder: {
-    folderId?: number;
-    folderName?: string;
-  };
-  FormattedFavoriteFolderResponse: {
-    data?: definitions["FavoriteFolderResponse"];
-    error?: string;
-    success?: boolean;
-  };
-  FavoriteFolderResponse: {
-    fileId?: number;
-    fileName?: string;
-  };
-  FormattedReadFavoriteFolderResponse: {
-    data?: definitions["ReadFavoriteFolderResponse"][];
-    error?: string;
-    success?: boolean;
-  };
-  ReadFavoriteFolderResponse: {
-    fileId?: number;
-    fileName?: string;
-  };
-  DeleteFavoriteFile: {
-    esId?: string;
-  };
-  AddFavoriteFile: {
-    esId?: string;
-  };
-  TextSearchRequest: {
-    keywords?: string;
-    isSound?: boolean;
-    isShape?: boolean;
-    classcodes?: number[];
-    color?: string;
-    applicant?: string;
-    /** Format: date */
-    startTime?: string;
-    /** Format: date */
-    endTime?: string;
-    chinese?: string;
-    english?: string;
-    japan?: string;
-  };
-  FormattedTextSearchResponse: {
-    data?: definitions["TextSearchResponse"];
-    error?: string;
-    success?: boolean;
-  };
-  TextSearchResponse: {
-    results?: string[][];
-  };
-  ImageSearchRequest: {
-    base64_img?: string;
-    indicatorX?: number;
-    indicatorY?: number;
-  };
-  FormattedImageSearchResponse: {
-    data?: definitions["ImageSearchResponse"];
-    error?: string;
-    success?: boolean;
-  };
-  ImageSearchResponse: {
-    results?: string[][];
-  };
-}
-
-export interface responses {
-  /** When a mask can't be parsed */
-  ParseError: unknown;
-  /** When any error occurs on mask */
-  MaskError: unknown;
 }
 
 export interface operations {
-  post_image_search: {
+  login_login_post: {
     parameters: {
-      body: {
-        payload: definitions["ImageSearchRequest"];
-      };
       header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
+      /** Successful Response */
       200: {
-        schema: definitions["FormattedImageSearchResponse"];
+        content: {
+          "application/json": components["schemas"]["LoginOutput"];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LoginInput"];
       };
     };
   };
-  delete_account: {
+  add_account_signin_post: {
     parameters: {
-      body: {
-        payload: definitions["DeleteAccountRequest"];
+      header: {
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
-      200: unknown;
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddAccountInput"];
+      };
     };
   };
-  delete_firebase_account: {
+  get_user_info_account_get: {
     parameters: {
-      body: {
-        payload: definitions["DeleteFirebaseAccountRequest"];
+      header: {
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
-      200: unknown;
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
     };
   };
-  get_history: {
+  edit_account_account_edit_info_patch: {
+    parameters: {
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EditUserInput"];
+      };
+    };
+  };
+  edit_photo_account_edit_photo_put: {
+    parameters: {
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_edit_photo_account_edit_photo_put"];
+      };
+    };
+  };
+  new_folder_new_folder_post: {
     parameters: {
       query: {
-        /** User ID */
-        userId: string;
-        /** User Type */
-        userType: "apple" | "general" | "facebook" | "firebase";
-        /** TODO: what is this for? */
-        isImageSearch: boolean;
-      };
-    };
-    responses: {
-      /** Success */
-      200: unknown;
-    };
-  };
-  post_login: {
-    parameters: {
-      body: {
-        payload: definitions["LoginRequest"];
+        folder_name: string;
       };
       header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
+      /** Successful Response */
       200: {
-        schema: definitions["FormattedLoginResponse"];
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };
-  post_signup: {
+  add_logo_add_logo_post: {
     parameters: {
-      body: {
-        payload: definitions["SignupRequest"];
-      };
       header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
+      /** Successful Response */
       200: {
-        schema: definitions["FormattedLoginResponse"];
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddLogoInput"];
       };
     };
   };
-  get_favorite_folder: {
+  read_all_folders_read_all_get: {
     parameters: {
-      query: {
-        /** User ID */
-        userId: string;
-        /** User Type */
-        userType: "apple" | "general" | "facebook" | "firebase";
-      };
       header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
+      /** Successful Response */
       200: {
-        schema: definitions["FormattedReadFavoriteFolderResponse"];
+        content: {
+          "application/json": unknown;
+        };
       };
-    };
-  };
-  put_favorite_folder: {
-    parameters: {
-      body: {
-        payload: definitions["RenameFavoriteFolder"];
-      };
-      header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
-      };
-    };
-    responses: {
-      /** Success */
-      200: {
-        schema: definitions["FormattedFavoriteFolderResponse"];
-      };
-    };
-  };
-  post_favorite_folder: {
-    parameters: {
-      body: {
-        payload: definitions["AddFavoriteFolderRequest"];
-      };
-      header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
-      };
-    };
-    responses: {
-      /** Success */
-      200: {
-        schema: definitions["FormattedFavoriteFolderResponse"];
-      };
-    };
-  };
-  delete_favorite_folder: {
-    parameters: {
-      body: {
-        payload: definitions["DeleteFavoriteFolder"];
-      };
-    };
-    responses: {
-      /** Success */
-      200: unknown;
-    };
-  };
-  get_favorite_file: {
-    parameters: {
-      path: {
-        folderId: number;
-      };
-    };
-    responses: {
-      /** Success */
-      200: unknown;
-    };
-  };
-  post_favorite_file: {
-    parameters: {
-      path: {
-        folderId: number;
-      };
-      body: {
-        payload: definitions["AddFavoriteFile"];
-      };
-    };
-    responses: {
-      /** Success */
-      200: unknown;
-    };
-  };
-  delete_favorite_file: {
-    parameters: {
-      path: {
-        folderId: number;
-      };
-      body: {
-        payload: definitions["DeleteFavoriteFile"];
-      };
-    };
-    responses: {
-      /** Success */
-      200: unknown;
-    };
-  };
-  get_result: {
-    parameters: {
-      path: {
-        resultId: number;
-      };
-    };
-    responses: {
-      /** Success */
-      200: unknown;
-    };
-  };
-  post_text_search: {
-    parameters: {
-      body: {
-        payload: definitions["TextSearchRequest"];
-      };
-      header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
-      };
-    };
-    responses: {
-      /** Success */
-      200: {
-        schema: definitions["FormattedTextSearchResponse"];
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };

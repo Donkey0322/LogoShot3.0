@@ -13,17 +13,15 @@ export default function useAuth() {
   const useSignupSWR = useSWRMutation(`/account/signup`, swrMutationFetcher(signupAsGeneralUser));
   const { setUser } = useUser();
 
-  const logIn = async (data: { email: string; password: string }) => {
+  const logIn = async (data: { username: string; password: string }) => {
     try {
       const {
-        data: { data: user },
+        data: { token, username },
       } = await useLoginSWR.trigger(data);
-      if (user?.userId) {
-        AsyncStorage.setItem('userId', `${user.userId}`);
-        setUser({ userId: user.userId, userType: 'general' });
-        router.back();
-        Alert.alert('Logged in', `Hi ${user.userId}`);
-      }
+      setUser({ username });
+      AsyncStorage.setItem('token', token);
+      router.back();
+      Alert.alert('Logged in', `Hi ${username}`);
     } catch (e) {
       if (e instanceof Error)
         switch (e.message) {
@@ -46,7 +44,7 @@ export default function useAuth() {
     }
   };
 
-  const signUp = async (data: { email: string; password: string }) => {
+  const signUp = async (data: { email: string; password: string; username: string }) => {
     try {
       const {
         data: { data: res },

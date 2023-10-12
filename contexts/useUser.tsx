@@ -3,9 +3,7 @@ import { createContext, memo, useContext, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 
 export interface UserType {
-  userId: string;
-  userType: 'apple' | 'general' | 'facebook';
-  name?: string;
+  username?: string;
   image?: string;
 }
 

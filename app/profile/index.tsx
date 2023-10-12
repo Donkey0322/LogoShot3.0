@@ -14,7 +14,7 @@ const { Logout } = ICONS;
 export default function Profile() {
   const { logOut } = useAuth();
   const { user } = useUser();
-  const login = useMemo(() => user?.userId ?? false, [user?.userId]);
+  const login = useMemo(() => user?.username ?? false, [user?.username]);
 
   return (
     <Screen
@@ -51,7 +51,7 @@ export default function Profile() {
         image={login ? '@/assets/figure.png' : undefined}
       />
       <Text style={{ fontSize: 31, marginTop: 32, fontWeight: 'bold' }}>
-        {login ? user?.name ?? 'Olivia Rodrigo' : '未登入'}
+        {user?.username ?? '未登入'}
       </Text>
       <Menu />
     </Screen>

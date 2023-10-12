@@ -8,7 +8,7 @@ import { useUser } from '@/contexts/useUser';
 
 export default function Header() {
   const { user } = useUser();
-  const login = useMemo(() => user?.userId ?? false, [user?.userId]);
+  const login = useMemo(() => user?.username ?? false, [user?.username]);
 
   return (
     <ImageBackground

@@ -35,7 +35,7 @@ export default function Menu() {
 
   const items = useMemo<ItemType[]>(
     () =>
-      user?.userId
+      user?.username
         ? [
             {
               icon: <Search />,
@@ -67,7 +67,7 @@ export default function Menu() {
               onPress: () => router.push('/profile/auth/signup'),
             },
           ],
-    [user?.userId],
+    [user?.username],
   );
 
   return (
