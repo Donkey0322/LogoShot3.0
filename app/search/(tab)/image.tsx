@@ -129,37 +129,41 @@ export default function ImageSearch() {
     <AppFrame.Background style={{ backgroundColor: '#FFFFFF' }}>
       <AppFrame.ScrollBeyond style={{ backgroundColor: '#E3DFFD' }}>
         <Header />
-        <AppFrame.ScrollView>
-          <AppFrame.ContentContainer>
+        <AppFrame.ScrollView style={{ flex: advance ? undefined : 1 }}>
+          <AppFrame.ContentContainer
+          // style={{ justifyContent: advance ? 'flex-start' : 'space-between' }}
+          >
             {data.image ? (
               <>
-                <Image
-                  resizeMode="cover"
-                  source={{ uri: source }}
-                  style={{
-                    width: data.imageWidth,
-                    height: data.imageHeight,
-                  }}
-                  transition={1000}
-                />
-                <View
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                  <Image
+                    contentFit="cover"
+                    source={{ uri: source }}
+                    style={{
+                      width: '50%',
+                      aspectRatio: 1,
+                    }}
+                    transition={1000}
+                  />
+                </TouchableOpacity>
+
+                {/* <View
                   style={{
                     marginVertical: 10,
                     borderWidth: 0,
                     flexDirection: 'row',
+                    justifyContent: 'flex-end',
                     alignItems: 'center',
+                    width: '100%',
                   }}
                 >
-                  <Text style={{ color: '#5173B7', flex: 1, fontWeight: 'bold' }}>
-                    請將十字拖曳至商標中心
-                  </Text>
                   <TouchableOpacity onPress={() => setModalVisible(true)}>
                     <Image
                       source={require('@/assets/readdImageButton.png')}
                       style={{ height: 28, width: 28 }}
                     />
                   </TouchableOpacity>
-                </View>
+                </View> */}
               </>
             ) : (
               <ImageUpload onPress={() => setModalVisible(true)}>

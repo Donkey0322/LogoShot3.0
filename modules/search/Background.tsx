@@ -37,6 +37,7 @@ export const ScrollView = ({ children, style, ...rest }: KeyboardAwareScrollView
     contentContainerStyle={[
       {
         flex: 1,
+        // minHeight: '95%',
         backgroundColor: 'inherit',
       },
       style,
@@ -53,5 +54,6 @@ export const ContentContainer = styled.View`
   min-height: 100%;
   background-color: inherit;
   align-items: center;
+  row-gap: 10px;
   justify-content: space-between;
 `;

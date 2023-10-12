@@ -64,7 +64,7 @@ export default function ImageSearch() {
     <AppFrame.Background style={{ backgroundColor: '#FFFFFF' }}>
       <AppFrame.ScrollBeyond style={{ backgroundColor: '#E3DFFD' }}>
         <Header />
-        <AppFrame.ScrollView>
+        <AppFrame.ScrollView style={{ flex: advance ? undefined : 1 }}>
           <AppFrame.ContentContainer style={{ paddingTop: 15 }}>
             <Input
               value={data.keywords}
