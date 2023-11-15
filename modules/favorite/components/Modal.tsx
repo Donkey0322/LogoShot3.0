@@ -8,7 +8,6 @@ import type { ModalProps } from '@/components/Modal';
 import Button from '@/components/Button';
 import Modal from '@/components/Modal';
 import { COLORS, ICONS } from '@/constant';
-import { useUser } from '@/contexts/useUser';
 import useFavoriteFolder from '@/libs/useFavoriteFolder';
 import List, { ListItem } from '@/modules/favorite/components/List';
 
@@ -107,15 +106,13 @@ const FavoriteFolderModalBody = ({
   Omit<FavoriteFolderModalProps['modalProps'], 'modalVisible'>) => {
   const originalFolder = useMemo(() => folder, []);
 
-  const { user } = useUser();
-  const { deleteFavoriteFolder, renameFavoriteFolder, addFavoriteFolder } = useFavoriteFolder(
-    user?.userId,
-    user?.userType,
-  );
+  const { deleteFavoriteFolder, renameFavoriteFolder, addFavoriteFolder } = useFavoriteFolder();
 
   const handleRenameFavoriteFolder = async () => {
     try {
-      await renameFavoriteFolder(folder);
+      if (!folder.folderId || !folder.folderName) return;
+      console.log(folder);
+      await renameFavoriteFolder({ folder_id: folder.folderId, new_name: folder.folderName });
       setMode('normal');
     } catch {
       Alert.alert('Error');
@@ -124,7 +121,9 @@ const FavoriteFolderModalBody = ({
 
   const handleDeleteFavoriteFolder = async () => {
     try {
-      await deleteFavoriteFolder({ folderId: folder.folderId });
+      if (!folder.folderId) return;
+      console.log('Delete', folder.folderId);
+      await deleteFavoriteFolder({ folder_id: folder.folderId });
       setModalVisible(false);
       setMode('normal');
     } catch {
@@ -134,11 +133,11 @@ const FavoriteFolderModalBody = ({
 
   const handleAddFavoriteFolder = async () => {
     try {
+      if (!folder.folderName) return;
       await addFavoriteFolder({
-        userId: user?.userId ?? '',
-        userType: 'firebase',
-        folderName: folder.folderName,
+        folder_name: folder.folderName,
       });
+      console.log('123');
       setModalVisible(false);
       setMode('normal');
     } catch {

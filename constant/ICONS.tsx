@@ -61,6 +61,7 @@ type IconsKeyMap = {
   Google: 'AntDesign';
   Plus: 'FontAwesome';
   Check: 'Ionicons';
+  Heart: 'Ionicons';
 };
 
 const ICONS: {
@@ -89,6 +90,7 @@ const ICONS: {
   Google: { name: 'google', Component: AntDesign },
   Plus: { name: 'plus', Component: FontAwesome },
   Check: { name: 'checkmark', Component: Ionicons },
+  Heart: { name: 'heart-circle-outline', Component: Ionicons },
 };
 
 type ICONSTYPE = Record<

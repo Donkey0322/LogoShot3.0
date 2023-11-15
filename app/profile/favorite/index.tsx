@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { styled } from 'styled-components/native';
 
@@ -10,7 +10,6 @@ import Screen from '@/components/stack';
 import Folder from '@/components/svg/Folder';
 import FlashList from '@/components/util/FlashList';
 import { COLORS, ICONS } from '@/constant';
-import { useUser } from '@/contexts/useUser';
 import useFavoriteFolder from '@/libs/useFavoriteFolder';
 import { FavoriteFolderModal } from '@/modules/favorite/components/Modal';
 
@@ -43,27 +42,36 @@ const FolderTitle = styled.Text`
 `;
 
 export default function Page() {
-  const { user } = useUser();
-  const { favoriteFolder } = useFavoriteFolder(user?.userId, user?.userType);
+  const { favoriteFolder } = useFavoriteFolder();
 
   const [mode, setMode] = useState<ModeType>('normal');
   const [modalVisible, setModalVisible] = useState(false);
   const [folder, setFolder] = useState<FolderType>({});
 
+  useEffect(() => {
+    console.log('favoriteFolder', favoriteFolder);
+  }, [favoriteFolder]);
+
   return (
     <Screen>
-      <View style={{ width: '100%', height: '100%', position: 'relative' }}>
+      <View
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'relative',
+        }}
+      >
         <FlashList<typeof favoriteFolder>
           data={favoriteFolder}
           items={({ item, index }) => (
             <View style={{ position: 'relative' }} key={index}>
-              <FolderTitle>{item.fileName}</FolderTitle>
+              <FolderTitle>{item.folder_name}</FolderTitle>
               <MenuContainer
                 style={styles.menu}
                 onPress={() => {
                   setFolder({
-                    folderName: item.fileName,
-                    folderId: item.fileId,
+                    folderName: item.folder_name,
+                    folderId: item.id,
                   });
                   setModalVisible(true);
                 }}
@@ -73,7 +81,7 @@ export default function Page() {
               <View style={{ zIndex: -1 }}>
                 <TouchableOpacity
                   onPress={() => {
-                    router.push('/profile/favorite/detail');
+                    router.push(`/profile/favorite/${item.id}`);
                   }}
                   hitSlop={{ top: -50, bottom: -50, left: -20, right: -20 }}
                 >

@@ -5,5 +5,5 @@
   },
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "editor.formatOnSave": true,
-  "cSpell.words": ["blurhash", "Pressable", "Toptab"]
+  "cSpell.words": ["appl", "blurhash", "Pressable", "signin", "tmark", "Toptab"]
 }

@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 
 export interface UserType {
   username?: string;
-  image?: string;
+  avatar?: string;
 }
 
 export type UserPropsType = UserType | undefined;

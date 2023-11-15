@@ -2,6 +2,7 @@ import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 
+import { ImageProvider } from '@/contexts/useImage';
 import { UserProvider } from '@/contexts/useUser';
 
 const NAVIGATE_ITEM = ['search', 'profile'];
@@ -29,17 +30,19 @@ export default function Layout() {
 
   return (
     <UserProvider>
-      <Stack initialRouteName="search">
-        {NAVIGATE_ITEM.map((n, index) => (
-          <Stack.Screen
-            key={index}
-            name={n}
-            options={{
-              headerShown: false,
-            }}
-          />
-        ))}
-      </Stack>
+      <ImageProvider>
+        <Stack initialRouteName="search">
+          {NAVIGATE_ITEM.map((n, index) => (
+            <Stack.Screen
+              key={index}
+              name={n}
+              options={{
+                headerShown: false,
+              }}
+            />
+          ))}
+        </Stack>
+      </ImageProvider>
     </UserProvider>
   );
 }

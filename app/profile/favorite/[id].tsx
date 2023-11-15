@@ -1,11 +1,12 @@
 import { Image } from 'expo-image';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { styled } from 'styled-components/native';
 
-import Stack from '@/components/stack';
+import { default as Stack } from '@/components/stack';
 import FlashList from '@/components/util/FlashList';
-import { useResults } from '@/contexts/useResults';
+import useFavoriteItem from '@/libs/useFavoriteItem';
 
 const FOLDER_SIZE = 150;
 const TRADEMARK_CONTAINER_BORDER_RADIUS = 10;
@@ -28,21 +29,26 @@ const ResultContainer = styled.View`
 `;
 
 export default function Page() {
-  const { results } = useResults();
+  const { id } = useLocalSearchParams();
+  const { favoriteItems } = useFavoriteItem(Number(id));
+
+  useEffect(() => {
+    console.log(id, favoriteItems);
+  }, [favoriteItems, id]);
 
   return (
     <Stack>
       <View style={{ width: '90%', height: '100%', position: 'relative' }}>
-        <FlashList<typeof results>
-          data={results}
-          items={({ item: { appl_no: id, tmark_name: name, tmark_image_url: url }, index }) => (
+        <FlashList<typeof favoriteItems>
+          data={favoriteItems}
+          items={({ item: { appl_no, tmark_name, tmark_image_url: url }, index }) => (
             <TouchableOpacity
               style={styles['Flashlist.renderItem']}
               key={index}
               onPress={() =>
                 router.push({
-                  pathname: '/search/result/detail/[id]',
-                  params: { id },
+                  pathname: '/profile/favorite/detail',
+                  params: { appl_no, id },
                 })
               }
             >
@@ -55,15 +61,12 @@ export default function Page() {
                     backgroundColor: '#0553',
                     overflow: 'hidden',
                   }}
-                  source={
-                    { uri: `http://140.112.106.88:8082/${url}` }
-                    // require("@/assets/figure.png")
-                  }
+                  source={{ uri: `http://140.112.106.88:8082/${url}` }}
                   // placeholder={blurhash}
                   contentFit="contain"
                   transition={1000}
                 />
-                <FileTitle numberOfLines={1}>{name}</FileTitle>
+                <FileTitle numberOfLines={1}>{tmark_name}</FileTitle>
               </ResultContainer>
             </TouchableOpacity>
           )}

@@ -4,7 +4,7 @@ import { Fetcher, Middleware } from 'openapi-typescript-fetch';
 
 import { paths } from '@/types/schema';
 
-const baseURL = `${
+export const baseURL = `${
   Constants.expoConfig?.extra?.REACT_APP_SERVER_USE_HTTPS === 'true' ? 'https' : 'http'
 }://${Constants.expoConfig?.extra?.REACT_APP_SERVER_DOMAIN}:${Constants.expoConfig?.extra
   ?.REACT_APP_SERVER_PORT}`;
@@ -37,17 +37,17 @@ const interceptUndefinedParams: Middleware = async (url, init, next) => {
   return res;
 };
 
-// const fetchError: Middleware = async (url, init, next) => {
-//   const res = await next(url, init);
-//   if (!res.data.success) throw new Error(res.data.error);
-//   return res;
-// };
+const fetchError: Middleware = async (url, init, next) => {
+  const res = await next(url, init);
+  if (res.data?.error) throw new Error(res.data.error);
+  return res;
+};
 
 const api = Fetcher.for<paths>();
 
 api.configure({
   baseUrl: baseURL,
-  use: [interceptUndefinedParams, logger, authTokenInjector],
+  use: [interceptUndefinedParams, logger, authTokenInjector, fetchError],
 });
 
 export default api;

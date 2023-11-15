@@ -60,6 +60,7 @@ const LgsDraggablePin = ({
   useEffect(() => {
     x.value = X;
     y.value = Y;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [X, Y]);
 
   return (

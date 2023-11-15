@@ -1,25 +1,40 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { Alert } from 'react-native';
+import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { useUser } from '@/contexts/useUser';
-import { loginAsGeneralUser, signupAsGeneralUser } from '@/libs/api/fetchers/account';
+import {
+  appleLogin,
+  appleSignup,
+  getUserInfo,
+  loginAsGeneralUser,
+  signupAsGeneralUser,
+} from '@/libs/api/fetchers/account';
 import { swrMutationFetcher } from '@/libs/api/functions';
 
 export default function useAuth() {
   const router = useRouter();
+  const useUserInfoSWR = useSWR(`/account`, () => getUserInfo({}));
   const useLoginSWR = useSWRMutation(`/account/login`, swrMutationFetcher(loginAsGeneralUser));
   const useSignupSWR = useSWRMutation(`/account/signup`, swrMutationFetcher(signupAsGeneralUser));
+
+  const useAppleLoginSWR = useSWRMutation(`/apple_login`, swrMutationFetcher(appleLogin));
+  const useAppleSignupSWR = useSWRMutation(`/apple_login`, swrMutationFetcher(appleSignup));
   const { setUser } = useUser();
 
   const logIn = async (data: { username: string; password: string }) => {
     try {
       const {
         data: { token, username },
+        data: temp,
       } = await useLoginSWR.trigger(data);
-      setUser({ username });
-      AsyncStorage.setItem('token', token);
+      console.log(temp);
+      await AsyncStorage.setItem('token', token);
+      const userinfo = await useUserInfoSWR.mutate();
+      console.log('Userinfo', userinfo);
+      setUser({ username, avatar: userinfo?.data.photo });
       router.back();
       Alert.alert('Logged in', `Hi ${username}`);
     } catch (e) {
@@ -35,6 +50,7 @@ export default function useAuth() {
             Alert.alert('帳戶未註冊，請先登入至頁面註冊，或利用 Facebook、Apple 帳戶登入');
             break;
           default:
+            console.log(e.message);
             Alert.alert(
               '伺服器出錯，請檢查帳戶是否已註冊，或聯繫聯絡系統服務人員協助處理',
               '來訊信箱：ntuim2022@gmail.com',
@@ -46,11 +62,9 @@ export default function useAuth() {
 
   const signUp = async (data: { email: string; password: string; username: string }) => {
     try {
-      const {
-        data: { data: res },
-      } = await useSignupSWR.trigger(data);
+      await useSignupSWR.trigger(data);
       Alert.alert(
-        `驗證信已寄至${res?.email}， 請至信箱中點擊連結完成驗證。（請小心驗證信有可能在信箱中被歸類為垃圾信件）`,
+        `驗證信已寄至${data?.email}， 請至信箱中點擊連結完成驗證。（請小心驗證信有可能在信箱中被歸類為垃圾信件）`,
       );
       router.replace('/profile/');
     } catch (e) {
@@ -74,7 +88,7 @@ export default function useAuth() {
 
   const logOut = async () => {
     try {
-      await AsyncStorage.removeItem('userId');
+      await AsyncStorage.removeItem('token');
       setUser(undefined);
       Alert.alert('登出成功！');
     } catch (e) {
@@ -89,6 +103,9 @@ export default function useAuth() {
     logIn,
     signUp,
     logOut,
+
+    appleLogin: useAppleLoginSWR.trigger,
+    appleSignup: useAppleSignupSWR.trigger,
 
     loading: {
       logIn: useLoginSWR.isMutating,

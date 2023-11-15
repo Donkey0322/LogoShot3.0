@@ -1,26 +1,24 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import * as FileSystem from 'expo-file-system';
 import { Image } from 'expo-image';
-import * as ImagePicker from 'expo-image-picker';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components/native';
 
 import Button from '@/components/Button';
 import Checkbox from '@/components/Checkbox';
-import DateTimePicker from '@/components/DatePicker';
 import Header from '@/components/Header';
-import Modal from '@/components/Modal';
 import Input from '@/components/TextInput';
-import { COLORS, FONTS, ICONS } from '@/constant';
+import { COLORS } from '@/constant';
+import { useImage } from '@/contexts/useImage';
 import { useResults } from '@/contexts/useResults';
+import useHistoryDetail from '@/libs/useHistoryDetail';
 import useImageSearch from '@/libs/useImageSearch';
-import * as AppFrame from '@/modules/search/Background';
-import useData, { imageInitData } from '@/modules/search/hooks/useData';
-import useDropdown from '@/modules/search/hooks/useDropdown';
-
-const { Camera, Album } = ICONS;
+import * as AppFrame from '@/modules/search/components/Background';
+import DateRangePicker from '@/modules/search/components/DateRangePicker';
+import Modal from '@/modules/search/components/Modal';
+import useData, { ImageDataType, imageInitData } from '@/modules/search/hooks/useData';
+import Dropdown from '@/modules/search/hooks/useDropdown';
 
 const ImageUpload = styled.TouchableOpacity`
   background-color: white;
@@ -34,37 +32,34 @@ const ImageUpload = styled.TouchableOpacity`
   width: 100%;
 `;
 
-const ModalOption = styled.TouchableOpacity`
-  border: 1px dashed #808080;
-  padding: 20px;
-  border-radius: 15px;
-  align-items: center;
-  row-gap: 10px;
-`;
-
 export default function ImageSearch() {
+  const { id } = useLocalSearchParams();
+  const { historyDetail } = useHistoryDetail(id ? Number(id) : undefined);
+
   const { imageSearch } = useImageSearch();
   const { setResults } = useResults();
+  const { image, handlePickImageForSearch } = useImage();
+
   /*input kit*/
-  const { data, handleDataChange, advance, setAdvance } = useData(imageInitData);
+  const { data, handleDataChange, advance, setAdvance, timelimit, setTimelimit } = useData(
+    (historyDetail as ImageDataType) ?? imageInitData,
+  );
   /******************************************************/
 
-  /*DropDownPicker 套組*/
-  const { ClassCodeDropDownPicker, ColorDropDownPicker } = useDropdown(handleDataChange);
-  /******************************************************/
+  // /*DropDownPicker 套組*/
+  // const { ClassCodeDropDownPicker, ColorDropDownPicker } = useDropdown(handleDataChange);
+  // /******************************************************/
 
   const [isLoading, setIsLoading] = useState(false);
 
   const onSearch = async () => {
     try {
       setIsLoading(true);
-      const {
-        data: { data: results },
-      } = await imageSearch({
-        base64_img: data['image'],
+      console.log(data['image']);
+      const { data: results } = await imageSearch({
+        image_data: data['image'],
       });
-      setResults(results?.results);
-      console.log(results);
+      setResults(results);
       router.push('/search/result/');
     } catch (e) {
       console.log(e);
@@ -82,48 +77,16 @@ export default function ImageSearch() {
   const tabBarHeight = useBottomTabBarHeight();
   const [modalVisible, setModalVisible] = useState(false);
 
-  /*圖片的 uri*/
-  const [source, setSource] = useState('');
-  useEffect(() => {
-    if (source) {
-      (async () => {
-        let image;
-        if (!data.isOldImage)
-          image = await FileSystem.readAsStringAsync(source, {
-            encoding: FileSystem.EncodingType.Base64,
-          });
-        else
-          image = /imagelog\/\w{1,30}\/\d{4}-\d{2}-\d{2}-\d{2}:\d{2}:\d{2}.png/.exec(source)?.[0];
-        handleDataChange('image')(image);
-      })();
-    }
-  }, [source]);
-
-  const handlePickImage = (type: 'photo' | 'camera') => async () => {
-    /*permission kit*/
-    const { granted } = await (type === 'photo'
-      ? ImagePicker.getMediaLibraryPermissionsAsync
-      : ImagePicker.getCameraPermissionsAsync)();
-    if (!granted) {
-      const request = await (type === 'photo'
-        ? ImagePicker.requestMediaLibraryPermissionsAsync
-        : ImagePicker.requestCameraPermissionsAsync)();
-      if (!request.granted) {
-        return;
-      }
-    }
-    /******************************************************/
-    const { assets, canceled } = await (type === 'photo'
-      ? ImagePicker.launchImageLibraryAsync
-      : ImagePicker.launchCameraAsync)({ allowsEditing: true, quality: 1 });
-    if (!canceled) {
-      console.log(assets);
-      handleDataChange('isOldImage')(false);
-      setSource(assets[0].uri);
-      setModalVisible(false);
-    }
+  const OnPickImageSuccess = () => {
+    router.push('/search/crop');
+    setModalVisible(false);
   };
-  /******************************************************/
+
+  useEffect(() => {
+    if (image) console.log(image);
+    handleDataChange('image')(image?.base64);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [image]);
 
   return (
     <AppFrame.Background style={{ backgroundColor: '#FFFFFF' }}>
@@ -133,38 +96,18 @@ export default function ImageSearch() {
           <AppFrame.ContentContainer
           // style={{ justifyContent: advance ? 'flex-start' : 'space-between' }}
           >
-            {data.image ? (
-              <>
-                <TouchableOpacity onPress={() => setModalVisible(true)}>
-                  <Image
-                    contentFit="cover"
-                    source={{ uri: source }}
-                    style={{
-                      width: '50%',
-                      aspectRatio: 1,
-                    }}
-                    transition={1000}
-                  />
-                </TouchableOpacity>
-
-                {/* <View
+            {image?.uri ? (
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
+                <Image
+                  contentFit="contain"
+                  source={{ uri: image?.uri }}
                   style={{
-                    marginVertical: 10,
-                    borderWidth: 0,
-                    flexDirection: 'row',
-                    justifyContent: 'flex-end',
-                    alignItems: 'center',
-                    width: '100%',
+                    width: '50%',
+                    aspectRatio: 1,
                   }}
-                >
-                  <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <Image
-                      source={require('@/assets/readdImageButton.png')}
-                      style={{ height: 28, width: 28 }}
-                    />
-                  </TouchableOpacity>
-                </View> */}
-              </>
+                  transition={1000}
+                />
+              </TouchableOpacity>
             ) : (
               <ImageUpload onPress={() => setModalVisible(true)}>
                 <Image
@@ -173,52 +116,37 @@ export default function ImageSearch() {
                 />
               </ImageUpload>
             )}
-            <ClassCodeDropDownPicker />
-            <ColorDropDownPicker />
-            <Input
-              value={data.keywords}
-              onChangeText={handleDataChange('keywords')}
-              style={styles.input}
-              placeholder={'輸入關鍵字'}
-            />
+            <Dropdown handleDataChange={handleDataChange} initData={data} />
+            {/* <ColorDropDownPicker /> */}
+
             <Input
               value={data.applicant}
               onChangeText={handleDataChange('applicant')}
               style={styles.input}
               placeholder={'輸入申請人'}
             />
-            <Text
-              style={{
-                ...FONTS.h4,
-                lineHeight: 50,
-                alignSelf: 'center',
+            <Checkbox
+              status={timelimit}
+              onPress={() => {
+                setTimelimit((prev) => !prev);
               }}
-            >
-              －商標註冊期間－
-            </Text>
-            <View style={styles.rangeContainer}>
-              <DateTimePicker value={data.startTime} onChange={handleDataChange('startTime')} />
-              <Text style={{ marginLeft: 10 }}>~</Text>
-              <DateTimePicker value={data.endTime} onChange={handleDataChange('endTime')} />
-            </View>
-            <View
-              style={{
-                borderWidth: 0,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                columnGap: 10,
-                marginTop: 10,
-              }}
-            >
-              <Text style={{ color: '#406E9F', fontWeight: 'bold' }}>進階搜尋</Text>
-              <Checkbox
-                status={advance}
-                onPress={() => {
-                  setAdvance(!advance);
-                }}
+              label="商標註冊期間"
+              style={{ marginTop: 10 }}
+            />
+            {timelimit && (
+              <DateRangePicker
+                start={{ value: data.startTime, onChange: handleDataChange('startTime') }}
+                end={{ value: data.endTime, onChange: handleDataChange('endTime') }}
               />
-            </View>
+            )}
+            <Checkbox
+              status={advance}
+              onPress={() => {
+                setAdvance((prev) => !prev);
+              }}
+              label="進階搜尋"
+              style={{ marginTop: 10 }}
+            />
             {advance && (
               <>
                 <Input
@@ -258,37 +186,23 @@ export default function ImageSearch() {
               <Text>搜尋</Text>
             </Button>
             <View style={{ height: tabBarHeight / 2 }} />
+            {/* <View
+              style={{ position: 'fixed', height: 50, backgroundColor: '#000000', zIndex: 10 }}
+            /> */}
           </AppFrame.ContentContainer>
         </AppFrame.ScrollView>
         <Modal
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
-          animation="fade"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
-        >
-          <Text style={styles.modalText}>Choose a way!</Text>
-          <View style={{ flexDirection: 'row', columnGap: 10 }}>
-            <ModalOption onPress={handlePickImage('camera')} style={{ elevation: 2 }}>
-              <Camera />
-              <Text style={styles.textStyle}>Use Camera</Text>
-            </ModalOption>
-            <ModalOption onPress={handlePickImage('photo')} style={{ elevation: 2 }}>
-              <Album />
-              <Text style={styles.textStyle}>Open Album</Text>
-            </ModalOption>
-          </View>
-        </Modal>
+          handleAlbumPress={handlePickImageForSearch('photo', OnPickImageSuccess)}
+          handleCameraPress={handlePickImageForSearch('camera', OnPickImageSuccess)}
+        />
       </AppFrame.ScrollBeyond>
     </AppFrame.Background>
   );
 }
 
 const styles = StyleSheet.create({
-  rangeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   textStyle: {
     color: '#000000',
     fontWeight: 'bold',

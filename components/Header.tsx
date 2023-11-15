@@ -49,7 +49,9 @@ export default function Header() {
         }}
         style={{ backgroundColor: COLORS('mustard.300'), paddingVertical: 10 }}
       >
-        <Text style={{ color: 'black' }}>{login ? user?.name ?? 'Olivia Rodrigo' : '登入'}</Text>
+        <Text style={{ color: 'black' }}>
+          {login ? user?.username ?? 'Olivia Rodrigo' : '登入'}
+        </Text>
       </Button>
     </ImageBackground>
   );

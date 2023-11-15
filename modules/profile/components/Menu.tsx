@@ -40,7 +40,7 @@ export default function Menu() {
             {
               icon: <Search />,
               content: '搜尋紀錄',
-              onPress: () => router.push('/profile/history/'),
+              onPress: () => router.push('/profile/history/image'),
             },
             {
               icon: <Star color={COLORS('icons.star')} />,
