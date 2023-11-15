@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 export default function useLogin() {
   const [loginData, setLoginData] = useState({
-    email: 'a0909182197@gmail.com',
-    password: 'cl910322',
+    username: 'donkey',
+    password: 'donkey',
   });
 
   const handleLoginDataChange = (

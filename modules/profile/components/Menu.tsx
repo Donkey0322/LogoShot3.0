@@ -35,12 +35,12 @@ export default function Menu() {
 
   const items = useMemo<ItemType[]>(
     () =>
-      user?.userId
+      user?.username
         ? [
             {
               icon: <Search />,
               content: '搜尋紀錄',
-              onPress: () => router.push('/profile/history/'),
+              onPress: () => router.push('/profile/history/image'),
             },
             {
               icon: <Star color={COLORS('icons.star')} />,
@@ -67,7 +67,7 @@ export default function Menu() {
               onPress: () => router.push('/profile/auth/signup'),
             },
           ],
-    [user?.userId],
+    [user?.username],
   );
 
   return (

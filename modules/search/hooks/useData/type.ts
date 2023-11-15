@@ -1,5 +1,4 @@
 export interface DataType {
-  keywords: string;
   classcodes: string[];
   color: string;
   applicant: string;
@@ -11,7 +10,6 @@ export interface DataType {
 }
 
 export const initData: DataType = {
-  keywords: '海底撈',
   classcodes: [],
   color: '',
   applicant: '',

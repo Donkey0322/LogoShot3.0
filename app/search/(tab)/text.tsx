@@ -1,30 +1,26 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { format } from 'date-fns';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import Button from '@/components/Button';
 import Checkbox from '@/components/Checkbox';
-import DateTimePicker from '@/components/DatePicker';
 import Header from '@/components/Header';
 import Input from '@/components/TextInput';
-import { COLORS, FONTS } from '@/constant';
+import { COLORS } from '@/constant';
 import { useResults } from '@/contexts/useResults';
 import useTextSearch from '@/libs/useTextSearch';
-import * as AppFrame from '@/modules/search/Background';
+import * as AppFrame from '@/modules/search/components/Background';
+import DateRangePicker from '@/modules/search/components/DateRangePicker';
 import useData, { textInitData } from '@/modules/search/hooks/useData';
-import useDropdown from '@/modules/search/hooks/useDropdown';
+import Dropdown from '@/modules/search/hooks/useDropdown';
 
 export default function ImageSearch() {
   const { textSearch } = useTextSearch();
   const { setResults } = useResults();
   /*input kit*/
-  const { data, handleDataChange, advance, setAdvance } = useData(textInitData);
-  /******************************************************/
-
-  /*DropDownPicker 套組*/
-  const { ClassCodeDropDownPicker, ColorDropDownPicker } = useDropdown(handleDataChange);
+  const { data, handleDataChange, advance, setAdvance, timelimit, setTimelimit } =
+    useData(textInitData);
   /******************************************************/
 
   const [isLoading, setIsLoading] = useState(false);
@@ -34,15 +30,23 @@ export default function ImageSearch() {
       setIsLoading(true);
       // const userInfoStr = await AsyncStorage.getItem("@userInfo");
       // const userInfo = userInfoStr != null ? JSON.parse(userInfoStr) : null;
-      const {
-        data: { data: results },
-      } = await textSearch({
-        ...data,
-        classcodes: data['classcodes'].map(Number),
-        startTime: format(data['startTime'], 'yyyy-mm-dd'),
-        endTime: format(data['endTime'], 'yyyy-mm-dd'),
+      console.log({
+        search_time: new Date().toISOString(),
+        search_key_words: data.keyword,
+        is_sim_sound: data.isSound,
+        is_sim_shape: data.isShape,
+        target_start_time: '2023-11-08',
+        target_end_time: '2023-11-08',
       });
-      setResults(results?.results);
+      const { data: results } = await textSearch({
+        search_key_words: data.keyword,
+        is_sim_sound: data.isSound,
+        is_sim_shape: data.isShape,
+        target_start_time: '2023/11/08',
+        target_end_time: '2023/11/08',
+        target_class_codes: data.classcodes,
+      });
+      setResults(results);
       router.push('/search/result/');
     } catch (e) {
       console.log(e);
@@ -64,11 +68,11 @@ export default function ImageSearch() {
     <AppFrame.Background style={{ backgroundColor: '#FFFFFF' }}>
       <AppFrame.ScrollBeyond style={{ backgroundColor: '#E3DFFD' }}>
         <Header />
-        <AppFrame.ScrollView>
+        <AppFrame.ScrollView style={{ flex: advance ? undefined : 1 }}>
           <AppFrame.ContentContainer style={{ paddingTop: 15 }}>
             <Input
-              value={data.keywords}
-              onChangeText={handleDataChange('keywords')}
+              value={data.keyword}
+              onChangeText={handleDataChange('keyword')}
               style={styles.input}
               placeholder={'輸入關鍵字'}
             />
@@ -81,77 +85,58 @@ export default function ImageSearch() {
                 marginVertical: 10,
               }}
             >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  columnGap: 20,
+              <Checkbox
+                status={data.isSound}
+                onPress={() => {
+                  if (data.isSound === false && data.isShape === true) {
+                    handleDataChange('isShape')(false);
+                  }
+                  handleDataChange('isSound')(!data.isSound);
                 }}
-              >
-                <Text>字音相似</Text>
-                <Checkbox
-                  status={data.isSound}
-                  onPress={() => {
-                    handleDataChange('isSound')(!data.isSound);
-                  }}
-                />
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  columnGap: 20,
+                label="字音相似"
+                labelStyle={{ fontWeight: 'normal', color: COLORS('black') }}
+              />
+              <Checkbox
+                status={data.isShape}
+                onPress={() => {
+                  if (data.isShape === false && data.isSound === true) {
+                    handleDataChange('isSound')(false);
+                  }
+                  handleDataChange('isShape')(!data.isShape);
                 }}
-              >
-                <Text>字型相似</Text>
-                <Checkbox
-                  status={data.isShape}
-                  onPress={() => {
-                    handleDataChange('isShape')(!data.isShape);
-                  }}
-                />
-              </View>
+                label="字型相似"
+                labelStyle={{ fontWeight: 'normal', color: COLORS('black') }}
+              />
             </View>
-            <ClassCodeDropDownPicker />
-            <ColorDropDownPicker />
+            <Dropdown handleDataChange={handleDataChange} initData={data} />
             <Input
               value={data.applicant}
               onChangeText={handleDataChange('applicant')}
               style={styles.input}
               placeholder={'輸入申請人'}
             />
-            <Text
-              style={{
-                ...FONTS.h4,
-                lineHeight: 50,
-                alignSelf: 'center',
+            <Checkbox
+              status={timelimit}
+              onPress={() => {
+                setTimelimit((prev) => !prev);
               }}
-            >
-              －商標註冊期間－
-            </Text>
-            <View style={styles.rangeContainer}>
-              <DateTimePicker value={data.startTime} onChange={handleDataChange('startTime')} />
-              <Text style={{ marginLeft: 10 }}>~</Text>
-              <DateTimePicker value={data.endTime} onChange={handleDataChange('endTime')} />
-            </View>
-            <View
-              style={{
-                borderWidth: 0,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                columnGap: 10,
-                marginTop: 30,
-              }}
-            >
-              <Text style={{ color: '#406E9F', fontWeight: 'bold' }}>進階搜尋</Text>
-              <Checkbox
-                status={advance}
-                onPress={() => {
-                  setAdvance(!advance);
-                }}
+              label="商標註冊期間"
+              style={{ marginTop: 10 }}
+            />
+            {timelimit && (
+              <DateRangePicker
+                start={{ value: data.startTime, onChange: handleDataChange('startTime') }}
+                end={{ value: data.endTime, onChange: handleDataChange('endTime') }}
               />
-            </View>
+            )}
+            <Checkbox
+              status={advance}
+              onPress={() => {
+                setAdvance((prev) => !prev);
+              }}
+              label="進階搜尋"
+              style={{ marginTop: 10 }}
+            />
             {advance && (
               <>
                 <Input
@@ -199,23 +184,6 @@ export default function ImageSearch() {
 }
 
 const styles = StyleSheet.create({
-  rangeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textStyle: {
-    color: '#000000',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 25,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    color: '#000000',
-    fontSize: 18,
-  },
   input: {
     width: '100%',
   },

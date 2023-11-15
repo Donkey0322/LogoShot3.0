@@ -1,26 +1,47 @@
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
+import styled from 'styled-components/native';
 
-import type { TouchableOpacityProps } from 'react-native';
+import type { TextStyle, TouchableOpacityProps, ViewStyle } from 'react-native';
 
 import { COLORS, ICONS } from '@/constant';
 
+interface CheckboxProps extends TouchableOpacityProps {
+  status: boolean;
+  position?: 'front' | 'end';
+  style?: ViewStyle;
+  label?: string;
+  labelStyle?: TextStyle;
+}
+
 const { Check } = ICONS;
+
+const CheckboxWrapper = styled.View`
+  flex-direction: row;
+  column-gap: 8px;
+  align-items: center;
+`;
 
 export default function Checkbox({
   status,
   onPress,
+  position = 'end',
+  style,
+  label,
+  labelStyle,
   ...rest
-}: {
-  status: boolean;
-} & TouchableOpacityProps) {
+}: CheckboxProps) {
   return (
-    <Pressable
-      style={[styles.checkboxBase, status && styles.checkboxChecked]}
-      onPress={onPress}
-      {...rest}
-    >
-      {status && <Check size={22} color="white" />}
-    </Pressable>
+    <CheckboxWrapper style={style}>
+      {position === 'front' && <Text style={[styles.labelStyle, labelStyle]}>{label}</Text>}
+      <Pressable
+        style={[styles.checkboxBase, status && styles.checkboxChecked]}
+        onPress={onPress}
+        {...rest}
+      >
+        {status && <Check size={22} color="white" />}
+      </Pressable>
+      {position === 'end' && <Text style={[styles.labelStyle, labelStyle]}>{label}</Text>}
+    </CheckboxWrapper>
   );
 }
 
@@ -37,5 +58,9 @@ const styles = StyleSheet.create({
   },
   checkboxChecked: {
     backgroundColor: COLORS('yellow'),
+  },
+  labelStyle: {
+    color: '#406E9F',
+    fontWeight: 'bold',
   },
 });

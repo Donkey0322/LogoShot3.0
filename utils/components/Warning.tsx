@@ -27,8 +27,8 @@ export default function Warning({
   const progress = useSharedValue(0);
 
   React.useEffect(() => {
-    // highlight-next-line
     progress.value = withRepeat(withTiming(1 - progress.value, { duration, easing }), -1, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const animatedStyle = useAnimatedStyle(() => {

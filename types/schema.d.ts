@@ -4,397 +4,811 @@
  */
 
 export interface paths {
-  "/Image_Search/image": {
-    post: operations["post_image_search"];
+  "/login": {
+    post: operations["login_login_post"];
+  };
+  "/apple_login": {
+    post: operations["login_apple_login_post"];
+  };
+  "/signin": {
+    post: operations["add_account_signin_post"];
+  };
+  "/apple_signin": {
+    post: operations["add_apple_account_apple_signin_post"];
   };
   "/account": {
-    delete: operations["delete_account"];
+    get: operations["get_user_info_account_get"];
   };
-  "/account/firebase": {
-    delete: operations["delete_firebase_account"];
+  "/account/edit-info": {
+    patch: operations["edit_account_account_edit_info_patch"];
   };
-  "/account/history": {
-    get: operations["get_history"];
+  "/favorite": {
+    post: operations["new_folder_favorite_post"];
   };
-  "/account/login": {
-    post: operations["post_login"];
+  "/favorite/{folder_id}": {
+    put: operations["edit_folder_favorite__folder_id__put"];
+    post: operations["add_logo_favorite__folder_id__post"];
+    delete: operations["edit_folder_favorite__folder_id__delete"];
   };
-  "/account/signup": {
-    post: operations["post_signup"];
+  "/favorite/all": {
+    get: operations["read_all_folders_favorite_all_get"];
   };
-  "/favorite/folder": {
-    get: operations["get_favorite_folder"];
-    put: operations["put_favorite_folder"];
-    post: operations["post_favorite_folder"];
-    delete: operations["delete_favorite_folder"];
-  };
-  "/favorite/folder/{folderId}/file": {
-    get: operations["get_favorite_file"];
-    post: operations["post_favorite_file"];
-    delete: operations["delete_favorite_file"];
-    parameters: {
-      path: {
-        folderId: number;
-      };
-    };
-  };
-  "/search/result/{resultId}": {
-    get: operations["get_result"];
-    parameters: {
-      path: {
-        resultId: number;
-      };
-    };
+  "/favorite/folder/{folder_id}": {
+    get: operations["read_folder_favorite_folder__folder_id__get"];
+    delete: operations["delete_favorite_logo_favorite_folder__folder_id__delete"];
   };
   "/search/text": {
-    post: operations["post_text_search"];
+    post: operations["text_search_search_text_post"];
+  };
+  "/search/image": {
+    post: operations["image_search_search_image_post"];
+  };
+  "/search/text_history": {
+    get: operations["text_history_search_text_history_get"];
+  };
+  "/search/image_history": {
+    get: operations["image_history_search_image_history_get"];
+  };
+  "/search/history_detail/{detail_id}": {
+    get: operations["image_history_search_history_detail__detail_id__get"];
+  };
+  "/search/logo_detail/{appl_no}": {
+    get: operations["logo_detail_search_logo_detail__appl_no__get"];
   };
 }
 
-export interface definitions {
-  LoginRequest: {
-    /**
-     * @description 帳號 / 信箱
-     * @example a0909182197@gmail.com
-     */
-    email: string;
-    password: string;
+export interface components {
+  schemas: {
+    /** AddAccountInput */
+    AddAccountInput: {
+      /** Username */
+      username: string;
+      /** Password */
+      password: string;
+      /** Email */
+      email: string;
+    };
+    /** AddAppleAccountInput */
+    AddAppleAccountInput: {
+      /** Name */
+      name: string;
+      /** Token */
+      token: string;
+      /** Email */
+      email: string;
+    };
+    /** AppleLoginInput */
+    AppleLoginInput: {
+      /** Email */
+      email: string;
+      /** Token */
+      token: string;
+    };
+    /** AppleLoginOutput */
+    AppleLoginOutput: {
+      /** Username */
+      username?: string;
+      /** Name */
+      name: string;
+      /** Token */
+      token: string;
+    };
+    /** EditFoldererInput */
+    EditFoldererInput: {
+      /** New Name */
+      new_name: string;
+    };
+    /** EditUserInput */
+    EditUserInput: {
+      /** Image Data */
+      image_data?: string;
+      /** Old Password */
+      old_password?: string;
+      /** New Password */
+      new_password?: string;
+    };
+    /** Folder */
+    Folder: {
+      /** Id */
+      id: number;
+      /** Folder Name */
+      folder_name: string;
+    };
+    /** GetUserInfoOutput */
+    GetUserInfoOutput: {
+      /** Id */
+      id: number;
+      /** Username */
+      username: string;
+      /** Email */
+      email: string;
+      /** Photo */
+      photo: string;
+    };
+    /** HTTPValidationError */
+    HTTPValidationError: {
+      /** Detail */
+      detail?: components["schemas"]["ValidationError"][];
+    };
+    /** History */
+    History: {
+      /** Id */
+      id: number;
+      /**
+       * Search Time
+       * Format: date-time
+       */
+      search_time: string;
+      /** Search Key Words */
+      search_key_words: string;
+      /** Image Path */
+      image_path: string;
+      /** Target Class Codes */
+      target_class_codes: string;
+      /** Target Color */
+      target_color: string;
+      /** Target Applicant */
+      target_applicant: string;
+    };
+    /** HistoryDetail */
+    HistoryDetail: {
+      /** Id */
+      id: number;
+      /** User Id */
+      user_id: number;
+      /**
+       * Search Time
+       * Format: date-time
+       */
+      search_time: string;
+      /** Search Key Words */
+      search_key_words: string;
+      /** Is Image Search */
+      is_image_search: boolean;
+      /** Is Sim Sound */
+      is_sim_sound: boolean;
+      /** Is Sim Shape */
+      is_sim_shape: boolean;
+      /** Target Draft C */
+      target_draft_c: string;
+      /** Target Draft E */
+      target_draft_e: string;
+      /** Target Draft J */
+      target_draft_j: string;
+      /** Target Class Codes */
+      target_class_codes: string;
+      /** Target Color */
+      target_color: string;
+      /** Target Applicant */
+      target_applicant: string;
+      /**
+       * Target Start Time
+       * Format: date
+       */
+      target_start_time: string;
+      /**
+       * Target End Time
+       * Format: date
+       */
+      target_end_time: string;
+      /** Image Path */
+      image_path: string;
+    };
+    /** ImageSearchInput */
+    ImageSearchInput: {
+      /** Image Data */
+      image_data: string;
+      /**
+       * Target Start Time
+       * Format: date
+       */
+      target_start_time?: string;
+      /**
+       * Target End Time
+       * Format: date
+       */
+      target_end_time?: string;
+    };
+    /** LoginInput */
+    LoginInput: {
+      /** Username */
+      username: string;
+      /** Password */
+      password: string;
+    };
+    /** LoginOutput */
+    LoginOutput: {
+      /** Username */
+      username: string;
+      /** Token */
+      token: string;
+    };
+    /** Logo */
+    Logo: {
+      /** Appl No */
+      appl_no: string;
+      /** Tmark Name */
+      tmark_name: string;
+      /** Tmark Image Url */
+      tmark_image_url: string;
+    };
+    /** LogoDetail */
+    LogoDetail: {
+      /** Appl No */
+      appl_no: string;
+      /**
+       * Appl Date
+       * Format: date
+       */
+      appl_date: string;
+      /** Tmark Name */
+      tmark_name: string;
+      /** Tmark Class Desc */
+      tmark_class_desc: string;
+      /** Tmark Image Url */
+      tmark_image_url: string;
+      /** Tmark Type Desc */
+      tmark_type_desc: string;
+      /** Tmark Color Desc */
+      tmark_color_desc: string;
+      /** Tmark Draft C */
+      tmark_draft_c: string;
+      /** Tmark Draft E */
+      tmark_draft_e: string;
+      /** Tmark Draft J */
+      tmark_draft_j: string;
+      /** Tmark Sign */
+      tmark_sign: string;
+      /** Word Description */
+      word_description: string;
+      /**
+       * Receive Date
+       * Format: date
+       */
+      receive_date: string;
+      /** Cns Components */
+      CNS_COMPONENTS: unknown[];
+      /** Applicant Chinese Name */
+      applicant_chinese_name: string;
+      /** Applicant English Name */
+      applicant_english_name: string;
+      /** Applicant Japanese Name */
+      applicant_japanese_name: string;
+      /** Applicant Address */
+      applicant_address: string;
+      /** Applicant Country Code */
+      applicant_country_code: string;
+      /** Applicant Chinese Country Name */
+      applicant_chinese_country_name: string;
+    };
+    /** TextSearchInput */
+    TextSearchInput: {
+      /** Search Key Words */
+      search_key_words: string;
+      /** Is Sim Sound */
+      is_sim_sound: boolean;
+      /** Is Sim Shape */
+      is_sim_shape: boolean;
+      /**
+       * Target Draft C
+       * @default
+       */
+      target_draft_c?: string;
+      /**
+       * Target Draft E
+       * @default
+       */
+      target_draft_e?: string;
+      /**
+       * Target Draft J
+       * @default
+       */
+      target_draft_j?: string;
+      /**
+       * Target Class Codes
+       * @default []
+       */
+      target_class_codes?: unknown[];
+      /**
+       * Target Color
+       * @default
+       */
+      target_color?: string;
+      /**
+       * Target Applicant
+       * @default
+       */
+      target_applicant?: string;
+      /**
+       * Target Start Time
+       * @default
+       */
+      target_start_time?: string;
+      /**
+       * Target End Time
+       * @default
+       */
+      target_end_time?: string;
+    };
+    /** ValidationError */
+    ValidationError: {
+      /** Location */
+      loc: (Partial<string> & Partial<number>)[];
+      /** Message */
+      msg: string;
+      /** Error Type */
+      type: string;
+    };
   };
-  FormattedLoginResponse: {
-    data?: definitions["LoginResponse"];
-    error?: string;
-    success?: boolean;
-  };
-  LoginResponse: {
-    userId?: string;
-    email?: string;
-  };
-  SignupRequest: {
-    /**
-     * @description 帳號 / 信箱
-     * @example a0909182197@gmail.com
-     */
-    email: string;
-    password: string;
-  };
-  DeleteFirebaseAccountRequest: {
-    /**
-     * @description 帳號 / 信箱
-     * @example a0909182197@gmail.com
-     */
-    email: string;
-    password: string;
-  };
-  DeleteAccountRequest: {
-    userId: string;
-    userType: string;
-  };
-  DeleteFavoriteFolder: {
-    folderId?: number;
-  };
-  AddFavoriteFolderRequest: {
-    /** @description User ID */
-    userId: string;
-    /**
-     * @description User Type
-     * @example apple
-     * @enum {string}
-     */
-    userType: "apple" | "general" | "facebook" | "firebase";
-    folderName?: string;
-  };
-  RenameFavoriteFolder: {
-    folderId?: number;
-    folderName?: string;
-  };
-  FormattedFavoriteFolderResponse: {
-    data?: definitions["FavoriteFolderResponse"];
-    error?: string;
-    success?: boolean;
-  };
-  FavoriteFolderResponse: {
-    fileId?: number;
-    fileName?: string;
-  };
-  FormattedReadFavoriteFolderResponse: {
-    data?: definitions["ReadFavoriteFolderResponse"][];
-    error?: string;
-    success?: boolean;
-  };
-  ReadFavoriteFolderResponse: {
-    fileId?: number;
-    fileName?: string;
-  };
-  DeleteFavoriteFile: {
-    esId?: string;
-  };
-  AddFavoriteFile: {
-    esId?: string;
-  };
-  TextSearchRequest: {
-    keywords?: string;
-    isSound?: boolean;
-    isShape?: boolean;
-    classcodes?: number[];
-    color?: string;
-    applicant?: string;
-    /** Format: date */
-    startTime?: string;
-    /** Format: date */
-    endTime?: string;
-    chinese?: string;
-    english?: string;
-    japan?: string;
-  };
-  FormattedTextSearchResponse: {
-    data?: definitions["TextSearchResponse"];
-    error?: string;
-    success?: boolean;
-  };
-  TextSearchResponse: {
-    results?: string[][];
-  };
-  ImageSearchRequest: {
-    base64_img?: string;
-    indicatorX?: number;
-    indicatorY?: number;
-  };
-  FormattedImageSearchResponse: {
-    data?: definitions["ImageSearchResponse"];
-    error?: string;
-    success?: boolean;
-  };
-  ImageSearchResponse: {
-    results?: string[][];
-  };
-}
-
-export interface responses {
-  /** When a mask can't be parsed */
-  ParseError: unknown;
-  /** When any error occurs on mask */
-  MaskError: unknown;
 }
 
 export interface operations {
-  post_image_search: {
+  login_login_post: {
     parameters: {
-      body: {
-        payload: definitions["ImageSearchRequest"];
-      };
       header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
+      /** Successful Response */
       200: {
-        schema: definitions["FormattedImageSearchResponse"];
+        content: {
+          "application/json": components["schemas"]["LoginOutput"];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LoginInput"];
       };
     };
   };
-  delete_account: {
+  login_apple_login_post: {
     parameters: {
-      body: {
-        payload: definitions["DeleteAccountRequest"];
+      header: {
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
-      200: unknown;
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AppleLoginOutput"];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AppleLoginInput"];
+      };
     };
   };
-  delete_firebase_account: {
+  add_account_signin_post: {
     parameters: {
-      body: {
-        payload: definitions["DeleteFirebaseAccountRequest"];
+      header: {
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
-      200: unknown;
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": number;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddAccountInput"];
+      };
     };
   };
-  get_history: {
+  add_apple_account_apple_signin_post: {
+    parameters: {
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": number;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddAppleAccountInput"];
+      };
+    };
+  };
+  get_user_info_account_get: {
+    parameters: {
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserInfoOutput"];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  edit_account_account_edit_info_patch: {
+    parameters: {
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EditUserInput"];
+      };
+    };
+  };
+  new_folder_favorite_post: {
     parameters: {
       query: {
-        /** User ID */
-        userId: string;
-        /** User Type */
-        userType: "apple" | "general" | "facebook" | "firebase";
-        /** TODO: what is this for? */
-        isImageSearch: boolean;
-      };
-    };
-    responses: {
-      /** Success */
-      200: unknown;
-    };
-  };
-  post_login: {
-    parameters: {
-      body: {
-        payload: definitions["LoginRequest"];
+        folder_name: string;
       };
       header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
+      /** Successful Response */
       200: {
-        schema: definitions["FormattedLoginResponse"];
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };
-  post_signup: {
+  edit_folder_favorite__folder_id__put: {
     parameters: {
-      body: {
-        payload: definitions["SignupRequest"];
+      path: {
+        folder_id: number;
       };
       header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
+      /** Successful Response */
       200: {
-        schema: definitions["FormattedLoginResponse"];
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EditFoldererInput"];
       };
     };
   };
-  get_favorite_folder: {
+  add_logo_favorite__folder_id__post: {
     parameters: {
+      path: {
+        folder_id: number;
+      };
       query: {
-        /** User ID */
-        userId: string;
-        /** User Type */
-        userType: "apple" | "general" | "facebook" | "firebase";
+        appl_no: string;
       };
       header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
+      /** Successful Response */
       200: {
-        schema: definitions["FormattedReadFavoriteFolderResponse"];
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };
-  put_favorite_folder: {
+  edit_folder_favorite__folder_id__delete: {
     parameters: {
-      body: {
-        payload: definitions["RenameFavoriteFolder"];
+      path: {
+        folder_id: number;
       };
       header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
+      /** Successful Response */
       200: {
-        schema: definitions["FormattedFavoriteFolderResponse"];
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };
-  post_favorite_folder: {
+  read_all_folders_favorite_all_get: {
     parameters: {
-      body: {
-        payload: definitions["AddFavoriteFolderRequest"];
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Folder"][];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_folder_favorite_folder__folder_id__get: {
+    parameters: {
+      path: {
+        folder_id: number;
       };
       header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
+      /** Successful Response */
       200: {
-        schema: definitions["FormattedFavoriteFolderResponse"];
+        content: {
+          "application/json": components["schemas"]["Logo"][];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };
-  delete_favorite_folder: {
-    parameters: {
-      body: {
-        payload: definitions["DeleteFavoriteFolder"];
-      };
-    };
-    responses: {
-      /** Success */
-      200: unknown;
-    };
-  };
-  get_favorite_file: {
+  delete_favorite_logo_favorite_folder__folder_id__delete: {
     parameters: {
       path: {
-        folderId: number;
+        folder_id: number;
       };
-    };
-    responses: {
-      /** Success */
-      200: unknown;
-    };
-  };
-  post_favorite_file: {
-    parameters: {
-      path: {
-        folderId: number;
-      };
-      body: {
-        payload: definitions["AddFavoriteFile"];
-      };
-    };
-    responses: {
-      /** Success */
-      200: unknown;
-    };
-  };
-  delete_favorite_file: {
-    parameters: {
-      path: {
-        folderId: number;
-      };
-      body: {
-        payload: definitions["DeleteFavoriteFile"];
-      };
-    };
-    responses: {
-      /** Success */
-      200: unknown;
-    };
-  };
-  get_result: {
-    parameters: {
-      path: {
-        resultId: number;
-      };
-    };
-    responses: {
-      /** Success */
-      200: unknown;
-    };
-  };
-  post_text_search: {
-    parameters: {
-      body: {
-        payload: definitions["TextSearchRequest"];
+      query: {
+        appl_no: string;
       };
       header: {
-        /** An optional fields mask */
-        "X-Fields"?: string;
+        "auth-token"?: string;
       };
     };
     responses: {
-      /** Success */
+      /** Successful Response */
       200: {
-        schema: definitions["FormattedTextSearchResponse"];
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  text_search_search_text_post: {
+    parameters: {
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Logo"][];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TextSearchInput"];
+      };
+    };
+  };
+  image_search_search_image_post: {
+    parameters: {
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Logo"][];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ImageSearchInput"];
+      };
+    };
+  };
+  text_history_search_text_history_get: {
+    parameters: {
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["History"][];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  image_history_search_image_history_get: {
+    parameters: {
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["History"][];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  image_history_search_history_detail__detail_id__get: {
+    parameters: {
+      path: {
+        detail_id: number;
+      };
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["HistoryDetail"];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  logo_detail_search_logo_detail__appl_no__get: {
+    parameters: {
+      path: {
+        appl_no: string;
+      };
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LogoDetail"];
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };

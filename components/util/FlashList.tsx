@@ -1,10 +1,11 @@
-import { CellContainer, FlashList } from "@shopify/flash-list";
-import { forwardRef } from "react";
-import Animated from "react-native-reanimated";
+/* eslint-disable react/display-name */
+import { CellContainer, FlashList } from '@shopify/flash-list';
+import { forwardRef } from 'react';
+import Animated from 'react-native-reanimated';
 
-import type { ListRenderItem } from "@shopify/flash-list";
+import type { ListRenderItem } from '@shopify/flash-list';
 
-import useWidthOnResize from "@/utils/hooks/useWidthOnResize";
+import useWidthOnResize from '@/utils/hooks/useWidthOnResize';
 
 const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 
@@ -14,7 +15,7 @@ interface FlashListProps<T> {
   itemSize: number;
 }
 
-export default function <T>({
+export default function List<T>({
   data,
   items,
   itemSize,
@@ -29,8 +30,8 @@ export default function <T>({
           {...props}
           style={{
             ...props.style,
-            flexDirection: "row",
-            justifyContent: "space-evenly",
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
           }}
           ref={ref}
         />
