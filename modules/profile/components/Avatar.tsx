@@ -63,8 +63,9 @@ export default function Avatar({
         }) => setImageWidth(width * 0.8)}
         color={theme}
         onPress={() => setModalVisible(true)}
+        disabled={!avatar?.uri}
       >
-        {image ? (
+        {avatar?.uri ? (
           <Image
             style={{
               flex: 1,
