@@ -19,6 +19,7 @@ import DateRangePicker from '@/modules/search/components/DateRangePicker';
 import Modal from '@/modules/search/components/Modal';
 import useData, { ImageDataType, imageInitData } from '@/modules/search/hooks/useData';
 import Dropdown from '@/modules/search/hooks/useDropdown';
+import toDate from '@/utils/functions/toDate';
 
 const ImageUpload = styled.TouchableOpacity`
   background-color: white;
@@ -36,7 +37,10 @@ export default function ImageSearch() {
   const { id } = useLocalSearchParams();
   const { historyDetail } = useHistoryDetail(id ? Number(id) : undefined);
 
-  const { imageSearch } = useImageSearch();
+  const {
+    imageSearch,
+    loading: { imageSearch: loading },
+  } = useImageSearch();
   const { setResults } = useResults();
   const { image, handlePickImageForSearch } = useImage();
 
@@ -46,33 +50,24 @@ export default function ImageSearch() {
   );
   /******************************************************/
 
-  // /*DropDownPicker 套組*/
-  // const { ClassCodeDropDownPicker, ColorDropDownPicker } = useDropdown(handleDataChange);
-  // /******************************************************/
-
-  const [isLoading, setIsLoading] = useState(false);
-
   const onSearch = async () => {
     try {
-      setIsLoading(true);
-      console.log(data['image']);
       const { data: results } = await imageSearch({
         image_data: data['image'],
+        target_start_time: toDate(timelimit ? data['startTime'] : undefined),
+        target_end_time: toDate(timelimit ? data['endTime'] : undefined),
+        target_draft_c: data['chinese'],
+        target_draft_e: data['english'],
+        target_draft_j: data['japan'],
+        target_class_codes: data['classcodes'],
+        target_color: data['color'],
+        target_applicant: data['applicant'],
       });
       setResults(results);
       router.push('/search/result/');
     } catch (e) {
       console.log(e);
-    } finally {
-      setIsLoading(false);
     }
-    // if (data) {
-    //   setIsLoading(false);
-    //   navigate("Result", { data: imageData });
-    // } else {
-    //   setIsLoading(false);
-    //   Alert.alert("搜尋失敗");
-    // }
   };
   const tabBarHeight = useBottomTabBarHeight();
   const [modalVisible, setModalVisible] = useState(false);
@@ -83,7 +78,6 @@ export default function ImageSearch() {
   };
 
   useEffect(() => {
-    if (image) console.log(image);
     handleDataChange('image')(image?.base64);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [image]);
@@ -93,9 +87,7 @@ export default function ImageSearch() {
       <AppFrame.ScrollBeyond style={{ backgroundColor: '#E3DFFD' }}>
         <Header />
         <AppFrame.ScrollView style={{ flex: advance ? undefined : 1 }}>
-          <AppFrame.ContentContainer
-          // style={{ justifyContent: advance ? 'flex-start' : 'space-between' }}
-          >
+          <AppFrame.ContentContainer>
             {image?.uri ? (
               <TouchableOpacity onPress={() => setModalVisible(true)}>
                 <Image
@@ -169,13 +161,10 @@ export default function ImageSearch() {
                 />
               </>
             )}
-            {isLoading && <ActivityIndicator />}
+            {loading && <ActivityIndicator />}
             <Button
               onPress={onSearch}
-              disabled={
-                false
-                // !data.image || !(!!data.image && isLoading !== true)
-              }
+              disabled={false || !data['image'] || loading}
               style={{
                 marginTop: 10,
                 backgroundColor: COLORS('coldblue'),
@@ -186,9 +175,6 @@ export default function ImageSearch() {
               <Text>搜尋</Text>
             </Button>
             <View style={{ height: tabBarHeight / 2 }} />
-            {/* <View
-              style={{ position: 'fixed', height: 50, backgroundColor: '#000000', zIndex: 10 }}
-            /> */}
           </AppFrame.ContentContainer>
         </AppFrame.ScrollView>
         <Modal

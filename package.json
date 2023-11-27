@@ -9,7 +9,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "type": "npx openapi-typescript http://140.112.106.82:8003/openapi.json -o ./types/schema.d.ts",
+    "type": "npx openapi-typescript http://140.112.106.82:8002/openapi.json -o ./types/schema.d.ts",
     "eslintInit": "eslint --init",
     "eslintFix": "eslint --fix",
     "commit": "node commit.mjs"

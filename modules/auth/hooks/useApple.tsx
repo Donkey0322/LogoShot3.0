@@ -29,13 +29,14 @@ export default function useApple({
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
+      console.log(credential);
       if (credential?.fullName?.givenName && credential.authorizationCode && credential.email) {
-        const { data } = await appleSignup({
+        await appleSignup({
           name: credential?.fullName?.givenName,
           token: credential.authorizationCode,
           email: credential.email,
         });
-        router.push();
+        router.push('/profile/');
         Alert.alert('Logged in', `Hi ${credential?.fullName?.givenName}`);
       }
     } catch (e) {
@@ -44,14 +45,12 @@ export default function useApple({
       // } else {
       //   Alert.alert("Apple Login Error !");
       // }
-      Alert.alert('Apple Login Error !');
+      console.log(e);
     }
   };
   return (
-    <>
-      <IconButton color={buttonColor} onPress={handlePress}>
-        <Apple color={iconColor} />
-      </IconButton>
-    </>
+    <IconButton color={buttonColor} onPress={handlePress}>
+      <Apple color={iconColor} />
+    </IconButton>
   );
 }

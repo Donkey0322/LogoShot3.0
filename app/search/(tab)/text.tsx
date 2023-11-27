@@ -28,16 +28,6 @@ export default function ImageSearch() {
   const onSearch = async () => {
     try {
       setIsLoading(true);
-      // const userInfoStr = await AsyncStorage.getItem("@userInfo");
-      // const userInfo = userInfoStr != null ? JSON.parse(userInfoStr) : null;
-      console.log({
-        search_time: new Date().toISOString(),
-        search_key_words: data.keyword,
-        is_sim_sound: data.isSound,
-        is_sim_shape: data.isShape,
-        target_start_time: '2023-11-08',
-        target_end_time: '2023-11-08',
-      });
       const { data: results } = await textSearch({
         search_key_words: data.keyword,
         is_sim_sound: data.isSound,
@@ -54,13 +44,6 @@ export default function ImageSearch() {
       router.push('/search/result/');
       setIsLoading(false);
     }
-    // if (data) {
-    //   setIsLoading(false);
-    //   navigate("Result", { data: imageData });
-    // } else {
-    //   setIsLoading(false);
-    //   Alert.alert("搜尋失敗");
-    // }
   };
   const tabBarHeight = useBottomTabBarHeight();
 

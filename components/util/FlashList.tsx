@@ -13,11 +13,13 @@ interface FlashListProps<T> {
   data: readonly T[] | undefined | null;
   items: ListRenderItem<T>;
   itemSize: number;
+  numColumns?: number;
 }
 
 export default function List<T>({
   data,
   items,
+  numColumns,
   itemSize,
 }: FlashListProps<T extends (infer U)[] ? U : never>) {
   const { width } = useWidthOnResize();
@@ -30,7 +32,8 @@ export default function List<T>({
           {...props}
           style={{
             ...props.style,
-            flexDirection: 'row',
+            flexDirection: numColumns === 1 ? 'column' : 'row',
+            ...(numColumns === 1 && { alignItems: 'center' }),
             justifyContent: 'space-evenly',
           }}
           ref={ref}
@@ -38,7 +41,7 @@ export default function List<T>({
       ))}
       renderItem={items}
       estimatedItemSize={itemSize}
-      numColumns={Math.floor((width - 50) / itemSize)}
+      numColumns={numColumns ?? Math.floor((width - 50) / itemSize)}
     />
   );
 }
