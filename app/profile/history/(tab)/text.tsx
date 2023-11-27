@@ -1,6 +1,7 @@
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { styled } from 'styled-components/native';
 
+import FlashList from '@/components/util/FlashList';
 import { COLORS } from '@/constant';
 import useHistory from '@/libs/useHistory';
 
@@ -14,11 +15,12 @@ const Background = styled.View<{ color?: string }>`
 
 const Card = styled.TouchableOpacity`
   width: 80%;
-  /* height: 50px; */
   background-color: beige;
   border-radius: 10px;
   overflow: hidden;
   flex-direction: row;
+  margin-bottom: 10px;
+  position: relative;
 `;
 
 const DescriptionWrapper = styled.View`
@@ -43,30 +45,45 @@ export default function Page() {
 
   return (
     <Background>
-      {textHistory?.map(
-        ({ search_key_words, target_class_codes, target_color, target_applicant }, index) => (
-          <Card key={index}>
-            <DescriptionWrapper>
-              <Item>
-                <Label>關鍵字：</Label>
-                <Text>{search_key_words}</Text>
-              </Item>
-              <Item>
-                <Label>應用商品類別：</Label>
-                <Text>{target_class_codes}</Text>
-              </Item>
-              <Item>
-                <Label>商標色彩：</Label>
-                <Text>{target_color}</Text>
-              </Item>
-              <Item>
-                <Label>申請人：</Label>
-                <Text>{target_applicant}</Text>
-              </Item>
-            </DescriptionWrapper>
-          </Card>
-        ),
-      )}
+      <View
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'relative',
+          backgroundColor: COLORS('mustard.100'),
+        }}
+      >
+        <FlashList<typeof textHistory>
+          data={textHistory}
+          items={({
+            item: { search_key_words, target_class_codes, target_color, target_applicant },
+            index,
+          }) => (
+            <Card key={index}>
+              <DescriptionWrapper>
+                <Item>
+                  <Label>關鍵字：</Label>
+                  <Text>{search_key_words}</Text>
+                </Item>
+                <Item>
+                  <Label>應用商品類別：</Label>
+                  <Text>{String(target_class_codes)}</Text>
+                </Item>
+                <Item>
+                  <Label>商標色彩：</Label>
+                  <Text>{target_color}</Text>
+                </Item>
+                <Item>
+                  <Label>申請人：</Label>
+                  <Text>{target_applicant}</Text>
+                </Item>
+              </DescriptionWrapper>
+            </Card>
+          )}
+          itemSize={400}
+          numColumns={1}
+        />
+      </View>
     </Background>
   );
 }

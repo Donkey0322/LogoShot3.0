@@ -7,14 +7,11 @@ export interface paths {
   "/login": {
     post: operations["login_login_post"];
   };
-  "/apple_login": {
-    post: operations["login_apple_login_post"];
-  };
   "/signin": {
     post: operations["add_account_signin_post"];
   };
-  "/apple_signin": {
-    post: operations["add_apple_account_apple_signin_post"];
+  "/apple_login": {
+    post: operations["add_apple_account_apple_login_post"];
   };
   "/account": {
     get: operations["get_user_info_account_get"];
@@ -68,21 +65,14 @@ export interface components {
       /** Email */
       email: string;
     };
-    /** AddAppleAccountInput */
-    AddAppleAccountInput: {
+    /** AppleLoginInput */
+    AppleLoginInput: {
       /** Name */
       name: string;
       /** Token */
       token: string;
       /** Email */
       email: string;
-    };
-    /** AppleLoginInput */
-    AppleLoginInput: {
-      /** Email */
-      email: string;
-      /** Token */
-      token: string;
     };
     /** AppleLoginOutput */
     AppleLoginOutput: {
@@ -140,15 +130,15 @@ export interface components {
        */
       search_time: string;
       /** Search Key Words */
-      search_key_words: string;
+      search_key_words?: string;
       /** Image Path */
-      image_path: string;
+      image_path?: string;
       /** Target Class Codes */
-      target_class_codes: string;
+      target_class_codes?: unknown[];
       /** Target Color */
-      target_color: string;
+      target_color?: string;
       /** Target Applicant */
-      target_applicant: string;
+      target_applicant?: string;
     };
     /** HistoryDetail */
     HistoryDetail: {
@@ -161,43 +151,26 @@ export interface components {
        * Format: date-time
        */
       search_time: string;
-      /** Search Key Words */
-      search_key_words: string;
       /** Is Image Search */
       is_image_search: boolean;
+      /** Search Key Words */
+      search_key_words?: string;
       /** Is Sim Sound */
-      is_sim_sound: boolean;
+      is_sim_sound?: boolean;
       /** Is Sim Shape */
-      is_sim_shape: boolean;
+      is_sim_shape?: boolean;
       /** Target Draft C */
-      target_draft_c: string;
+      target_draft_c?: string;
       /** Target Draft E */
-      target_draft_e: string;
+      target_draft_e?: string;
       /** Target Draft J */
-      target_draft_j: string;
+      target_draft_j?: string;
       /** Target Class Codes */
-      target_class_codes: string;
+      target_class_codes?: string;
       /** Target Color */
-      target_color: string;
+      target_color?: string;
       /** Target Applicant */
-      target_applicant: string;
-      /**
-       * Target Start Time
-       * Format: date
-       */
-      target_start_time: string;
-      /**
-       * Target End Time
-       * Format: date
-       */
-      target_end_time: string;
-      /** Image Path */
-      image_path: string;
-    };
-    /** ImageSearchInput */
-    ImageSearchInput: {
-      /** Image Data */
-      image_data: string;
+      target_applicant?: string;
       /**
        * Target Start Time
        * Format: date
@@ -208,6 +181,58 @@ export interface components {
        * Format: date
        */
       target_end_time?: string;
+      /** Image Path */
+      image_path?: string;
+    };
+    /** ImageSearchInput */
+    ImageSearchInput: {
+      /** Image Data */
+      image_data: string;
+      /**
+       * Search Key Words
+       * @default
+       */
+      search_key_words?: string;
+      /**
+       * Target Start Time
+       * @default
+       */
+      target_start_time?: string;
+      /**
+       * Target End Time
+       * @default
+       */
+      target_end_time?: string;
+      /**
+       * Target Draft C
+       * @default
+       */
+      target_draft_c?: string;
+      /**
+       * Target Draft E
+       * @default
+       */
+      target_draft_e?: string;
+      /**
+       * Target Draft J
+       * @default
+       */
+      target_draft_j?: string;
+      /**
+       * Target Class Codes
+       * @default []
+       */
+      target_class_codes?: unknown[];
+      /**
+       * Target Color
+       * @default
+       */
+      target_color?: string;
+      /**
+       * Target Applicant
+       * @default
+       */
+      target_applicant?: string;
     };
     /** LoginInput */
     LoginInput: {
@@ -230,56 +255,56 @@ export interface components {
       /** Tmark Name */
       tmark_name: string;
       /** Tmark Image Url */
-      tmark_image_url: string;
+      tmark_image_url?: string;
     };
     /** LogoDetail */
     LogoDetail: {
       /** Appl No */
       appl_no: string;
+      /** Tmark Name */
+      tmark_name: string;
       /**
        * Appl Date
        * Format: date
        */
-      appl_date: string;
-      /** Tmark Name */
-      tmark_name: string;
+      appl_date?: string;
       /** Tmark Class Desc */
-      tmark_class_desc: string;
+      tmark_class_desc?: string;
       /** Tmark Image Url */
-      tmark_image_url: string;
+      tmark_image_url?: string;
       /** Tmark Type Desc */
-      tmark_type_desc: string;
+      tmark_type_desc?: string;
       /** Tmark Color Desc */
-      tmark_color_desc: string;
+      tmark_color_desc?: string;
       /** Tmark Draft C */
-      tmark_draft_c: string;
+      tmark_draft_c?: string;
       /** Tmark Draft E */
-      tmark_draft_e: string;
+      tmark_draft_e?: string;
       /** Tmark Draft J */
-      tmark_draft_j: string;
+      tmark_draft_j?: string;
       /** Tmark Sign */
-      tmark_sign: string;
+      tmark_sign?: string;
       /** Word Description */
-      word_description: string;
+      word_description?: string;
       /**
        * Receive Date
        * Format: date
        */
-      receive_date: string;
+      receive_date?: string;
       /** Cns Components */
-      CNS_COMPONENTS: unknown[];
+      CNS_COMPONENTS?: unknown[];
       /** Applicant Chinese Name */
-      applicant_chinese_name: string;
+      applicant_chinese_name?: string;
       /** Applicant English Name */
-      applicant_english_name: string;
+      applicant_english_name?: string;
       /** Applicant Japanese Name */
-      applicant_japanese_name: string;
+      applicant_japanese_name?: string;
       /** Applicant Address */
-      applicant_address: string;
+      applicant_address?: string;
       /** Applicant Country Code */
-      applicant_country_code: string;
+      applicant_country_code?: string;
       /** Applicant Chinese Country Name */
-      applicant_chinese_country_name: string;
+      applicant_chinese_country_name?: string;
     };
     /** TextSearchInput */
     TextSearchInput: {
@@ -369,32 +394,6 @@ export interface operations {
       };
     };
   };
-  login_apple_login_post: {
-    parameters: {
-      header: {
-        "auth-token"?: string;
-      };
-    };
-    responses: {
-      /** Successful Response */
-      200: {
-        content: {
-          "application/json": components["schemas"]["AppleLoginOutput"];
-        };
-      };
-      /** Validation Error */
-      422: {
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["AppleLoginInput"];
-      };
-    };
-  };
   add_account_signin_post: {
     parameters: {
       header: {
@@ -421,7 +420,7 @@ export interface operations {
       };
     };
   };
-  add_apple_account_apple_signin_post: {
+  add_apple_account_apple_login_post: {
     parameters: {
       header: {
         "auth-token"?: string;
@@ -431,7 +430,7 @@ export interface operations {
       /** Successful Response */
       200: {
         content: {
-          "application/json": number;
+          "application/json": components["schemas"]["AppleLoginOutput"];
         };
       };
       /** Validation Error */
@@ -443,7 +442,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["AddAppleAccountInput"];
+        "application/json": components["schemas"]["AppleLoginInput"];
       };
     };
   };

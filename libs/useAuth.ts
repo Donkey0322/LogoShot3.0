@@ -28,9 +28,7 @@ export default function useAuth() {
     try {
       const {
         data: { token, username },
-        data: temp,
       } = await useLoginSWR.trigger(data);
-      console.log(temp);
       await AsyncStorage.setItem('token', token);
       const userinfo = await useUserInfoSWR.mutate();
       console.log('Userinfo', userinfo);
@@ -68,12 +66,13 @@ export default function useAuth() {
       );
       router.replace('/profile/');
     } catch (e) {
+      console.log(e.message);
       if (e instanceof Error)
         switch (e.message) {
           case 'INVALID_EMAIL':
             Alert.alert('請輸入有效信箱');
             break;
-          case 'EMAIL_EXISTS':
+          case 'EmailExist':
             Alert.alert('此信箱已註冊過');
             break;
           default:

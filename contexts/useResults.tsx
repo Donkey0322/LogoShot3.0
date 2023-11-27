@@ -1,8 +1,9 @@
 import { createContext, memo, useContext, useMemo, useState } from 'react';
 
+import type { components } from '@/types/schema';
 import type { ReactNode } from 'react';
 
-type Results = { appl_no: string; tmark_name: string; tmark_image_url: string }[];
+type Results = components['schemas']['Logo'][];
 
 export type ResultsType = Results | undefined;
 

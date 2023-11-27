@@ -1,8 +1,9 @@
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { styled } from 'styled-components/native';
 
+import FlashList from '@/components/util/FlashList';
 import { COLORS } from '@/constant';
 import { useImage } from '@/contexts/useImage';
 import useHistory from '@/libs/useHistory';
@@ -17,12 +18,13 @@ const Background = styled.View<{ color?: string }>`
 `;
 
 const Card = styled.TouchableOpacity`
-  width: 80%;
-  /* height: 50px; */
   background-color: beige;
   border-radius: 10px;
   overflow: hidden;
   flex-direction: row;
+  width: 45%;
+  margin-bottom: 10px;
+  position: relative;
 `;
 
 const DescriptionWrapper = styled.View`
@@ -45,47 +47,61 @@ const Label = styled.Text`
 export default function Page() {
   const { imageHistory } = useHistory();
   const { setImage } = useImage();
-  const handleHistoryPress = (id: number, uri: string) => () => {
-    setImage({ uri: fetchImage(uri) });
-    router.push({ pathname: '/search/(tab)/image', params: { id } });
+  const handleHistoryPress = (id: number, uri?: string) => () => {
+    if (uri) {
+      setImage({ uri: fetchImage(uri) });
+      router.push({ pathname: '/search/(tab)/image', params: { id } });
+    }
   };
+
   return (
     <Background>
-      {imageHistory?.map(
-        ({ image_path, target_class_codes, target_color, target_applicant, id }, index) => (
-          <Card key={index} onPress={handleHistoryPress(id, image_path)}>
-            <Image
-              style={{
-                width: 130,
-                height: 130,
-                backgroundColor: 'black',
-                padding: 10,
-              }}
-              source={
-                { uri: fetchImage(image_path) }
-                // require("@/assets/figure.png")
-              }
-              // placeholder={blurhash}
-              contentFit="contain"
-              transition={1000}
-            />
-            <DescriptionWrapper>
-              <Item>
-                <Label>應用商品類別：</Label>
-                <Text>{target_class_codes}</Text>
-              </Item>
-              <Item>
-                <Label>商標色彩：</Label>
-                <Text>{target_color}</Text>
-              </Item>
-              <Item>
-                <Label>申請人：</Label>
-                <Text>{target_applicant}</Text>
-              </Item>
-            </DescriptionWrapper>
-          </Card>
-        ),
-      )}
+      <View
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'relative',
+          backgroundColor: COLORS('mustard.100'),
+        }}
+      >
+        <FlashList<typeof imageHistory>
+          data={imageHistory}
+          items={({
+            item: { image_path, target_class_codes, target_color, target_applicant, id },
+            index,
+          }) => (
+            <Card key={index} onPress={handleHistoryPress(id, image_path)}>
+              <Image
+                style={{
+                  width: 130,
+                  height: 130,
+                  backgroundColor: 'black',
+                  padding: 10,
+                }}
+                source={{ uri: fetchImage(image_path) }}
+                contentFit="contain"
+                transition={1000}
+              />
+              <DescriptionWrapper>
+                <Item>
+                  <Label>應用商品類別：</Label>
+                  <Text>{String(target_class_codes)}</Text>
+                </Item>
+                <Item>
+                  <Label>商標色彩：</Label>
+                  <Text>{target_color}</Text>
+                </Item>
+                <Item>
+                  <Label>申請人：</Label>
+                  <Text>{target_applicant}</Text>
+                </Item>
+              </DescriptionWrapper>
+            </Card>
+          )}
+          itemSize={400}
+          numColumns={1}
+        />
+      </View>
     </Background>
   );
 }

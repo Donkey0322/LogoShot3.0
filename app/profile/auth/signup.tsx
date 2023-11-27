@@ -61,7 +61,11 @@ export default function Page() {
       />
       <Button
         onPress={() => {
-          signUp(signupData);
+          signUp({
+            email: signupData.email,
+            password: signupData.password,
+            username: signupData.user,
+          });
         }}
         style={{
           backgroundColor: COLORS('mustard.500'),
