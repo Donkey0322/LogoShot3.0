@@ -9,6 +9,7 @@ import Stack from '@/components/stack';
 import { COLORS } from '@/constant';
 import useFavoriteItem from '@/libs/useFavoriteItem';
 import useTrademarkDetail from '@/libs/useTrademark';
+import fetchImage from '@/utils/functions/fetchImage';
 
 const Title = styled.Text`
   font-size: 32px;
@@ -62,7 +63,7 @@ export default function Detail() {
     <Stack contentContainerStyle={{ paddingTop: 30, rowGap: 15 }}>
       <Image
         contentFit="contain"
-        source={{ uri: `http://140.112.106.88:8082/${trademarkDetail?.tmark_image_url}` }}
+        source={{ uri: fetchImage(`pics/${trademarkDetail?.tmark_image_url}`) }}
         style={{
           width: '60%',
           aspectRatio: 1,

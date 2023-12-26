@@ -1,16 +1,11 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { styled } from 'styled-components/native';
 
 import Button from '@/components/Button';
 import Input from '@/components/TextInput';
 import { COLORS } from '@/constant';
 import useAuth from '@/libs/useAuth';
-import {
-  useApple as Apple,
-  useFacebook as Facebook,
-  useGoogle as Google,
-  useLogin,
-} from '@/modules/auth/hooks';
+import { useLogin } from '@/modules/auth/hooks';
 
 const Background = styled.View<{ color?: string }>`
   flex: 1;
@@ -29,7 +24,7 @@ export default function Page() {
 
   return (
     <Background>
-      <Label>帳號</Label>
+      <Label>使用者名稱</Label>
       <Input
         value={loginData.username}
         style={styles.input}
@@ -51,14 +46,15 @@ export default function Page() {
           marginHorizontal: 100,
         }}
         fontStyle={[{ fontSize: 18 }]}
+        disabled={!loginData.password || !loginData.username}
       >
         登入
       </Button>
-      <View style={styles.icons}>
+      {/* <View style={styles.icons}>
         <Facebook buttonColor={COLORS('facebook')} iconColor={COLORS('white')} />
         <Apple buttonColor="#000000" iconColor={COLORS('white')} />
         <Google buttonColor={COLORS('google')} iconColor={COLORS('white')} />
-      </View>
+      </View> */}
       {/* <Facebook /> */}
     </Background>
   );

@@ -7,21 +7,22 @@ import useSWRMutation from 'swr/mutation';
 import { useUser } from '@/contexts/useUser';
 import {
   appleLogin,
-  appleSignup,
   getUserInfo,
   loginAsGeneralUser,
+  resendMail,
   signupAsGeneralUser,
 } from '@/libs/api/fetchers/account';
 import { swrMutationFetcher } from '@/libs/api/functions';
 
 export default function useAuth() {
+  const { user } = useUser();
   const router = useRouter();
-  const useUserInfoSWR = useSWR(`/account`, () => getUserInfo({}));
+  const useUserInfoSWR = useSWR(`/account`, user?.username ? () => getUserInfo({}) : null);
   const useLoginSWR = useSWRMutation(`/account/login`, swrMutationFetcher(loginAsGeneralUser));
   const useSignupSWR = useSWRMutation(`/account/signup`, swrMutationFetcher(signupAsGeneralUser));
+  const resendMailSWR = useSWRMutation('resend', swrMutationFetcher(resendMail));
 
   const useAppleLoginSWR = useSWRMutation(`/apple_login`, swrMutationFetcher(appleLogin));
-  const useAppleSignupSWR = useSWRMutation(`/apple_login`, swrMutationFetcher(appleSignup));
   const { setUser } = useUser();
 
   const logIn = async (data: { username: string; password: string }) => {
@@ -38,14 +39,11 @@ export default function useAuth() {
     } catch (e) {
       if (e instanceof Error)
         switch (e.message) {
-          case 'INVALID_EMAIL':
-            Alert.alert('請輸入有效信箱');
+          case 'NotFound':
+            Alert.alert(`帳號不存在`);
             break;
-          case 'INVALID_PASSWORD':
-            Alert.alert('密碼錯誤');
-            break;
-          case 'EMAIL_NOT_FOUND':
-            Alert.alert('帳戶未註冊，請先登入至頁面註冊，或利用 Facebook、Apple 帳戶登入');
+          case 'LoginFailed':
+            Alert.alert(`登入失敗，請確認帳號與密碼是否正確。`);
             break;
           default:
             console.log(e.message);
@@ -61,19 +59,19 @@ export default function useAuth() {
   const signUp = async (data: { email: string; password: string; username: string }) => {
     try {
       await useSignupSWR.trigger(data);
-      Alert.alert(
-        `驗證信已寄至${data?.email}， 請至信箱中點擊連結完成驗證。（請小心驗證信有可能在信箱中被歸類為垃圾信件）`,
-      );
-      router.replace('/profile/');
+      Alert.alert(`驗證信已寄至${data?.email}，請輸入信件中之六位驗證碼`);
     } catch (e) {
-      console.log(e.message);
-      if (e instanceof Error)
+      if (e instanceof Error) {
         switch (e.message) {
-          case 'INVALID_EMAIL':
+          case 'InvalidEmail':
             Alert.alert('請輸入有效信箱');
             break;
           case 'EmailExist':
             Alert.alert('此信箱已註冊過');
+            break;
+          case 'NotVerified':
+            Alert.alert(`此信箱尚未驗證。驗證信已寄至${data?.email}，請輸入信件中之六位驗證碼`);
+            resendMailSWR.trigger({ email: data.email });
             break;
           default:
             Alert.alert(
@@ -82,6 +80,8 @@ export default function useAuth() {
             );
             break;
         }
+        throw new Error(e.message);
+      }
     }
   };
 
@@ -104,7 +104,6 @@ export default function useAuth() {
     logOut,
 
     appleLogin: useAppleLoginSWR.trigger,
-    appleSignup: useAppleSignupSWR.trigger,
 
     loading: {
       logIn: useLoginSWR.isMutating,

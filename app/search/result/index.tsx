@@ -1,11 +1,12 @@
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { styled } from 'styled-components/native';
 
 import Stack from '@/components/stack';
 import FlashList from '@/components/util/FlashList';
 import { useResults } from '@/contexts/useResults';
+import fetchImage from '@/utils/functions/fetchImage';
 
 const FOLDER_SIZE = 150;
 const TRADEMARK_CONTAINER_BORDER_RADIUS = 10;
@@ -33,42 +34,46 @@ export default function Page() {
   return (
     <Stack>
       <View style={{ width: '90%', height: '100%', position: 'relative' }}>
-        <FlashList<typeof results>
-          data={results}
-          items={({ item: { appl_no: id, tmark_name: name, tmark_image_url: url }, index }) => (
-            <TouchableOpacity
-              style={styles['Flashlist.renderItem']}
-              key={index}
-              onPress={() =>
-                router.push({
-                  pathname: '/search/result/detail/[id]',
-                  params: { id },
-                })
-              }
-            >
-              <ResultContainer>
-                <Image
-                  style={{
-                    flex: 1,
-                    width: 150,
-                    height: 130,
-                    backgroundColor: '#0553',
-                    overflow: 'hidden',
-                  }}
-                  source={
-                    { uri: `http://140.112.106.88:8082/${url}` }
-                    // require("@/assets/figure.png")
-                  }
-                  // placeholder={blurhash}
-                  contentFit="contain"
-                  transition={1000}
-                />
-                <FileTitle numberOfLines={1}>{name}</FileTitle>
-              </ResultContainer>
-            </TouchableOpacity>
-          )}
-          itemSize={FOLDER_SIZE}
-        />
+        {results?.length ? (
+          <FlashList<typeof results>
+            data={results}
+            items={({ item: { appl_no: id, tmark_name: name, tmark_image_url: url }, index }) => (
+              <TouchableOpacity
+                style={styles['Flashlist.renderItem']}
+                key={index}
+                onPress={() =>
+                  router.push({
+                    pathname: '/search/result/detail/[id]',
+                    params: { id },
+                  })
+                }
+              >
+                <ResultContainer>
+                  <Image
+                    style={{
+                      flex: 1,
+                      width: 150,
+                      height: 130,
+                      backgroundColor: '#0553',
+                      overflow: 'hidden',
+                    }}
+                    source={
+                      { uri: fetchImage(`pics/${url}`) }
+                      // require("@/assets/figure.png")
+                    }
+                    // placeholder={blurhash}
+                    contentFit="contain"
+                    transition={1000}
+                  />
+                  <FileTitle numberOfLines={1}>{name}</FileTitle>
+                </ResultContainer>
+              </TouchableOpacity>
+            )}
+            itemSize={FOLDER_SIZE}
+          />
+        ) : (
+          <Text>沒有符合的紀錄</Text>
+        )}
       </View>
     </Stack>
   );

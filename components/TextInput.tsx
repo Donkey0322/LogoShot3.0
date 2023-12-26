@@ -25,6 +25,7 @@ export default function Input({
           backgroundColor: 'white',
           borderWidth: 0,
         }}
+        autoComplete="off"
         placeholder={placeholder}
         secureTextEntry={secureTextEntry}
         onSubmitEditing={Keyboard.dismiss}

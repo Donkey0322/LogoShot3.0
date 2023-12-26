@@ -47,13 +47,13 @@ export default function Menu() {
               content: '我的最愛',
               onPress: () => router.push('/profile/favorite/'),
             },
-            {
-              icon: <Delete color={COLORS('red.500')} style={{ marginRight: 5 }} />,
-              content: '刪除帳戶',
-              contentStyle: {
-                color: COLORS('red.500'),
-              },
-            },
+            // {
+            //   icon: <Delete color={COLORS('red.500')} style={{ marginRight: 5 }} />,
+            //   content: '刪除帳戶',
+            //   contentStyle: {
+            //     color: COLORS('red.500'),
+            //   },
+            // },
           ]
         : [
             {

@@ -30,13 +30,7 @@ const ImageContainer = styled.TouchableOpacity<{ color: string }>`
   overflow: hidden;
 `;
 
-export default function Avatar({
-  theme = COLORS('joy.orange'),
-  image,
-}: {
-  theme: Color;
-  image?: string;
-}) {
+export default function Avatar({ theme = COLORS('joy.orange') }: { theme: Color }) {
   const [imageWidth, setImageWidth] = useState(0);
   const { avatar, handlePickImageForAvatar } = useAvatar();
   const [modalVisible, setModalVisible] = useState(false);
@@ -63,7 +57,6 @@ export default function Avatar({
         }) => setImageWidth(width * 0.8)}
         color={theme}
         onPress={() => setModalVisible(true)}
-        disabled={!avatar?.uri}
       >
         {avatar?.uri ? (
           <Image

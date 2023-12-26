@@ -63,6 +63,7 @@ export default function ImageSearch() {
         target_color: data['color'],
         target_applicant: data['applicant'],
       });
+      console.log(results)
       setResults(results);
       router.push('/search/result/');
     } catch (e) {

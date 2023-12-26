@@ -14,6 +14,7 @@ import * as AppFrame from '@/modules/search/components/Background';
 import DateRangePicker from '@/modules/search/components/DateRangePicker';
 import useData, { textInitData } from '@/modules/search/hooks/useData';
 import Dropdown from '@/modules/search/hooks/useDropdown';
+import toDate from '@/utils/functions/toDate';
 
 export default function ImageSearch() {
   const { textSearch } = useTextSearch();
@@ -32,16 +33,17 @@ export default function ImageSearch() {
         search_key_words: data.keyword,
         is_sim_sound: data.isSound,
         is_sim_shape: data.isShape,
-        target_start_time: '2023/11/08',
-        target_end_time: '2023/11/08',
+        target_start_time: toDate(timelimit ? data['startTime'] : undefined),
+        target_end_time: toDate(timelimit ? data['endTime'] : undefined),
         target_class_codes: data.classcodes,
+        target_applicant: data.applicant,
+        target_color: data.color,
       });
       setResults(results);
       router.push('/search/result/');
     } catch (e) {
       console.log(e);
     } finally {
-      router.push('/search/result/');
       setIsLoading(false);
     }
   };
@@ -87,7 +89,7 @@ export default function ImageSearch() {
                   }
                   handleDataChange('isShape')(!data.isShape);
                 }}
-                label="字型相似"
+                label="字形相似"
                 labelStyle={{ fontWeight: 'normal', color: COLORS('black') }}
               />
             </View>
@@ -146,7 +148,7 @@ export default function ImageSearch() {
             <Button
               onPress={onSearch}
               disabled={
-                false
+                isLoading || !data.keyword
                 // !data.image || !(!!data.image && isLoading !== true)
               }
               style={{

@@ -16,7 +16,7 @@ export default function Dropdown<DataType extends { classcodes: string[]; color:
   const [classDropdownOpen, setClassDropdownOpen] = useState(false);
   const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
   const [classCode, setClassCode] = useState<string[]>([]);
-  const [color, setColor] = useState('彩色');
+  const [color, setColor] = useState('');
 
   useEffect(() => {
     handleDataChange('classcodes')(classCode);

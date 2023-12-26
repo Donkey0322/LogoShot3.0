@@ -17,7 +17,7 @@ export interface TextDataType extends DataType {
 
 export const textInitData: TextDataType = {
   ...initData,
-  keyword: '海底撈',
+  keyword: '',
   isShape: false,
   isSound: false,
 };
