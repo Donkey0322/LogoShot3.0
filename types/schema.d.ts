@@ -25,6 +25,9 @@ export interface paths {
   "/account/edit-info": {
     patch: operations["edit_account_account_edit_info_patch"];
   };
+  "/account/{username}": {
+    delete: operations["delete_account_account__username__delete"];
+  };
   "/favorite": {
     post: operations["new_folder_favorite_post"];
   };
@@ -119,7 +122,7 @@ export interface components {
       /** Email */
       email: string;
       /** Photo */
-      photo: string;
+      photo?: string;
     };
     /** HTTPValidationError */
     HTTPValidationError: {
@@ -560,6 +563,30 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["EditUserInput"];
+      };
+    };
+  };
+  delete_account_account__username__delete: {
+    parameters: {
+      path: {
+        username: string;
+      };
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };

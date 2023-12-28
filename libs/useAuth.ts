@@ -7,6 +7,7 @@ import useSWRMutation from 'swr/mutation';
 import { useUser } from '@/contexts/useUser';
 import {
   appleLogin,
+  deleteAccount,
   getUserInfo,
   loginAsGeneralUser,
   resendMail,
@@ -21,6 +22,7 @@ export default function useAuth() {
   const useLoginSWR = useSWRMutation(`/account/login`, swrMutationFetcher(loginAsGeneralUser));
   const useSignupSWR = useSWRMutation(`/account/signup`, swrMutationFetcher(signupAsGeneralUser));
   const resendMailSWR = useSWRMutation('resend', swrMutationFetcher(resendMail));
+  const useDeleteAccountSWR = useSWRMutation('/account', swrMutationFetcher(deleteAccount));
 
   const useAppleLoginSWR = useSWRMutation(`/apple_login`, swrMutationFetcher(appleLogin));
   const { setUser } = useUser();
@@ -102,7 +104,7 @@ export default function useAuth() {
     logIn,
     signUp,
     logOut,
-
+    deleteAccount: useDeleteAccountSWR.trigger,
     appleLogin: useAppleLoginSWR.trigger,
 
     loading: {

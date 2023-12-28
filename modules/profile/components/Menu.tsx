@@ -1,12 +1,14 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import { useMemo } from 'react';
-import { Text } from 'react-native';
+import { Alert, Text } from 'react-native';
 import { styled } from 'styled-components/native';
 
 import type { TextStyle, TouchableOpacityProps } from 'react-native';
 
 import { COLORS, ICONS } from '@/constant';
 import { useUser } from '@/contexts/useUser';
+import useAuth from '@/libs/useAuth';
 const { Star, Search, Delete, Member, Login } = ICONS;
 
 interface ItemType extends TouchableOpacityProps {
@@ -31,7 +33,8 @@ const ListItem = styled.TouchableOpacity`
 `;
 
 export default function Menu() {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
+  const { deleteAccount } = useAuth();
 
   const items = useMemo<ItemType[]>(
     () =>
@@ -47,13 +50,19 @@ export default function Menu() {
               content: '我的最愛',
               onPress: () => router.push('/profile/favorite/'),
             },
-            // {
-            //   icon: <Delete color={COLORS('red.500')} style={{ marginRight: 5 }} />,
-            //   content: '刪除帳戶',
-            //   contentStyle: {
-            //     color: COLORS('red.500'),
-            //   },
-            // },
+            {
+              icon: <Delete color={COLORS('red.500')} style={{ marginRight: 5 }} />,
+              content: '刪除帳戶',
+              contentStyle: {
+                color: COLORS('red.500'),
+              },
+              onPress: async () => {
+                await deleteAccount({ username: String(user.username) });
+                await AsyncStorage.removeItem('token');
+                setUser(undefined);
+                Alert.alert('帳號已刪除');
+              },
+            },
           ]
         : [
             {

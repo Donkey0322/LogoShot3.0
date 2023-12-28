@@ -3,7 +3,7 @@ import { ExpoConfig } from 'expo/config';
 const config: ExpoConfig = {
   name: 'Logo Shot 3.0',
   slug: 'my-app',
-  version: '1.0.4',
+  version: '1.0.5',
   scheme: 'logoShot',
   orientation: 'portrait',
   icon: './assets/Logoshot.png',
