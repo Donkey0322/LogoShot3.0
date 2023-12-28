@@ -1,35 +1,36 @@
 import { ExpoConfig } from 'expo/config';
 
 const config: ExpoConfig = {
-  name: 'Logo Shot',
-  slug: 'logoShot',
+  name: 'Logo Shot 3.0',
+  slug: 'my-app',
+  version: '1.0.5',
   scheme: 'logoShot',
+  orientation: 'portrait',
+  icon: './assets/Logoshot.png',
+  userInterfaceStyle: 'light',
+  splash: {
+    image: './assets/splash.png',
+    resizeMode: 'contain',
+    backgroundColor: '#ffffff',
+  },
+  assetBundlePatterns: ['**/*'],
   web: {
-    bundler: 'metro',
+    favicon: './assets/favicon.png',
   },
   ios: {
     supportsTablet: true,
-    bundleIdentifier: 'meow.logoshot',
+    bundleIdentifier: 'com.b09705015.myapp',
+    usesAppleSignIn: true,
     infoPlist: {
       NSPhotoLibraryUsageDescription:
         '$(PRODUCT_NAME)在商標搜尋中提供了以圖搜圖的功能，若希望使用此功能，請打開相簿權限',
       NSCameraUsageDescription:
         '$(PRODUCT_NAME)在商標搜尋中提供了以圖搜圖的功能，若希望能在使用此功能時運用相機拍攝，請打開相機權限',
-      NSMicrophoneUsageDescription: 'Allow $(PRODUCT_NAME) to access your microphone',
-      SKAdNetworkItems: [
-        {
-          SKAdNetworkIdentifier: 'v9wttpbfk9.skadnetwork',
-        },
-        {
-          SKAdNetworkIdentifier: 'n38lu8286q.skadnetwork',
-        },
-      ],
     },
-    usesAppleSignIn: true,
   },
   extra: {
     eas: {
-      projectId: 'c2c2c0d1-5a7b-4593-b94a-89ef77847f5f',
+      projectId: '8d872e1d-a60a-443b-8d37-e486cb68ec96',
     },
     REACT_APP_SERVER_DOMAIN: '140.112.106.82',
     REACT_APP_SERVER_PORT: '8002',
@@ -42,17 +43,10 @@ const config: ExpoConfig = {
     [
       'expo-image-picker',
       {
-        photosPermission: 'The app accesses your photos to let you share them with your friends.',
-        cameraPermission: 'The app accesses your photos to let you share them with your friends.',
-      },
-    ],
-    [
-      'react-native-fbsdk-next',
-      {
-        appID: '1256648868295950',
-        clientToken: '03d70c08606f570fb17e4454d0eb6aff',
-        displayName: 'LogoShot',
-        scheme: 'fb1256648868295950',
+        photosPermission:
+          'Access to the photos allows you to pick photos for searching trademarks.',
+        cameraPermission:
+          'Access to the camera allows you to take photos for searching trademarks.',
       },
     ],
     'expo-apple-authentication',

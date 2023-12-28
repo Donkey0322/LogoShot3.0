@@ -7,7 +7,9 @@ import styled from 'styled-components/native';
 
 import Stack from '@/components/stack';
 import { COLORS, ICONS } from '@/constant';
+import { useUser } from '@/contexts/useUser';
 import useTrademarkDetail from '@/libs/useTrademark';
+import fetchImage from '@/utils/functions/fetchImage';
 
 const { Heart } = ICONS;
 
@@ -41,6 +43,7 @@ const SubTitle = styled.Text`
 
 export default function Detail() {
   const { id } = useLocalSearchParams();
+  const { user } = useUser();
   const { trademarkDetail } = useTrademarkDetail(String(id));
   useEffect(() => {
     console.log('trademarkDetail', trademarkDetail);
@@ -51,7 +54,7 @@ export default function Detail() {
       <Stack contentContainerStyle={{ paddingTop: 30, rowGap: 15 }}>
         <Image
           contentFit="contain"
-          source={{ uri: `http://140.112.106.88:8082/${trademarkDetail?.tmark_image_url}` }}
+          source={{ uri: fetchImage(`pics/${trademarkDetail?.tmark_image_url}`) }}
           style={{
             width: '60%',
             aspectRatio: 1,
@@ -92,16 +95,18 @@ export default function Detail() {
             <Text>{trademarkDetail?.applicant_chinese_country_name}</Text>
           </SubTitleWrapper>
         </Description>
-        <TouchableOpacity
-          onPress={() =>
-            router.push({
-              pathname: '/search/result/detail/[id]/chooseFavorite',
-              params: { id: String(id) },
-            })
-          }
-        >
-          <Heart size={40} style={{ marginTop: 20 }} color={COLORS('red.300')} />
-        </TouchableOpacity>
+        {user?.username && (
+          <TouchableOpacity
+            onPress={() =>
+              router.push({
+                pathname: '/search/result/detail/[id]/chooseFavorite',
+                params: { id: String(id) },
+              })
+            }
+          >
+            <Heart size={40} style={{ marginTop: 20 }} color={COLORS('red.300')} />
+          </TouchableOpacity>
+        )}
       </Stack>
     )
   );

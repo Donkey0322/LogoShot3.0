@@ -14,6 +14,7 @@ export const Background = ({ children, style, ...rest }: SafeAreaViewProps) => (
     style={[
       {
         flex: 1,
+        backgroundColor: 'red',
       },
       style,
     ]}

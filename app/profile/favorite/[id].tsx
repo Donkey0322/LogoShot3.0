@@ -1,12 +1,13 @@
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { styled } from 'styled-components/native';
 
 import { default as Stack } from '@/components/stack';
 import FlashList from '@/components/util/FlashList';
 import useFavoriteItem from '@/libs/useFavoriteItem';
+import fetchImage from '@/utils/functions/fetchImage';
 
 const FOLDER_SIZE = 150;
 const TRADEMARK_CONTAINER_BORDER_RADIUS = 10;
@@ -39,6 +40,7 @@ export default function Page() {
   return (
     <Stack>
       <View style={{ width: '90%', height: '100%', position: 'relative' }}>
+        {!favoriteItems?.length && <Text>尚未有任何 LOGO～ 試著搜尋看看吧！</Text>}
         <FlashList<typeof favoriteItems>
           data={favoriteItems}
           items={({ item: { appl_no, tmark_name, tmark_image_url: url }, index }) => (
@@ -61,7 +63,7 @@ export default function Page() {
                     backgroundColor: '#0553',
                     overflow: 'hidden',
                   }}
-                  source={{ uri: `http://140.112.106.88:8082/${url}` }}
+                  source={{ uri: fetchImage(`pics/${url}`) }}
                   // placeholder={blurhash}
                   contentFit="contain"
                   transition={1000}

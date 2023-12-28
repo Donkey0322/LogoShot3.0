@@ -10,6 +10,12 @@ export interface paths {
   "/signin": {
     post: operations["add_account_signin_post"];
   };
+  "/resend-code": {
+    post: operations["resend_code_resend_code_post"];
+  };
+  "/verify": {
+    post: operations["add_account_verify_post"];
+  };
   "/apple_login": {
     post: operations["add_apple_account_apple_login_post"];
   };
@@ -18,6 +24,9 @@ export interface paths {
   };
   "/account/edit-info": {
     patch: operations["edit_account_account_edit_info_patch"];
+  };
+  "/account/{username}": {
+    delete: operations["delete_account_account__username__delete"];
   };
   "/favorite": {
     post: operations["new_folder_favorite_post"];
@@ -113,7 +122,7 @@ export interface components {
       /** Email */
       email: string;
       /** Photo */
-      photo: string;
+      photo?: string;
     };
     /** HTTPValidationError */
     HTTPValidationError: {
@@ -166,7 +175,7 @@ export interface components {
       /** Target Draft J */
       target_draft_j?: string;
       /** Target Class Codes */
-      target_class_codes?: string;
+      target_class_codes?: unknown[];
       /** Target Color */
       target_color?: string;
       /** Target Applicant */
@@ -306,6 +315,11 @@ export interface components {
       /** Applicant Chinese Country Name */
       applicant_chinese_country_name?: string;
     };
+    /** ResendCodeInput */
+    ResendCodeInput: {
+      /** Email */
+      email: string;
+    };
     /** TextSearchInput */
     TextSearchInput: {
       /** Search Key Words */
@@ -364,6 +378,13 @@ export interface components {
       /** Error Type */
       type: string;
     };
+    /** VerifyInput */
+    VerifyInput: {
+      /** Code */
+      code: string;
+      /** Email */
+      email: string;
+    };
   };
 }
 
@@ -417,6 +438,58 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["AddAccountInput"];
+      };
+    };
+  };
+  resend_code_resend_code_post: {
+    parameters: {
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ResendCodeInput"];
+      };
+    };
+  };
+  add_account_verify_post: {
+    parameters: {
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["VerifyInput"];
       };
     };
   };
@@ -490,6 +563,30 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["EditUserInput"];
+      };
+    };
+  };
+  delete_account_account__username__delete: {
+    parameters: {
+      path: {
+        username: string;
+      };
+      header: {
+        "auth-token"?: string;
+      };
+    };
+    responses: {
+      /** Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
       };
     };
   };
