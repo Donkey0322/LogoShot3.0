@@ -43,18 +43,18 @@ export default function Page() {
             placeholder={'輸入名稱'}
             onChangeText={(text) => handleSignupDataChange(text, 'user')}
           />
-          <Label>帳號</Label>
+          <Label>您的信箱</Label>
           <Input
             value={signupData.email}
             style={styles.input}
-            placeholder={'輸入帳號'}
+            placeholder={'請輸入信箱'}
             onChangeText={(text) => handleSignupDataChange(text, 'email')}
           />
-          <Label>密碼</Label>
+          <Label>您的密碼</Label>
           <Input
             value={signupData.password}
             style={styles.input}
-            placeholder={'輸入密碼'}
+            placeholder={'請輸入密碼'}
             onChangeText={(text) => handleSignupDataChange(text, 'password')}
             secureTextEntry={true}
           />
