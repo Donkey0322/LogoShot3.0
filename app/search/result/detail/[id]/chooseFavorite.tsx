@@ -1,14 +1,17 @@
 import { useLocalSearchParams } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, TouchableOpacity, View } from 'react-native';
 import { styled } from 'styled-components/native';
 
+import Fab from '@/components/Fab';
 import Folder from '@/components/svg/Folder';
 import FlashList from '@/components/util/FlashList';
-import { COLORS } from '@/constant';
+import { COLORS, ICONS } from '@/constant';
 import useFavoriteFolder from '@/libs/useFavoriteFolder';
 import useTrademarkDetail from '@/libs/useTrademark';
+import { FavoriteFolderModal, FolderType, ModeType } from '@/modules/favorite/components/Modal';
 
+const { Plus } = ICONS;
 const FOLDER_SIZE = 150;
 
 const FolderTitle = styled.Text`
@@ -24,6 +27,10 @@ export default function Page() {
   const { favoriteFolder } = useFavoriteFolder();
   const { trademarkDetail } = useTrademarkDetail(String(id));
   const { addItem } = useFavoriteFolder();
+
+  const [mode, setMode] = useState<ModeType>('normal');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [folder, setFolder] = useState<FolderType>({});
 
   useEffect(() => {
     console.log('favoriteFolder', favoriteFolder);
@@ -76,6 +83,21 @@ export default function Page() {
           </View>
         )}
         itemSize={FOLDER_SIZE}
+      />
+      <Fab
+        position={{ right: 20, bottom: 50 }}
+        size={70}
+        onPress={() => {
+          setMode('add');
+          setFolder({ folderName: '', folderId: 0 });
+          setModalVisible(true);
+        }}
+      >
+        <Plus size={30} />
+      </Fab>
+      <FavoriteFolderModal
+        modalProps={{ mode, setMode, modalVisible, setModalVisible }}
+        folderProps={{ folder, setFolder }}
       />
     </View>
   );
